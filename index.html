@@ -1,17 +1,3 @@
-<!doctype html>
-<html lang="de">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#06100B">
-<meta name="color-scheme" content="dark">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="description" content="Mahlzeit: Kalorien, Makros, Getränke und Gesundheits-Score mit Ernährungs-KI.">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-<script src="config.js"></script>
 <title>Mahlzeit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -883,6 +869,15 @@ html[data-theme="light"] .gd-ov{background:rgba(10,25,18,.6)}
 .eagle .spk{animation:spk .95s ease-out forwards;opacity:0;transform-box:fill-box;transform-origin:center}
 @keyframes spk{0%{opacity:0;translate:0 0;scale:.2}20%{opacity:1;scale:1.1}100%{opacity:0;translate:var(--dx) var(--dy);scale:.3;rotate:90deg}}
 @media (prefers-reduced-motion:reduce){.eagle .gi.new,.eagle.hop,.eagle .spk{animation:none}}
+
+.gwrap canvas{width:100%;height:auto;display:block;border-radius:18px;touch-action:none;background:#0b4f78;border:1px solid var(--line);aspect-ratio:8/5}
+.gpano canvas{width:100%;height:auto;display:block;border-radius:14px;aspect-ratio:8/5}
+.gpano{margin-bottom:12px}
+.gcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gcard{display:grid;gap:4px;justify-items:center;text-align:center;padding:10px;border-radius:16px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);cursor:pointer;font:inherit}
+.gcard:hover,.gcard:focus-visible{border-color:var(--accent,#4FD1A5)}
+.gcard canvas{width:100%;height:auto;border-radius:12px;aspect-ratio:5/3}
+.gcard small{color:var(--muted)}
 </style>
 
 <div id="app"></div>
@@ -1494,14 +1489,14 @@ function topbar(o){
    (o.gear?'<button type="button" class="ib" data-act="settings" aria-label="Einstellungen und Info">'+I.gear+'</button>':'')+'</div></div>';
 }
 function tabbar(){
-  return '<nav class="tabbar" aria-label="Hauptmenü">'+TABS.map(function(t){return '<button type="button" data-act="nav" data-v="'+t[0]+'" class="'+(S.view===t[0]?'on':'')+'"'+(S.view===t[0]?' aria-current="page"':'')+'>'+t[2]+'<span>'+t[1]+((t[0]==='ai')&&!S.premium?'<i class="lk">'+I.lock+'</i>':'')+'</span></button>'}).join('')+'</nav>';
+  return '<nav class="tabbar" aria-label="Hauptmenü">'+TABS.map(function(t){return '<button type="button" data-act="nav" data-v="'+t[0]+'" class="'+(S.view===t[0]||(t[0]==='arena'&&S.view==='game')?'on':'')+'"'+(S.view===t[0]?' aria-current="page"':'')+'>'+t[2]+'<span>'+t[1]+((t[0]==='ai')&&!S.premium?'<i class="lk">'+I.lock+'</i>':'')+'</span></button>'}).join('')+'</nav>';
 }
 function go(v){S.view=v;save();render();window.scrollTo(0,0)}
 function render(){
   var y=window.scrollY;
   try{arTick()}catch(e){}
-  ({welcome:renderWelcome,wizard:renderWizard,loading:renderLoading,result:renderResult,eagle:renderEagle,shop:renderShop,history:renderHistory,ai:renderAI,train:renderTrain,arena:renderArena})[S.view]();
-  var nav=S.done&&['result','history','ai','eagle','train','arena'].indexOf(S.view)>-1&&!(S.view==='train'&&!S.train.done);
+  ({welcome:renderWelcome,wizard:renderWizard,loading:renderLoading,result:renderResult,eagle:renderEagle,shop:renderShop,history:renderHistory,ai:renderAI,train:renderTrain,arena:renderArena,game:renderGame})[S.view]();
+  var nav=S.done&&['result','history','ai','eagle','train','arena','game'].indexOf(S.view)>-1&&!(S.view==='train'&&!S.train.done);
   document.body.classList.toggle('hasnav',nav);
   if(nav)app.insertAdjacentHTML('beforeend',tabbar());
   if(S.view==='wizard'||S.view==='result')window.scrollTo(0,y);
@@ -3166,7 +3161,7 @@ var GUIDE=[
  {i:'book',t:'Essen eintragen',tx:'Tippe bei Heute auf eine Mahlzeit. Dort gibt es mehrere Wege.',b:['Essen eingeben: suche ein Lebensmittel und wähle die Menge','Scannen: ein Foto vom Essen oder vom Barcode machen','Eigenes Rezept: speichere Gerichte, die du oft isst','Du sammelst mehrere Lebensmittel im Korb und trägst sie zusammen ein','Die Leiste mit Frühstück, Mittagessen, Snack und Abendessen bleibt oben stehen, so wechselst du schnell','Pro eingetragenem Essen bekommst du Arena-Punkte (EP)']},
  {i:'chart',t:'Verlauf',tx:'Hier siehst du, wie es dir über die Zeit geht. Oben wählst du den Bereich.',b:['Essen: 90 Tage, Wochenrückblick und eine Tabelle','Training: dein Kalender mit Quote und Serie','Gewicht: trage dein Gewicht ein, die Kurve zeigt den Weg zu deinem Zielgewicht','Fotos: ein Rahmen für dein Fortschrittsfoto, aus allen Fotos wird später ein Video']},
  {i:'chat',t:'Assistent',tx:'Ein Chat nur für Essen und Ernährung, ohne KI und ohne Internet.',b:['Schreib zum Beispiel „Ich hatte eine Banane und zwei Eier“, dann trägt er es ein','Frag nach Kalorien, Nährwerten und Ideen für Mahlzeiten','Gehört zu Premium']},
- {i:'trophy',t:'Arena',tx:'Tritt jede Woche gegen 9 andere an.',b:['Du bekommst EP: Essen eintragen 5 (bis zu 10 Mal am Tag), Training eintragen 20, Tagesziel erreichen 50, Wasserziel erreichen 15','Am Ende der Woche zählt dein Platz in der Tabelle mit 10 Plätzen','Platz 1 bis 3: du steigst auf. Platz 4 bis 7: du bleibst. Platz 8 bis 10: du steigst ab','Ligen: Bronze, Silber, Gold, Platin, Diamant und die Bodybuilder-Arena','Quests: Im Tab Quests findest du jeden Tag 4 neue Aufgaben. Jede geschaffte Quest gibt 5 Minuten doppelte EP']},
+ {i:'trophy',t:'Arena',tx:'Tritt jede Woche gegen 9 andere an.',b:['Du bekommst EP: Essen eintragen 5 (bis zu 10 Mal am Tag), Training eintragen 20, Tagesziel erreichen 50, Wasserziel erreichen 15','Am Ende der Woche zählt dein Platz in der Tabelle mit 10 Plätzen','Platz 1 bis 3: du steigst auf. Platz 4 bis 7: du bleibst. Platz 8 bis 10: du steigst ab','Ligen: Bronze, Silber, Gold, Platin, Diamant und die Bodybuilder-Arena','Minispiel Küstenkampf (nur Premium): Zerstöre das Gebäude deines Gegners, ein Sieg gibt 5 EP, ohne Tageslimit','Quests: Im Tab Quests findest du jeden Tag 4 neue Aufgaben. Jede geschaffte Quest gibt 5 Minuten doppelte EP']},
  {i:'star',t:'Adler',tx:'Dein Adler ist dein Coach und wächst mit dir.',b:['Gib ihm einen Namen und wähle einen Look','Im Shop gibt es Kleidung, Brillen, Federn und Hintergründe','Der Adler begleitet dich durch die Fragen und die App']},
  {i:'dumbbell',t:'Training',tx:'Dein Trainingsplan ist kostenlos.',b:['Beantworte ein paar Fragen zu Ziel, Ort, Geräten und Wochenplan, daraus entsteht dein Plan','Pro Trainingstag öffnest du die Übungen und trägst Sätze und Wiederholungen ein','Mit „Training beenden“ schließt du den Tag ab und bekommst deine Serie und 20 EP','Den Plan kannst du 2 mal ändern, mit Premium so oft du willst','Rekord-Check (Premium): trage einen Rekord ein und finde heraus, wie viele Menschen das schaffen, von Silber bis Olympia']},
  {i:'gear',t:'Einstellungen',tx:'Oben rechts findest du das Zahnrad.',b:['Aussehen: dunkel, hell oder automatisch','Angaben ändern: Ziel, Gewicht, Ernährung und mehr','Pläne neu erstellen: Essensplan und Trainingsplan','Premium: Freischalten mit Code','Alle Daten löschen','Deine Daten und Fotos bleiben auf deinem Gerät']},
@@ -3208,14 +3203,14 @@ function arRng(seed){var s=seed>>>0||1;return function(){s^=s<<13;s>>>=0;s^=s>>>
 function arWeekKey(d){return keyOf(weekStart(d||new Date()))}
 function arInit(){
   if(!S.arena||!S.arena.pid){S.arena={pid:uid()+uid(),name:'Spieler'+(100+Math.floor(Math.random()*900)),league:0,week:arWeekKey(),locks:{},hist:[],last:null};save()}
-  var a=S.arena;a.locks=a.locks||{};a.hist=a.hist||[];a.bonus=a.bonus||{};a.qdone=a.qdone||{};a.vis=a.vis||{};a.boostUntil=a.boostUntil||0;if(!(a.league>=0&&a.league<LEAGUES.length))a.league=0;if(!a.week)a.week=arWeekKey();
+  var a=S.arena;a.locks=a.locks||{};a.hist=a.hist||[];a.bonus=a.bonus||{};a.game=a.game||{};a.qdone=a.qdone||{};a.vis=a.vis||{};a.boostUntil=a.boostUntil||0;if(!(a.league>=0&&a.league<LEAGUES.length))a.league=0;if(!a.week)a.week=arWeekKey();
 }
 /* EP eines Tages aus den Eintragungen: Essen bis zu 10 Einträge pro Tag (5 EP je Eintrag, höchstens 50) */
 function arFoodCount(k){return (S.log[k]||[]).filter(function(i){return !isDrink(i)}).length}
 function arBase(k){
   var n=Math.min(10,arFoodCount(k)),a=S.arena,lk=a.locks;
-  var r={food:n*EP.food,train:S.tdone&&S.tdone[k]?EP.train:0,goal:lk[k+'|goal']?EP.goal:0,water:lk[k+'|water']?EP.water:0,slots:n};
-  r.sum=r.food+r.train+r.goal+r.water;return r;
+  var r={food:n*EP.food,train:S.tdone&&S.tdone[k]?EP.train:0,goal:lk[k+'|goal']?EP.goal:0,water:lk[k+'|water']?EP.water:0,slots:n,game:(a.game&&a.game[k])||0};
+  r.sum=r.food+r.train+r.goal+r.water+r.game;return r;
 }
 function arDay(k){var r=arBase(k),bo=(S.arena.bonus&&S.arena.bonus[k])||0;r.bonus=bo;r.sum+=bo;return r}
 function arWeekDays(wk){var out=[],d0=parseKey(wk);for(var i=0;i<7;i++){var d=new Date(d0.getFullYear(),d0.getMonth(),d0.getDate()+i,12);out.push(keyOf(d))}return out}
@@ -3380,6 +3375,7 @@ function renderArena(){
   var h=topbar({gear:true})+'<div class="pg-h"><div><h1>Arena</h1><small>Woche vom '+esc(parseKey(wk).toLocaleDateString('de-DE',{day:'numeric',month:'long'}))+' · noch '+arDaysLeft()+(arDaysLeft()===1?' Tag':' Tage')+'</small></div></div>';
   var qn=arQuests(keyOf(today(0))).filter(function(q){return arQDone(keyOf(today(0)),q)}).length;
   h+='<div class="seg" role="tablist" style="margin-bottom:12px"><button type="button" role="tab" data-act="arview" data-v="table" class="'+(S.arview!=='quests'?'on':'')+'">Tabelle</button><button type="button" role="tab" data-act="arview" data-v="quests" class="'+(S.arview==='quests'?'on':'')+'">Quests · '+qn+'/4</button></div>';
+  h+='<button type="button" class="trcard" style="margin-bottom:12px" data-act="opengame"><span class="ic">'+I.dice+'</span><div><b>Minispiel: Küstenkampf'+(S.premium?'':' · Premium')+'</b><small>Zerstöre das Gebäude deines Gegners, 5 EP pro Sieg</small></div><span class="ch">'+I.chev+'</span></button>';
   if(S.arview==='quests'){h+=questsHtml();app.innerHTML=h;return}
   h+=arBoostHtml();
   if(a.last){var l=a.last,up=l.zone==='up',dn=l.zone==='down',top=up&&l.league===LEAGUES.length-1;
@@ -3390,11 +3386,402 @@ function renderArena(){
   h+='<section class="card artab"><h3 style="margin:0 0 8px">Tabelle</h3><div class="ar-rows">'+rows.map(function(x){var z=arZone(x.rank);return '<div class="ar-row z-'+z+(x.me?' me':'')+'"><span class="ar-r">'+x.rank+'</span><span class="ar-n">'+esc(x.me?x.name+' (du)':x.name)+(x.bot?'<i class="ar-bot">Bot</i>':'')+'</span><span class="ar-z" aria-hidden="true">'+(z==='up'?'▲':z==='down'?'▼':'')+'</span><b class="ar-e">'+x.ep+' EP</b></div>'}).join('')+'</div>'+
    '<div class="ar-leg"><span class="up">Platz 1 bis 3: Aufstieg</span><span>Platz 4 bis 7: bleibt</span><span class="down">Platz 8 bis 10: Abstieg</span></div></section>';
   h+='<section class="card"><h3 style="margin:0 0 8px">So bekommst du EP</h3><div class="ar-ep">'+
-   [['Essen eintragen','+5 EP pro Eintrag, bis zu 10 Mal am Tag (höchstens 50)',td.food>0,td.food+' EP heute'],['Training beenden','+20 EP pro Trainingstag',td.train>0,td.train+' EP heute'],['Tagesziel erreichen','+50 EP, wenn du 90 bis 105 % deiner Kalorien triffst',td.goal>0,td.goal+' EP heute'],['Wasserziel erreichen','+15 EP, wenn du dein Trinkziel schaffst',td.water>0,td.water+' EP heute']].map(function(x){return '<div class="ar-er'+(x[2]?' on':'')+'"><span class="ar-ck">'+(x[2]?I.check:'')+'</span><div><b>'+x[0]+'</b><small>'+x[1]+'</small></div><em>'+x[3]+'</em></div>'}).join('')+'</div></section>';
+   [['Essen eintragen','+5 EP pro Eintrag, bis zu 10 Mal am Tag (höchstens 50)',td.food>0,td.food+' EP heute'],['Training beenden','+20 EP pro Trainingstag',td.train>0,td.train+' EP heute'],['Tagesziel erreichen','+50 EP, wenn du 90 bis 105 % deiner Kalorien triffst',td.goal>0,td.goal+' EP heute'],['Wasserziel erreichen','+15 EP, wenn du dein Trinkziel schaffst',td.water>0,td.water+' EP heute'],['Minispiel gewinnen','+5 EP pro Sieg, ohne Tageslimit (nur mit Premium)',td.game>0,td.game+' EP heute']].map(function(x){return '<div class="ar-er'+(x[2]?' on':'')+'"><span class="ar-ck">'+(x[2]?I.check:'')+'</span><div><b>'+x[0]+'</b><small>'+x[1]+'</small></div><em>'+x[3]+'</em></div>'}).join('')+'</div></section>';
   h+='<section class="card"><h3 style="margin:0 0 8px">Ligen</h3><div class="ar-lg">'+LEAGUES.map(function(l,i){return '<div class="ar-l'+(i===a.league?' on':'')+'">'+leagueBadge(i,34)+'<small>'+esc(l.n.replace('-Arena',''))+'</small></div>'}).join('')+'</div><p class="hint" style="margin:10px 0 0">Jede Woche zählt dein Platz: Platz 1 bis 3 steigt eine Liga auf, Platz 4 bis 7 bleibt, Platz 8 bis 10 steigt ab. Ganz oben ist die Bodybuilder-Arena.</p></section>';
   h+='<section class="card"><div class="field" style="margin-top:0"><label for="arname">Dein Name in der Arena</label><input class="text" id="arname" data-arf="name" maxlength="16" autocomplete="off" value="'+esc(a.name)+'"></div><p class="hint" style="margin:10px 0 0">'+esc(arNote())+'</p></section>';
   app.innerHTML=h;
   arSync();
+}
+
+/* ---------- Minispiel "Küstenkampf": Schleuder-Duell unter Wasser, Sieg bringt 5 EP ---------- */
+var GW=800,GH=500,GFL=440,GRAV=520,GVMAX=760;
+/* Waffen: Schaden = Kalorien des Essens. Rad = Größe der Explosion, unabhängig vom Score des Essens. */
+var GWEAP=[
+ {id:'banana',n:'Banane',e:'🍌',kcal:105,shots:6,rad:30},
+ {id:'melon',n:'Melone',e:'🍉',kcal:90,shots:5,rad:36},
+ {id:'apple',n:'Apfel',e:'🍎',kcal:80,shots:4,rad:28},
+ {id:'pizza',n:'Pizza',e:'🍕',kcal:270,shots:3,rad:32},
+ {id:'burger',n:'Burger',e:'🍔',kcal:540,shots:2,rad:42,pre:true}
+];
+var GEN={qualle:{n:'Qualle Quirin',d:'Wirft ruhig und gleichmäßig'},hummer:{n:'Hummer Harald',d:'Kneift schnell zu'}};
+var G=null,gMode='home',gRaf=0,gLast=0;
+var GH_ME={x:148,y:252},GH_EN={x:664,y:256};
+function gPickWeapon(){var r=Math.random();if(r<.08)return GWEAP[4];return GWEAP[Math.floor(Math.random()*4)]}
+function gTarget(){try{return clamp(Math.round(calc(S.p,S.p.perMonth).target),1200,4500)}catch(e){return 2000}}
+function gRnd(a,b){return a+Math.random()*(b-a)}
+/* ---- Aufbau ---- */
+function gNew(en){
+  var mx=gTarget(),w1=gPickWeapon(),w2=gPickWeapon();
+  G={en:en,ph:'play',max:mx,hpMe:mx,hpEn:mx,me:{w:w1,ammo:w1.shots,cd:0,hits:0},bot:{w:w2,ammo:w2.shots,t:2.6,hits:0},shots:[],fx:[],txt:[],rings:[],t:0,shake:0,aim:null,res:null,reload:0,img:null,
+    objs:[{x:285,cy:230,ph:0,sp:1.25,amp:150,r:26},{x:515,cy:225,ph:2.1,sp:1.6,amp:155,r:26}],note:'',noteT:0,awarded:0};
+  G.cv=document.createElement('canvas');G.cv.width=GW;G.cv.height=GH;G.cv.setAttribute('aria-label','Spielfeld des Minispiels');
+  gBuildWall();gLoadEagle();gBindInput();
+}
+function gBuildWall(){
+  var cw=GW/4,ch=GH/4;G.wm=new Uint8Array(cw*ch);
+  var c=document.createElement('canvas');c.width=GW;c.height=GH;var x=c.getContext('2d'),x0=368,x1=432,i,j;
+  var g=x.createLinearGradient(x0,0,x1,0);g.addColorStop(0,'#d6b36a');g.addColorStop(.5,'#ecd18c');g.addColorStop(1,'#c4a05a');
+  x.fillStyle=g;x.fillRect(x0,0,x1-x0,GFL+12);
+  for(i=0;i<1100;i++){x.fillStyle=Math.random()<.5?'rgba(110,75,25,.2)':'rgba(255,244,200,.28)';x.fillRect(x0+Math.random()*(x1-x0),Math.random()*GFL,1.5+Math.random()*3,1.5+Math.random()*3)}
+  for(i=0;i<9;i++){x.strokeStyle=i%2?'rgba(120,80,30,.22)':'rgba(255,245,210,.3)';x.lineWidth=2;x.beginPath();for(var u=x0;u<=x1;u+=8)x.lineTo(u,40+i*48+Math.sin(u*.2+i)*5);x.stroke()}
+  var eg=x.createLinearGradient(x0,0,x1,0);eg.addColorStop(0,'rgba(90,55,15,.35)');eg.addColorStop(.12,'rgba(90,55,15,0)');eg.addColorStop(.88,'rgba(90,55,15,0)');eg.addColorStop(1,'rgba(90,55,15,.35)');x.fillStyle=eg;x.fillRect(x0,0,x1-x0,GFL+12);
+  for(j=0;j<ch;j++)for(i=0;i<cw;i++){var px=i*4+2,py=j*4+2;if(px>=x0&&px<x1&&py<GFL+10)G.wm[j*cw+i]=1}
+  G.wcv=c;
+}
+function gCarve(cx,cy,r){
+  var x=G.wcv.getContext('2d');x.globalCompositeOperation='destination-out';x.fillStyle='#000';x.beginPath();x.arc(cx,cy,r+1.5,0,7);x.fill();x.globalCompositeOperation='source-over';
+  var cw=GW/4,i0=Math.max(0,Math.floor((cx-r)/4)),i1=Math.min(cw-1,Math.ceil((cx+r)/4)),j0=Math.max(0,Math.floor((cy-r)/4)),j1=Math.min(GH/4-1,Math.ceil((cy+r)/4));
+  for(var j=j0;j<=j1;j++)for(var i=i0;i<=i1;i++){var dx=i*4+2-cx,dy=j*4+2-cy;if(dx*dx+dy*dy<=(r+2.9)*(r+2.9))G.wm[j*cw+i]=0}
+}
+function gSand(px,py){if(px<0||px>=GW||py<0||py>=GH)return false;return G.wm[Math.floor(py/4)*(GW/4)+Math.floor(px/4)]===1}
+function gLoadEagle(){
+  try{
+    var svg=eagle({crop:true}).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" width="144" height="172" ').replace('role="img"','').replace('</defs>','</defs><style>.lid{opacity:0}</style>');
+    var im=new Image();im.onload=function(){if(G)G.img=im};im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  }catch(e){}
+}
+/* ---- Eingabe: Waffe in der Hand nach hinten ziehen und loslassen ---- */
+function gPt(e){var r=G.cv.getBoundingClientRect();return {x:(e.clientX-r.left)*GW/r.width,y:(e.clientY-r.top)*GH/r.height}}
+function gPull(p){var lx=GH_ME.x-p.x,ly=GH_ME.y-p.y,len=Math.sqrt(lx*lx+ly*ly),k=len>150?150/len:1;return {lx:lx,ly:ly,len:len,cl:len*k,k:k}}
+function gBindInput(){
+  var cv=G.cv;
+  cv.addEventListener('pointerdown',function(e){
+    if(!G||G.ph!=='play'||G.me.ammo<=0)return;var p=gPt(e),dx=p.x-GH_ME.x,dy=p.y-GH_ME.y;
+    if(dx*dx+dy*dy<120*120){G.aim={x:p.x,y:p.y};try{cv.setPointerCapture(e.pointerId)}catch(x){}e.preventDefault()}
+  });
+  cv.addEventListener('pointermove',function(e){if(G&&G.aim){var p=gPt(e);G.aim.x=p.x;G.aim.y=p.y;e.preventDefault()}});
+  var up=function(e){
+    if(!G||!G.aim)return;var a=G.aim;G.aim=null;
+    if(G.ph!=='play'||G.me.ammo<=0||G.me.cd>0)return;
+    var pl=gPull(a);if(pl.cl<26||pl.lx<=8)return;
+    var sp=GVMAX*pl.cl/150,ang=Math.atan2(pl.ly,pl.lx);
+    gLaunch('me',G.me.w,Math.cos(ang)*sp,Math.sin(ang)*sp);
+    G.me.ammo--;G.me.cd=1.5;
+  };
+  cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',function(){if(G)G.aim=null});
+}
+/* ---- Physik ---- */
+function gLaunch(side,w,vx,vy){
+  var h=side==='me'?GH_ME:GH_EN,ang=Math.atan2(vy,vx),sp=Math.sqrt(vx*vx+vy*vy);
+  /* Normale Waffen streuen, der Burger trifft genau dorthin, wo man zielt. */
+  if(!w.pre){ang+=(Math.random()*2-1)*.07;sp*=1+(Math.random()*2-1)*.06}
+  G.shots.push({side:side,w:w,x:h.x,y:h.y,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,rot:0});
+}
+function gRect(side){return side==='me'?{x:652,x2:780,y:300,y2:GFL}:{x:22,x2:150,y:300,y2:GFL}}
+/* Treffer nur auf dem sichtbaren Gebäude: die Muschel ist oben schmal, das Haus hat ein Dach */
+function gHit(side,x,y){if(y<300||y>GFL)return false;if(side==='me'){var hw=66*Math.min(1,.38+(y-300)/70)*.94;return Math.abs(x-716)<=hw}return x>22&&x<150}
+function gBoom(x,y,w,dmg,side,kind){
+  if(kind==='sand'||kind==='floor')gCarve(x,y,w.rad*1.15);
+  for(var i=0;i<16;i++){var a=Math.random()*6.28,s=gRnd(60,230);G.fx.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-40,t:0,l:gRnd(.35,.7),c:kind==='sand'?['#e9cf8e','#d6b36a','#f3e2b0','#c4a05a'][i%4]:['#ffd24a','#ff8a3d','#fff3c4','#ffffff'][i%4],r:gRnd(2,5)})}
+  G.rings.push({x:x,y:y,r:4,max:w.rad*1.4,t:0});
+  G.shake=Math.max(G.shake,w.rad>38?7:4);
+  if(dmg>0){
+    if(side==='me')G.hpEn=Math.max(0,G.hpEn-dmg);else G.hpMe=Math.max(0,G.hpMe-dmg);
+    G.txt.push({x:x,y:y-14,t:0,s:'-'+dmg,c:side==='me'?'#ffe27a':'#ff9a8a'});
+  }
+}
+function gObjY(o){return o.cy+o.amp*Math.sin(G.t*o.sp+o.ph)}
+function gStep(dt){
+  var i,s,n;G.t+=dt;
+  G.me.cd=Math.max(0,G.me.cd-dt);
+  if(G.shake>0)G.shake=Math.max(0,G.shake-dt*20);
+  /* Schüsse */
+  for(i=G.shots.length-1;i>=0;i--){
+    s=G.shots[i];var dead=false;
+    for(n=0;n<4&&!dead;n++){
+      var h=dt/4;s.x+=s.vx*h;s.vy+=GRAV*h;s.y+=s.vy*h;s.rot+=h*8;
+            if(s.y<-12||s.x<-40||s.x>GW+40){dead=true;break}
+      if(s.y>=GFL-3){gBoom(s.x,GFL-3,s.w,0,s.side,'floor');dead=true;break}
+      if(gHit(s.side,s.x,s.y)){var fr=s.side==='me'?G.me:G.bot,dm=s.w.kcal*((!s.w.pre&&fr.hits>0)?2:1);fr.hits++;gBoom(s.x,s.y,s.w,dm,s.side,'hit');dead=true;break}
+      if(gSand(s.x,s.y)){gBoom(s.x,s.y,s.w,0,s.side,'sand');dead=true;break}
+      for(var k=0;k<G.objs.length;k++){var o=G.objs[k],dx=s.x-o.x,dy=s.y-gObjY(o);if(dx*dx+dy*dy<(o.r+9)*(o.r+9)){
+        for(var q=0;q<7;q++){var a=Math.random()*6.28;G.fx.push({x:s.x,y:s.y,vx:Math.cos(a)*120,vy:Math.sin(a)*120,t:0,l:.3,c:'#cfd8e3',r:3})}
+        G.rings.push({x:s.x,y:s.y,r:3,max:16,t:0,c:'#cfd8e3'});dead=true;break}}
+    }
+    if(!dead){s.tr=s.tr||[];if(!s.tl||G.t-s.tl>.03){s.tr.push([s.x,s.y]);s.tl=G.t;if(s.tr.length>9)s.tr.shift()}}
+    if(dead)G.shots.splice(i,1);
+  }
+  /* Partikel, Ringe, Zahlen */
+  G.fx=G.fx.filter(function(p){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=380*dt;return p.t<p.l});
+  G.rings=G.rings.filter(function(r){r.t+=dt;r.r=r.max*(r.t/.35);return r.t<.35});
+  G.txt=G.txt.filter(function(t){t.t+=dt;t.y-=28*dt;return t.t<1.2});
+  if(G.noteT>0)G.noteT-=dt;
+  /* Bot */
+  var b=G.bot;
+  if(b.ammo>0){
+    b.t-=dt;
+    if(b.t<=0){gBotShoot();b.ammo--;b.t=G.me.ammo<=0?1.1:gRnd(3.1,4.1)}
+  }
+  /* Neue Waffen: sobald beide keine Munition mehr haben und nichts mehr fliegt */
+  if(G.me.ammo<=0&&b.ammo<=0&&!G.shots.length){
+    G.reload+=dt;
+    if(G.reload>.9){var w1=gPickWeapon(),w2=gPickWeapon();G.me.w=w1;G.me.ammo=w1.shots;G.me.cd=.6;G.me.hits=0;b.hits=0;b.w=w2;b.ammo=w2.shots;b.t=gRnd(2.4,3.2);G.reload=0;G.note='Neue Waffen: du '+w1.n+', Gegner '+w2.n;G.noteT=2.4}
+  }else G.reload=0;
+  /* Ende */
+  if(G.hpEn<=0||G.hpMe<=0){
+    G.ph='end';G.res=G.hpEn<=0?'win':'lose';
+    if(G.res==='win')G.awarded=arGameWin();
+    gMode='end';render();
+  }
+}
+/* Der Bot probiert ein paar Abschüsse im Kopf durch und nimmt den besten, mit Fehlern */
+function gBotShoot(){
+  var b=G.bot,tg=gRect('en'),cx=(tg.x+tg.x2)/2,cy=(tg.y+tg.y2)/2,best=null,i;
+  for(i=0;i<26;i++){
+    var a=gRnd(.35,1.15),pw=gRnd(.5,1),sp=GVMAX*pw,vx=-Math.cos(a)*sp,vy=-Math.sin(a)*sp,x=GH_EN.x,y=GH_EN.y,t;
+    for(t=0;t<2.6;t+=.03){vy+=GRAV*.03;x+=vx*.03;y+=vy*.03;if(y>GFL||y<-10||x<0)break}
+    var d=Math.abs(x-cx)+Math.abs(y-cy)*.4;if(!best||d<best.d)best={d:d,a:a,p:pw}
+  }
+  var a2=best.a+gRnd(-.07,.07),p2=best.p*(1+gRnd(-.08,.08)),sp2=GVMAX*clamp(p2,.3,1);
+  gLaunch('en',b.w,-Math.cos(a2)*sp2,-Math.sin(a2)*sp2);
+}
+/* ---- EP ---- */
+function arGameWin(){
+  arInit();var a=S.arena,td=keyOf(today(0)),have=a.game[td]||0,add=5;
+  a.game[td]=have+add;save();return add;
+}
+/* ---- Zeichnen ---- */
+var gBgCache=null;
+function gBgStatic(){
+  var cv=document.createElement('canvas');cv.width=GW;cv.height=GH;var c=cv.getContext('2d'),i;
+  var g=c.createLinearGradient(0,0,0,GFL);g.addColorStop(0,'#06456f');g.addColorStop(.45,'#0f78a6');g.addColorStop(1,'#3fc3cf');
+  c.fillStyle=g;c.fillRect(0,0,GW,GH);
+  /* ferne Felsen und Korallen in zwei Schichten */
+  [[.28,'rgba(6,58,96,.55)'],[.5,'rgba(8,80,118,.6)']].forEach(function(L,li){
+    c.fillStyle=L[1];c.beginPath();c.moveTo(0,GFL);
+    for(var x=0;x<=GW;x+=20){var h=40+li*20+Math.sin(x*.013+li*2)*28+Math.sin(x*.037+li)*14;c.lineTo(x,GFL-h*(L[0]+.6))}
+    c.lineTo(GW,GFL);c.closePath();c.fill();
+  });
+  /* Korallen */
+  var cor=[[205,'#e8618c'],[320,'#f29a4a'],[470,'#b772e0'],[598,'#e8618c'],[110,'#f29a4a'],[760,'#b772e0']];
+  cor.forEach(function(k,n){var x=k[0],y=GFL+2;c.strokeStyle=k[1];c.lineWidth=7;c.lineCap='round';c.globalAlpha=.9;
+    for(var b=0;b<4;b++){var a=-1.57+(b-1.5)*.45,len=34+((n*13+b*17)%26);c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(x+Math.cos(a)*len*.5,y+Math.sin(a)*len*.6,x+Math.cos(a)*len,y+Math.sin(a)*len);c.stroke();
+      c.fillStyle=k[1];c.beginPath();c.arc(x+Math.cos(a)*len,y+Math.sin(a)*len,5,0,7);c.fill()}
+    c.globalAlpha=1});
+  /* Sandboden mit Wellen */
+  var sg=c.createLinearGradient(0,GFL,0,GH);sg.addColorStop(0,'#efd596');sg.addColorStop(1,'#bf9a58');c.fillStyle=sg;
+  c.beginPath();c.moveTo(0,GFL);for(var x2=0;x2<=GW;x2+=10)c.lineTo(x2,GFL-2+Math.sin(x2*.05)*2);c.lineTo(GW,GH);c.lineTo(0,GH);c.closePath();c.fill();
+  c.strokeStyle='rgba(120,85,35,.18)';c.lineWidth=2;
+  for(i=0;i<5;i++){c.beginPath();for(var x3=0;x3<=GW;x3+=10)c.lineTo(x3,GFL+10+i*11+Math.sin(x3*.04+i*1.7)*3);c.stroke()}
+  c.fillStyle='rgba(255,255,255,.25)';for(i=0;i<50;i++)c.fillRect((i*97)%GW,GFL+6+(i*31)%54,3,2);
+  /* Steine, Muscheln, Seestern */
+  [[250,GFL+26,13],[560,GFL+30,16],[330,GFL+48,9],[720,GFL+22,10]].forEach(function(r){c.fillStyle='#8c8f98';c.beginPath();c.ellipse(r[0],r[1],r[2],r[2]*.6,0,0,7);c.fill();c.fillStyle='rgba(255,255,255,.25)';c.beginPath();c.ellipse(r[0]-r[2]*.3,r[1]-r[2]*.2,r[2]*.4,r[2]*.2,0,0,7);c.fill()});
+  c.fillStyle='#f08a3c';c.save();c.translate(470,GFL+40);c.beginPath();for(i=0;i<10;i++){var rr=i%2?5:13,aa=i*Math.PI/5-1.57;c.lineTo(Math.cos(aa)*rr,Math.sin(aa)*rr)}c.closePath();c.fill();c.restore();
+  c.fillStyle='#f6e6c8';c.beginPath();c.ellipse(190,GFL+44,9,6,.3,0,Math.PI,true);c.fill();
+  return cv;
+}
+function gBg(c,t){
+  if(!gBgCache)gBgCache=gBgStatic();
+  c.drawImage(gBgCache,0,0);
+  /* Lichtstrahlen */
+  c.save();c.globalAlpha=.09;c.fillStyle='#fff';
+  for(var i=0;i<6;i++){var x=60+i*140+Math.sin(t*.35+i*1.3)*26;c.beginPath();c.moveTo(x,0);c.lineTo(x+50,0);c.lineTo(x+170,GFL);c.lineTo(x+30,GFL);c.closePath();c.fill()}
+  c.restore();
+  /* Fische im Hintergrund */
+  for(var f=0;f<4;f++){var fx=((t*(18+f*7)+f*230)%(GW+120))-60,fy=90+f*55+Math.sin(t+f)*10,dir=f%2?-1:1;
+    if(dir<0)fx=GW-fx;c.save();c.translate(fx,fy);c.scale(dir,1);c.fillStyle='rgba(255,210,120,.55)';c.beginPath();c.ellipse(0,0,10,5,0,0,7);c.fill();c.beginPath();c.moveTo(-8,0);c.lineTo(-16,-5);c.lineTo(-16,5);c.fill();c.restore()}
+  /* Seetang */
+  c.lineCap='round';
+  [[160,'#2fa36d'],[238,'#37b57a'],[548,'#2fa36d'],[612,'#37b57a'],[700,'#2fa36d'],[330,'#37b57a']].forEach(function(s,k){c.strokeStyle=s[1];c.lineWidth=6;c.beginPath();c.moveTo(s[0],GFL+4);for(var y=1;y<=6;y++)c.lineTo(s[0]+Math.sin(t*1.2+k+y*.7)*(3+y*1.4),GFL+4-y*15);c.stroke()});
+  /* Blasen */
+  c.fillStyle='rgba(255,255,255,.35)';c.strokeStyle='rgba(255,255,255,.5)';c.lineWidth=1;
+  for(var q=0;q<14;q++){var bx=(q*71+40)%GW,by=GFL-((t*30+q*53)%GFL),br=2+q%3;c.beginPath();c.arc(bx+Math.sin(t+q)*6,by,br,0,7);c.fill();c.stroke()}
+}
+function gHouse(c){
+  /* Anker-Haus: Holzhaus mit Bullauge, Tür, Anker, Laterne und Dach-Deck */
+  var x0=24,x1=148,top=312;
+  var g=c.createLinearGradient(x0,0,x1,0);g.addColorStop(0,'#8b6540');g.addColorStop(.5,'#a67c53');g.addColorStop(1,'#80593a');
+  c.fillStyle=g;c.fillRect(x0,top,x1-x0,GFL-top);
+  c.strokeStyle='rgba(55,33,15,.45)';c.lineWidth=2;
+  for(var i=0;i<6;i++){c.beginPath();c.moveTo(x0,top+i*22+10);c.lineTo(x1,top+i*22+10);c.stroke()}
+  c.fillStyle='rgba(255,230,180,.16)';for(var j=0;j<8;j++)c.fillRect(x0+4+j*16,top+2,2,GFL-top-4);
+  c.fillStyle='#3a2410';for(var n=0;n<6;n++)for(var m=0;m<2;m++){c.beginPath();c.arc(x0+7+m*(x1-x0-14),top+16+n*22,1.6,0,7);c.fill()}
+  /* Dach-Deck mit Geländer */
+  c.fillStyle='#5e432a';c.fillRect(18,300,136,15);c.fillStyle='#7a5638';c.fillRect(18,300,136,5);
+  c.fillStyle='#3d2916';for(var d=0;d<8;d++)c.fillRect(24+d*17,306,2,9);
+  c.fillStyle='#6d4d31';[22,150].forEach(function(px){c.fillRect(px-2,272,5,30);c.fillStyle='#cfa86a';c.beginPath();c.arc(px,271,4,0,7);c.fill();c.fillStyle='#6d4d31'});
+  c.strokeStyle='#d9c08a';c.lineWidth=2.5;c.beginPath();c.moveTo(22,280);c.quadraticCurveTo(86,294,150,280);c.stroke();
+  /* Bullauge */
+  c.fillStyle='#b88a3a';c.beginPath();c.arc(56,352,20,0,7);c.fill();
+  var wg=c.createRadialGradient(50,346,2,56,352,16);wg.addColorStop(0,'#bfeaff');wg.addColorStop(1,'#2b6f96');c.fillStyle=wg;c.beginPath();c.arc(56,352,15,0,7);c.fill();
+  c.strokeStyle='#e8c46a';c.lineWidth=3;c.beginPath();c.arc(56,352,17.5,0,7);c.stroke();
+  c.strokeStyle='rgba(255,255,255,.7)';c.lineWidth=2;c.beginPath();c.arc(56,352,10,3.6,4.7);c.stroke();
+  for(var s=0;s<8;s++){c.fillStyle='#8a6522';c.beginPath();c.arc(56+Math.cos(s*.785)*20,352+Math.sin(s*.785)*20,1.6,0,7);c.fill()}
+  /* Tür */
+  c.fillStyle='#4a301b';c.beginPath();c.moveTo(94,GFL);c.lineTo(94,376);c.quadraticCurveTo(113,356,132,376);c.lineTo(132,GFL);c.closePath();c.fill();
+  c.strokeStyle='#2e1c0e';c.lineWidth=1.5;c.beginPath();c.moveTo(113,364);c.lineTo(113,GFL);c.stroke();
+  c.fillStyle='#e8c46a';c.beginPath();c.arc(124,410,2.8,0,7);c.fill();
+  c.fillStyle='#6d4d31';c.fillRect(90,GFL-5,46,5);
+  /* Anker-Zeichen über der Tür */
+  c.strokeStyle='#e3ebf3';c.lineWidth=3.5;c.lineCap='round';
+  c.beginPath();c.moveTo(113,326);c.lineTo(113,350);c.moveTo(105,334);c.lineTo(121,334);c.moveTo(103,343);c.quadraticCurveTo(113,356,123,343);c.stroke();
+  c.beginPath();c.arc(113,324,3,0,7);c.stroke();
+  /* Laterne mit Schein */
+  c.strokeStyle='#2a2a2a';c.lineWidth=2;c.beginPath();c.moveTo(144,318);c.lineTo(144,328);c.stroke();
+  var lg=c.createRadialGradient(144,336,1,144,336,22);lg.addColorStop(0,'rgba(255,225,130,.8)');lg.addColorStop(1,'rgba(255,225,130,0)');c.fillStyle=lg;c.fillRect(120,314,48,48);
+  c.fillStyle='#ffd966';c.fillRect(140,328,8,12);c.strokeStyle='#2a2a2a';c.strokeRect(140,328,8,12);
+  /* Seepocken am Sockel */
+  c.fillStyle='#d8d2c0';for(var b=0;b<9;b++){c.beginPath();c.arc(x0+6+b*14,GFL-3-(b%3)*2,3.5,Math.PI,0);c.fill()}
+}
+function gShell(c){
+  /* Muschel-Imbiss: große Fächer-Muschel mit Markise, Theke und Schild */
+  var cx=716,w=66,top=300;
+  var g=c.createLinearGradient(0,top,0,GFL);g.addColorStop(0,'#ffd3c4');g.addColorStop(1,'#ee93ad');
+  c.fillStyle=g;c.beginPath();c.moveTo(cx-w,GFL);c.bezierCurveTo(cx-w-8,355,cx-34,top+4,cx,top);c.bezierCurveTo(cx+34,top+4,cx+w+8,355,cx+w,GFL);c.closePath();c.fill();
+  c.strokeStyle='#c76f8e';c.lineWidth=2.5;
+  for(var i=-5;i<=5;i++){c.beginPath();c.moveTo(cx,GFL+10);c.quadraticCurveTo(cx+i*14,top+60,cx+i*9.5,top+4+Math.abs(i)*6);c.stroke()}
+  /* Rand mit Wellenkante */
+  c.fillStyle='#f7a6bd';
+  for(var k=-6;k<=6;k++){var ex=cx+k*9.6,ey=top+8+Math.abs(k)*5.2;c.beginPath();c.arc(ex,ey,6,0,7);c.fill()}
+  /* Perle oben */
+  var pg=c.createRadialGradient(cx-2,top-5,1,cx,top-2,7);pg.addColorStop(0,'#fff');pg.addColorStop(1,'#cfd6f2');c.fillStyle=pg;c.beginPath();c.arc(cx,top-2,6,0,7);c.fill();
+  /* Fenster / Theke */
+  c.fillStyle='#fff3d6';c.fillRect(cx-40,372,80,36);
+  c.fillStyle='#ffe0a0';c.fillRect(cx-40,372,80,10);
+  c.fillStyle='#6a3f22';c.fillRect(cx-44,406,88,7);
+  /* gestreifte Markise */
+  for(var s=0;s<8;s++){c.fillStyle=s%2?'#ffffff':'#3f86c7';c.beginPath();c.moveTo(cx-46+s*11.5,356);c.lineTo(cx-46+(s+1)*11.5,356);c.lineTo(cx-48+(s+1)*12,374);c.lineTo(cx-48+s*12,374);c.closePath();c.fill()}
+  c.fillStyle='#2f5f94';for(var sc=0;sc<8;sc++){c.beginPath();c.arc(cx-42+sc*12,374,6,0,Math.PI);c.fill()}
+  /* Schild */
+  c.fillStyle='#4a3020';c.fillRect(cx-30,338,60,15);c.fillStyle='#fff3d6';c.font='800 11px sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText('IMBISS',cx,346);
+  c.strokeStyle='#4a3020';c.lineWidth=1.5;c.beginPath();c.moveTo(cx-20,338);c.lineTo(cx-20,330);c.moveTo(cx+20,338);c.lineTo(cx+20,330);c.stroke();
+  /* Gläser auf der Theke */
+  c.fillStyle='#8fd3ff';c.fillRect(cx-28,394,7,12);c.fillRect(cx+18,396,7,10);c.fillStyle='#ff8a65';c.fillRect(cx-8,398,14,8);
+  /* Lichterkette */
+  for(var l=0;l<7;l++){c.fillStyle=['#ffd24a','#7ee0ff','#ff8aa8'][l%3];c.beginPath();c.arc(cx-54+l*18,372+Math.sin(l*1.2)*0+((l%2)?3:0),2.4,0,7);c.fill()}
+}
+function gCracks(c,r,frac){
+  if(frac>=.8)return;c.strokeStyle='rgba(20,10,5,.55)';c.lineWidth=2;c.lineJoin='round';
+  var n=Math.round((1-frac)*10);
+  for(var i=0;i<n;i++){var x=r.x+14+((i*37)%(r.x2-r.x-28)),y=GFL-18-((i*53)%110);c.beginPath();c.moveTo(x,y);c.lineTo(x+8,y-11);c.lineTo(x+1,y-21);c.lineTo(x+11,y-33);c.stroke()}
+  if(frac<.4){c.fillStyle='rgba(60,60,60,.4)';for(var k=0;k<4;k++){c.beginPath();c.arc((r.x+r.x2)/2+Math.sin(G.t*2+k)*12,r.y-8-((G.t*40+k*25)%60),6+k,0,7);c.fill()}}
+}
+function gEagleDraw(c){
+  if(G.img)c.drawImage(G.img,30,190,102,122);
+  else{c.fillStyle='#fff';c.beginPath();c.arc(84,240,28,0,7);c.fill()}
+}
+function gEnemyDraw(c,kind,x,y,t,hand){
+  c.save();c.translate(x,y);
+  if(kind==='qualle'){
+    var bob=Math.sin(t*2)*3;c.translate(0,bob);
+    c.strokeStyle='#b78be0';c.lineWidth=5;c.lineCap='round';
+    for(var i=0;i<6;i++){c.beginPath();c.moveTo(-24+i*9.6,26);for(var k=1;k<=4;k++)c.lineTo(-24+i*9.6+Math.sin(t*3+i+k)*5,26+k*10);c.stroke()}
+    var g=c.createRadialGradient(-10,-20,4,0,0,46);g.addColorStop(0,'#e5c6ff');g.addColorStop(.6,'#a56ee0');g.addColorStop(1,'#7a46b8');
+    c.fillStyle=g;c.beginPath();c.moveTo(-42,26);c.bezierCurveTo(-48,-44,48,-44,42,26);c.quadraticCurveTo(0,38,-42,26);c.fill();
+    c.fillStyle='rgba(255,255,255,.45)';c.beginPath();c.ellipse(-16,-16,10,6,-.5,0,7);c.fill();
+    c.fillStyle='#fff';c.beginPath();c.arc(-13,0,8,0,7);c.arc(13,0,8,0,7);c.fill();c.fillStyle='#222';c.beginPath();c.arc(-16,1,3.5,0,7);c.arc(10,1,3.5,0,7);c.fill();
+    c.strokeStyle='#4a2a78';c.lineWidth=3;c.beginPath();c.arc(-2,12,8,.15,Math.PI-.15);c.stroke();
+  }else{
+    c.fillStyle='#d9473f';c.beginPath();c.ellipse(0,6,30,36,0,0,7);c.fill();
+    c.fillStyle='#b8362f';for(var s=0;s<4;s++)c.fillRect(-22+s*2,10+s*9,44-s*4,3);
+    c.strokeStyle='#d9473f';c.lineWidth=4;c.beginPath();c.moveTo(-8,-26);c.lineTo(-14+Math.sin(t*3)*2,-44);c.moveTo(8,-26);c.lineTo(14+Math.sin(t*3+1)*2,-44);c.stroke();
+    c.fillStyle='#fff';c.beginPath();c.arc(-14,-45,7,0,7);c.arc(14,-45,7,0,7);c.fill();c.fillStyle='#222';c.beginPath();c.arc(-16,-45,3,0,7);c.arc(12,-45,3,0,7);c.fill();
+    c.fillStyle='#d9473f';c.beginPath();c.ellipse(-38,-2,16,12,-.5,0,7);c.fill();c.beginPath();c.ellipse(38,-2,16,12,.5,0,7);c.fill();
+    c.strokeStyle='#8a1f1a';c.lineWidth=2.5;c.beginPath();c.moveTo(-42,-2);c.lineTo(-26,-2);c.moveTo(42,-2);c.lineTo(26,-2);c.stroke();
+    c.strokeStyle='#4a1010';c.lineWidth=3;c.beginPath();c.arc(0,-12,7,.2,Math.PI-.2);c.stroke();
+  }
+  c.restore();
+}
+function gDraw(){
+  var c=G.cv.getContext('2d');c.save();
+  if(G.shake>0)c.translate((Math.random()-.5)*G.shake,(Math.random()-.5)*G.shake);
+  gBg(c,G.t);gHouse(c);gShell(c);
+  gCracks(c,gRect('en'),G.hpMe/G.max);gCracks(c,gRect('me'),G.hpEn/G.max);
+  gEagleDraw(c);gEnemyDraw(c,G.en,716,250,G.t);
+  c.drawImage(G.wcv,0,0);
+  /* Kanten der Wand */
+  /* Hindernisse: unzerstörbare Eisenminen */
+  G.objs.forEach(function(o){var y=gObjY(o);c.save();c.translate(o.x,y);c.rotate(G.t*.8);
+    c.fillStyle='#4b5662';for(var i=0;i<8;i++){c.rotate(Math.PI/4);c.fillRect(-3,-o.r-8,6,12)}
+    var g=c.createRadialGradient(-7,-7,3,0,0,o.r);g.addColorStop(0,'#9aa7b5');g.addColorStop(1,'#39434d');c.fillStyle=g;c.beginPath();c.arc(0,0,o.r,0,7);c.fill();
+    c.strokeStyle='#cbd5e0';c.lineWidth=2;c.beginPath();c.arc(0,0,o.r-6,0,7);c.stroke();c.restore()});
+  /* Waffen in den Händen */
+  c.font='30px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';c.textAlign='center';c.textBaseline='middle';
+  var pl=G.aim?gPull(G.aim):null;
+  if(G.me.ammo>0){var wx=GH_ME.x,wy=GH_ME.y;if(pl){wx=GH_ME.x-pl.lx*pl.k*.55;wy=GH_ME.y-pl.ly*pl.k*.55}c.fillText(G.me.w.e,wx,wy)}
+  if(G.bot.ammo>0)c.fillText(G.bot.w.e,GH_EN.x,GH_EN.y);
+  /* Zielhilfe */
+  if(pl&&pl.cl>14&&pl.lx>0){
+    var sp=GVMAX*pl.cl/150,vx=pl.lx/pl.len*sp,vy=pl.ly/pl.len*sp,x=GH_ME.x,y=GH_ME.y,pts=G.me.w.pre?34:6;
+    c.fillStyle='rgba(255,255,255,.85)';
+    for(var i=0;i<pts;i++){for(var s=0;s<4;s++){vy+=GRAV*.015;x+=vx*.015;y+=vy*.015}c.beginPath();c.arc(x,y,3,0,7);c.fill()}
+    c.strokeStyle='rgba(255,255,255,.55)';c.lineWidth=3;c.beginPath();c.moveTo(GH_ME.x,GH_ME.y);c.lineTo(GH_ME.x-pl.lx*pl.k*.55,GH_ME.y-pl.ly*pl.k*.55);c.stroke();
+  }
+  /* Schüsse, Explosionen */
+  G.shots.forEach(function(s){(s.tr||[]).forEach(function(q,qi,arr){c.globalAlpha=.08+.3*qi/arr.length;c.fillStyle='#fff';c.beginPath();c.arc(q[0],q[1],2+qi*.3,0,7);c.fill()});c.globalAlpha=1;c.save();c.shadowColor='rgba(0,0,0,.45)';c.shadowBlur=8;c.translate(s.x,s.y);c.rotate(s.rot);c.font='28px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';c.fillText(s.w.e,0,0);c.restore()});
+  G.rings.forEach(function(r){if(!r.c){var fa=Math.max(0,.5*(1-r.t/.2));if(fa>0){var fg=c.createRadialGradient(r.x,r.y,0,r.x,r.y,r.max*.9);fg.addColorStop(0,'rgba(255,240,180,'+fa+')');fg.addColorStop(1,'rgba(255,160,60,0)');c.fillStyle=fg;c.beginPath();c.arc(r.x,r.y,r.max*.9,0,7);c.fill()}}c.strokeStyle=r.c||'rgba(255,230,150,'+(1-r.t/.35)+')';c.lineWidth=4*(1-r.t/.35)+1;c.beginPath();c.arc(r.x,r.y,r.r,0,7);c.stroke()});
+  G.fx.forEach(function(p){c.globalAlpha=1-p.t/p.l;c.fillStyle=p.c;c.beginPath();c.arc(p.x,p.y,p.r,0,7);c.fill()});c.globalAlpha=1;
+  c.font='800 22px sans-serif';
+  G.txt.forEach(function(t){c.globalAlpha=Math.max(0,1-t.t/1.2);c.fillStyle='#000';c.fillText(t.s,t.x+1,t.y+1);c.fillStyle=t.c;c.fillText(t.s,t.x,t.y)});c.globalAlpha=1;
+  c.restore();
+  /* Anzeigen */
+  gBar(c,16,12,'Dein Anker-Haus',G.hpMe,G.max,'#4FD1A5');gBar(c,GW-16-250,12,gEnName(),G.hpEn,G.max,'#ff8a65');
+  gAmmo(c,16,GH-44,G.me,'Du');gAmmo(c,GW-16-250,GH-44,G.bot,'Gegner');
+  if(G.me.cd>0){c.fillStyle='rgba(0,0,0,.4)';c.fillRect(16,GH-60,250,6);c.fillStyle='#ffd24a';c.fillRect(16,GH-60,250*(1-G.me.cd/1.5),6)}
+  if(G.noteT>0){c.font='700 20px sans-serif';c.textAlign='center';c.fillStyle='rgba(0,0,0,.55)';c.fillRect(GW/2-230,GH/2-24,460,40);c.fillStyle='#fff';c.fillText(G.note,GW/2,GH/2-3)}
+  if(G.ph==='end'){c.fillStyle='rgba(0,0,0,.45)';c.fillRect(0,0,GW,GH);c.fillStyle='#fff';c.font='800 54px sans-serif';c.textAlign='center';c.fillText(G.res==='win'?'Gewonnen!':'Verloren',GW/2,GH/2)}
+  c.textAlign='left';c.textBaseline='alphabetic';
+}
+function gEnName(){return G.en==='qualle'?'Muschel-Imbiss':'Muschel-Imbiss'}
+function gBar(c,x,y,label,hp,max,col){
+  c.fillStyle='rgba(0,0,0,.45)';c.fillRect(x,y,250,34);
+  c.fillStyle='#fff';c.font='700 13px sans-serif';c.textAlign='left';c.textBaseline='alphabetic';c.fillText(label,x+8,y+14);c.textAlign='right';c.fillText(Math.round(hp)+' kcal',x+242,y+14);
+  c.fillStyle='rgba(255,255,255,.18)';c.fillRect(x+8,y+20,234,8);c.fillStyle=col;c.fillRect(x+8,y+20,234*Math.max(0,hp/max),8);
+  c.textBaseline='middle';
+}
+function gAmmo(c,x,y,f,label){
+  c.fillStyle='rgba(0,0,0,.45)';c.fillRect(x,y,250,30);
+  c.textBaseline='alphabetic';c.textAlign='left';c.fillStyle='#fff';c.font='700 13px sans-serif';
+  var dbl=!f.w.pre&&f.hits>0;c.fillText(label+': '+f.w.n+' ('+(dbl?f.w.kcal*2+' kcal, x2':f.w.kcal+' kcal')+')',x+8,y+19);
+  for(var i=0;i<f.w.shots;i++){c.fillStyle=i<f.ammo?'#ffd24a':'rgba(255,255,255,.2)';c.beginPath();c.arc(x+250-12-i*14,y+15,5,0,7);c.fill()}
+  c.textBaseline='middle';
+}
+function gLoop(ts){
+  if(!G||S.view!=='game'||!G.cv){gRaf=0;return}
+  var dt=Math.min(.033,gLast?(ts-gLast)/1000:.016);gLast=ts;
+  if(G.ph==='play')gStep(dt);
+  if(G&&G.cv)gDraw();
+  gRaf=requestAnimationFrame(gLoop);
+}
+function gStart(){if(!gRaf){gLast=0;gRaf=requestAnimationFrame(gLoop)}}
+/* ---- Seite ---- */
+function gPortrait(kind,w,h){
+  /* Porträt für die Auswahl */
+  var cv=document.createElement('canvas');cv.width=w;cv.height=h;var c=cv.getContext('2d'),sc=h/150;
+  var g=c.createLinearGradient(0,0,0,h);g.addColorStop(0,'#0c5d8c');g.addColorStop(1,'#38b8c9');c.fillStyle=g;c.fillRect(0,0,w,h);
+  c.save();c.scale(sc,sc);var tmp=G;G={t:0};gEnemyDraw(c,kind,w/sc/2,h/sc*.5,0);G=tmp;c.restore();
+  return cv;
+}
+function gPanorama(){
+  var cv=document.createElement('canvas');cv.width=GW;cv.height=GH;var c=cv.getContext('2d');
+  var tmp=G;G={t:1.5,img:null};gBg(c,1.5);gHouse(c);gShell(c);
+  c.fillStyle='#e3c382';c.fillRect(368,40,64,GFL-40);
+  G=tmp;cv.setAttribute('aria-hidden','true');
+  return cv;
+}
+function renderGame(){
+  var h=topbar({gear:true})+'<div class="pg-h"><div><h1>Minispiel</h1><small>Küstenkampf · Sieg bringt 5 EP</small></div><button type="button" class="btn sm" data-act="gquit">Zurück</button></div>';
+  var td=keyOf(today(0)),got=(S.arena&&S.arena.game&&S.arena.game[td])||0,mount=null;
+  if(!S.premium){
+    h+='<section class="card lockcard"><span class="lockbadge">'+I.lock+'Premium</span><h3>Küstenkampf</h3><p class="sub" style="margin:8px 0 14px">Ein Schleuder-Duell unter Wasser: Zerstöre das Gebäude deines Gegners und verdiene EP. Das Minispiel gibt es nur mit Premium.</p><button type="button" class="btn pri full" style="flex:none" data-act="openpremium">Premium ansehen ('+PREMIUM_PRICE+')</button></section>';
+  }else if(gMode==='pick'){
+    h+='<section class="card"><h3 style="margin:0 0 4px">Korallenstadt</h3><p class="sub" style="margin:0 0 10px">Gegen wen willst du kämpfen?</p><div class="gpano" id="gpano"></div><div class="gcards">'+
+     ['qualle','hummer'].map(function(k){return '<button type="button" class="gcard" data-act="gpick" data-v="'+k+'"><span class="gpt" data-p="'+k+'"></span><b>'+esc(GEN[k].n)+'</b><small>'+esc(GEN[k].d)+'</small></button>'}).join('')+'</div></section>';
+  }else if(G&&(gMode==='play'||gMode==='end')){
+    h+='<div class="gwrap" id="gwrap"></div>';
+    if(gMode==='end'){
+      h+='<section class="card" style="margin-top:12px;text-align:center"><h3 style="margin:0 0 6px">'+(G.res==='win'?'Gewonnen!':'Verloren')+'</h3><p class="sub" style="margin:0 0 12px">'+(G.res==='win'?'Du bekommst '+G.awarded+' EP. Ein Tageslimit gibt es nicht.':'Das Anker-Haus ist zerstört. Probier es gleich nochmal.')+'</p><div class="two"><button type="button" class="btn pri" style="flex:1" data-act="gplay">Nochmal spielen</button><button type="button" class="btn" style="flex:1" data-act="gquit">Zurück</button></div></section>';
+    }else h+='<p class="hint" style="margin:10px 2px 0">Ziehe die Waffe in der Hand deines Adlers nach hinten und lass los. Zwischen zwei Schüssen musst du 1,5 Sekunden warten. Der Burger trifft genau dorthin, wo du hinzielst, alle anderen Waffen streuen ein wenig. Nach dem ersten Treffer machen sie doppelten Schaden (außer der Burger). Treffer im Sand reißen ein Loch.</p>';
+    mount=true;
+  }else{
+    h+='<section class="card"><h3 style="margin:0 0 6px">Küstenkampf</h3><p class="sub" style="margin:0 0 12px">Dein Adler steht auf dem Anker-Haus links, dein Gegner auf dem Muschel-Imbiss rechts. Dazwischen steht eine riesige Sandwand. Zerstöre das gegnerische Gebäude, bevor es deines trifft.</p>'+
+     '<div class="ar-ep">'+[['Waffen','Banane, Melone, Apfel, Pizza und der seltene Burger. Der Schaden ist so hoch wie die Kalorien des Essens. Nach dem ersten Treffer richtet jede Waffe außer dem Burger doppelten Schaden an.'],['Leben','Beide Gebäude haben so viele Leben, wie dein Tagesziel Kalorien hat ('+gTarget()+').'],['Hindernisse','Eine Sandwand, die du durchschießen musst, und zwei Eisenminen, die du nicht zerstören kannst.'],['Belohnung','5 EP pro Sieg, ohne Tageslimit. Heute: '+got+' EP.']].map(function(x){return '<div class="ar-e"><div><b>'+x[0]+'</b><small>'+x[1]+'</small></div></div>'}).join('')+'</div>'+
+     '<button type="button" class="btn pri full" style="margin-top:14px;flex:none" data-act="gplay">Spielen</button></section>';
+  }
+  app.innerHTML=h;
+  if(mount&&G&&G.cv){var w=document.getElementById('gwrap');if(w)w.appendChild(G.cv);gStart()}
+  if(gMode==='pick'){var gp=document.getElementById('gpano');if(gp)gp.appendChild(gPanorama());
+    [].forEach.call(document.querySelectorAll('.gpt'),function(el){el.appendChild(gPortrait(el.dataset.p,200,120))})}
 }
 
 var SC=' Gesundheits-Score: ganze Zahl von 1 bis 100, 100 ist am gesündesten. Er bewertet Nährstoffdichte, Ballaststoffe, Gemüse, Obst, Vollkorn, Hülsenfrüchte, wenig Zucker, wenig gesättigtes Fett, wenig Salz und wenig Verarbeitung. Süßigkeiten, Softdrinks und Frittiertes liegen unter 30, Gemüse, Hülsenfrüchte und Fisch über 80.';
@@ -3946,6 +4333,10 @@ function onClick(e){
   case 'nav':go(t.dataset.v);break;
   case 'openshop':S.prev=S.view;S.view='shop';save();render();window.scrollTo(0,0);break;
   case 'shopback':S.view='eagle';save();render();window.scrollTo(0,0);break;
+  case 'opengame':gMode='home';G=null;S.view='game';save();render();window.scrollTo(0,0);break;
+  case 'gplay':if(!S.premium){openSheet(null,'premium');break}gMode='pick';G=null;render();window.scrollTo(0,0);break;
+  case 'gpick':if(!S.premium){openSheet(null,'premium');break}gNew(t.dataset.v);gMode='play';render();window.scrollTo(0,0);break;
+  case 'gquit':gMode='home';G=null;S.view='arena';save();render();window.scrollTo(0,0);break;
   case 'arview':S.arview=t.dataset.v;render();window.scrollTo(0,0);break;
   case 'openquests':S.arview='quests';S.view='arena';save();render();window.scrollTo(0,0);break;
   case 'egslot':S.eagle.slot=t.dataset.v;save();render();break;
@@ -4143,7 +4534,3 @@ load();applyTheme();render();
 })();
 
 </script>
-
-<script>if("serviceWorker"in navigator&&location.protocol.indexOf("http")===0){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
-</body>
-</html>
