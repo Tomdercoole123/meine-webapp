@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,viewport-fit=cover">
 <title>Mahlzeit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1112,6 +1114,109 @@ html{height:100%;min-height:100dvh}body{margin:0}
 body{min-height:100vh;min-height:100dvh;padding-top:max(14px,env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px));padding-left:max(12px,env(safe-area-inset-left,0px),var(--safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px),var(--safe-area-inset-right,0px));padding-bottom:max(8px,env(safe-area-inset-bottom,0px))}
 @media (max-width:520px){#app{max-width:none}.panel{max-width:none}.cmo{left:0;width:100%;transform:none;box-shadow:none}.tabbar{width:calc(100% - 20px)}}
 @media (display-mode:fullscreen),(display-mode:standalone){html,body{overscroll-behavior-y:none}}
+
+/* ---- v49: Mango springt zwischen den Fragen, Verlauf-Mango, Name ---- */
+html,body{overflow-x:clip}
+.coach .eg{position:relative;z-index:2}
+.coach .eagle .mg{transform-box:fill-box;transform-origin:50% 100%}
+.coach .eagle .arm{transform-box:fill-box;transform-origin:50% 0}
+@keyframes hopOutX{0%,22%{transform:translateX(0)}100%{transform:translateX(120vw)}}
+@keyframes hopOutY{0%{transform:translateY(0) scale(1,1)}20%{transform:translateY(10px) scale(1.07,.86)}26%{transform:translateY(-8px) scale(.93,1.1)}58%{transform:translateY(-80px) scale(1,1)}100%{transform:translateY(-6px) scale(1,1)}}
+@keyframes hopOutLL{0%{transform:rotate(0)}18%{transform:rotate(30deg)}26%{transform:rotate(-3deg)}50%{transform:rotate(32deg)}100%{transform:rotate(22deg)}}
+@keyframes hopOutLLS{0%{transform:rotate(0)}18%{transform:rotate(-64deg)}26%{transform:rotate(-4deg)}50%{transform:rotate(-90deg)}100%{transform:rotate(-70deg)}}
+@keyframes hopOutLR{0%{transform:rotate(0)}18%{transform:rotate(-30deg)}26%{transform:rotate(3deg)}50%{transform:rotate(-32deg)}100%{transform:rotate(-22deg)}}
+@keyframes hopOutLRS{0%{transform:rotate(0)}18%{transform:rotate(64deg)}26%{transform:rotate(4deg)}50%{transform:rotate(90deg)}100%{transform:rotate(70deg)}}
+@keyframes hopOutAL{0%{transform:rotate(0)}18%{transform:rotate(-14deg)}30%{transform:rotate(80deg)}100%{transform:rotate(40deg)}}
+@keyframes hopOutAR{0%{transform:rotate(0)}18%{transform:rotate(14deg)}30%{transform:rotate(-80deg)}100%{transform:rotate(-40deg)}}
+@keyframes qFadeOut{to{opacity:0;transform:translateY(8px)}}
+@keyframes qFadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.coach.hopout .eg{animation:hopOutX 1s cubic-bezier(.35,0,.85,.6) forwards}
+.coach.hopout .eagle .mg{animation:hopOutY 1s ease-out forwards}
+.coach.hopout .eagle .ll{animation:hopOutLL 1s ease-out forwards}
+.coach.hopout .eagle .lls{animation:hopOutLLS 1s ease-out forwards}
+.coach.hopout .eagle .lr{animation:hopOutLR 1s ease-out forwards}
+.coach.hopout .eagle .lrs{animation:hopOutLRS 1s ease-out forwards}
+.coach.hopout .eagle .al{animation:hopOutAL 1s ease-out forwards}
+.coach.hopout .eagle .ar{animation:hopOutAR 1s ease-out forwards}
+.coach.hopout .bubble,.qout{animation:qFadeOut .4s ease-in forwards}
+@keyframes hopInX{0%{transform:translateX(-120vw)}68%,100%{transform:translateX(0)}}
+@keyframes hopInY{0%{transform:translateY(-6px) scale(1,1)}34%{transform:translateY(-84px) scale(1,1)}66%{transform:translateY(-4px) scale(1,1.06)}74%{transform:translateY(9px) scale(1.08,.84)}86%{transform:translateY(-3px) scale(.97,1.04)}100%{transform:translateY(0) scale(1,1)}}
+@keyframes hopInLL{0%{transform:rotate(22deg)}30%{transform:rotate(32deg)}62%{transform:rotate(4deg)}74%{transform:rotate(30deg)}100%{transform:rotate(0)}}
+@keyframes hopInLLS{0%{transform:rotate(-70deg)}30%{transform:rotate(-92deg)}62%{transform:rotate(-6deg)}74%{transform:rotate(-66deg)}100%{transform:rotate(0)}}
+@keyframes hopInLR{0%{transform:rotate(-22deg)}30%{transform:rotate(-32deg)}62%{transform:rotate(-4deg)}74%{transform:rotate(-30deg)}100%{transform:rotate(0)}}
+@keyframes hopInLRS{0%{transform:rotate(70deg)}30%{transform:rotate(92deg)}62%{transform:rotate(6deg)}74%{transform:rotate(66deg)}100%{transform:rotate(0)}}
+@keyframes hopInAL{0%{transform:rotate(40deg)}35%{transform:rotate(70deg)}70%{transform:rotate(10deg)}100%{transform:rotate(0)}}
+@keyframes hopInAR{0%{transform:rotate(-40deg)}35%{transform:rotate(-70deg)}70%{transform:rotate(-10deg)}100%{transform:rotate(0)}}
+.coach.hopin .eg{animation:hopInX 1.15s cubic-bezier(.25,.4,.5,1) both}
+.coach.hopin .eagle .mg{animation:hopInY 1.15s ease-in-out both}
+.coach.hopin .eagle .ll{animation:hopInLL 1.15s ease-in-out both}
+.coach.hopin .eagle .lls{animation:hopInLLS 1.15s ease-in-out both}
+.coach.hopin .eagle .lr{animation:hopInLR 1.15s ease-in-out both}
+.coach.hopin .eagle .lrs{animation:hopInLRS 1.15s ease-in-out both}
+.coach.hopin .eagle .al{animation:hopInAL 1.15s ease-in-out both}
+.coach.hopin .eagle .ar{animation:hopInAR 1.15s ease-in-out both}
+.coach.hopin .bubble,.qin{animation:qFadeIn .5s ease-out .8s both}
+.et-bird{display:none}
+.etrack{height:22px;margin-bottom:8px}
+/* Gehen mit Knien: abwechselnd hebt ein Bein, das Knie knickt ein, der Körper wippt und schwingt */
+@keyframes wkMg{0%{transform:translateY(0) rotate(-3deg)}25%{transform:translateY(-9px) rotate(0)}50%{transform:translateY(0) rotate(3deg)}75%{transform:translateY(-9px) rotate(0)}100%{transform:translateY(0) rotate(-3deg)}}
+@keyframes wkLL{0%,50%,100%{transform:rotate(0)}25%{transform:rotate(24deg)}}
+@keyframes wkLLS{0%,50%,100%{transform:rotate(0)}25%{transform:rotate(-82deg)}}
+@keyframes wkLR{0%,50%,100%{transform:rotate(0)}75%{transform:rotate(-24deg)}}
+@keyframes wkLRS{0%,50%,100%{transform:rotate(0)}75%{transform:rotate(82deg)}}
+@keyframes wkAL{0%,100%{transform:rotate(14deg)}50%{transform:rotate(-14deg)}}
+@keyframes wkAR{0%,100%{transform:rotate(14deg)}50%{transform:rotate(-14deg)}}
+.eagle.walk .mg{animation:wkMg .8s ease-in-out infinite}
+.eagle.walk .ll{animation:wkLL .8s ease-in-out infinite}
+.eagle.walk .lls{animation:wkLLS .8s ease-in-out infinite}
+.eagle.walk .lr{animation:wkLR .8s ease-in-out infinite}
+.eagle.walk .lrs{animation:wkLRS .8s ease-in-out infinite}
+.eagle.walk .al{animation:wkAL .8s ease-in-out infinite}
+.eagle.walk .ar{animation:wkAR .8s ease-in-out -.4s infinite}
+.hgo{position:fixed;left:0;bottom:calc(98px + env(safe-area-inset-bottom,0px));z-index:40;width:130px;pointer-events:none;will-change:transform}
+.hgo .eagle{display:block;width:130px;height:auto;overflow:visible}
+.hgb{position:absolute;bottom:100%;left:-10px;width:190px;margin-bottom:4px;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:9px 12px;font-size:.92rem;font-weight:700;line-height:1.3;color:var(--ink);text-align:center;transition:opacity .4s;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.hgb::after{content:"";position:absolute;left:50%;bottom:-8px;width:14px;height:14px;margin-left:-7px;background:var(--bg);border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(45deg)}
+@media (prefers-reduced-motion:reduce){.coach.hopout *,.coach.hopin *,.qout,.qin,.eagle.walk *{animation:none!important}}
+/* v49b: Blickrichtung, größere Mango */
+.eagle .fc{transform-box:fill-box;transform-origin:50% 50%;transition:transform .25s ease}
+.eagle .gi-face,.eagle .gi-head{transition:transform .25s ease}
+.eagle.lk-r .fc{transform:translateX(30px) scaleX(.78)}
+.eagle.lk-r .gi-face{transform:translateX(30px) scaleX(.78)}
+.eagle.lk-r .gi-head{transform:translateX(12px)}
+.coach .eg{flex:0 0 152px;width:152px}
+.hgo{width:175px}.hgo .eagle{width:175px}
+.hgb{left:50%;margin-left:-100px;width:200px}
+@media (max-width:380px){.coach .eg{flex-basis:130px;width:130px}}
+/* v49c: ganzer Körper dreht sich in Laufrichtung (Profil), Knie zeigen nach vorn */
+.eagle.lk-r,.eagle.lk-l{transition:transform .28s ease}
+.eagle.lk-r{transform:scaleX(.8)}
+.eagle.lk-l{transform:scaleX(-.8)}
+.eagle.lk-l .fc{transform:translateX(30px) scaleX(.78)}
+.eagle.lk-l .gi-face{transform:translateX(30px) scaleX(.78)}
+.eagle.lk-l .gi-head{transform:translateX(12px)}
+@keyframes pfJH{0%{transform:rotate(0)}18%{transform:rotate(-30deg)}26%{transform:rotate(4deg)}50%{transform:rotate(-48deg)}100%{transform:rotate(-34deg)}}
+@keyframes pfJS{0%{transform:rotate(0)}18%{transform:rotate(66deg)}26%{transform:rotate(2deg)}50%{transform:rotate(100deg)}100%{transform:rotate(80deg)}}
+@keyframes pfJA{0%{transform:rotate(0)}18%{transform:rotate(18deg)}35%{transform:rotate(-60deg)}100%{transform:rotate(-30deg)}}
+.coach.hopout .eagle.lk-r .ll,.coach.hopout .eagle.lk-r .lr{animation:pfJH 1s ease-out forwards}
+.coach.hopout .eagle.lk-r .lls,.coach.hopout .eagle.lk-r .lrs{animation:pfJS 1s ease-out forwards}
+.coach.hopout .eagle.lk-r .al,.coach.hopout .eagle.lk-r .ar{animation:pfJA 1s ease-out forwards}
+@keyframes pfIH{0%{transform:rotate(-34deg)}30%{transform:rotate(-48deg)}62%{transform:rotate(-8deg)}74%{transform:rotate(-30deg)}100%{transform:rotate(0)}}
+@keyframes pfIS{0%{transform:rotate(80deg)}30%{transform:rotate(100deg)}62%{transform:rotate(6deg)}74%{transform:rotate(66deg)}100%{transform:rotate(0)}}
+@keyframes pfIA{0%{transform:rotate(-30deg)}35%{transform:rotate(-60deg)}70%{transform:rotate(10deg)}100%{transform:rotate(0)}}
+.coach.hopin .eagle.lk-r .ll,.coach.hopin .eagle.lk-r .lr{animation:pfIH 1.15s ease-in-out both}
+.coach.hopin .eagle.lk-r .lls,.coach.hopin .eagle.lk-r .lrs{animation:pfIS 1.15s ease-in-out both}
+.coach.hopin .eagle.lk-r .al,.coach.hopin .eagle.lk-r .ar{animation:pfIA 1.15s ease-in-out both}
+/* Profil-Gehen: ein Bein vor, eins zurück, das Knie knickt beim Nachziehen nach hinten ein */
+@keyframes pfWH{0%{transform:rotate(-26deg)}50%{transform:rotate(22deg)}100%{transform:rotate(-26deg)}}
+@keyframes pfWS{0%,50%{transform:rotate(4deg)}70%{transform:rotate(78deg)}100%{transform:rotate(4deg)}}
+@keyframes pfWA{0%,100%{transform:rotate(24deg)}50%{transform:rotate(-24deg)}}
+.eagle.walk.lk-r .ll,.eagle.walk.lk-l .ll{animation:pfWH .8s ease-in-out infinite}
+.eagle.walk.lk-r .lls,.eagle.walk.lk-l .lls{animation:pfWS .8s ease-in-out infinite}
+.eagle.walk.lk-r .lr,.eagle.walk.lk-l .lr{animation:pfWH .8s ease-in-out -.4s infinite}
+.eagle.walk.lk-r .lrs,.eagle.walk.lk-l .lrs{animation:pfWS .8s ease-in-out -.4s infinite}
+.eagle.walk.lk-r .al,.eagle.walk.lk-l .al{animation:pfWA .8s ease-in-out infinite}
+.eagle.walk.lk-r .ar,.eagle.walk.lk-l .ar{animation:pfWA .8s ease-in-out -.4s infinite}
 </style>
 
 <div id="app"></div>
@@ -1215,7 +1320,7 @@ var FEATHERS=[['Alphonso','#F2B21E','#E8572A','#B8760A'],['Tommy Atkins','#E7A12
 function egDef(){return {name:'Mango',feat:0,head:'none',face:'none',top:'none',neck:'none',bg:'none',slot:'feat',c:{head:'#E5484D',face:'#2B323D',top:'#2F6BFF',neck:'#F2B51C',bg:'#4FD1A5'}}}
 var PREMIUM_CODE='42310',PREMIUM_PRICE='2,99 €';
 var S={theme:'light',guideSeen:false,tchanges:0,arena:null,view:'welcome',premium:false,train:{step:0,goal:null,place:null,equip:[],days:null,dur:null,exp:null,split:{},avoid:[],q:'',done:false},prev:'welcome',step:0,done:false,day:keyOf(today(0)),plans:{},log:{},tg:{},recipes:[],seenWeek:'',weekAI:{},
-  p:{phok:false,camok:false,goal:null,sex:null,age:'',weight:'',height:'',bfIdx:null,activity:null,meals:null,biggest:null,perMonth:2,diet:'Alles',intol:[],cuis:[],effort:'normal',likes:'',dislikes:'',tw:'',sport:null,breakfast:null,orders:null,aims:[],challenge:null,focus:[],motiv:[],track:[],pfreq:null,guide:null},
+  p:{uname:'',phok:false,camok:false,goal:null,sex:null,age:'',weight:'',height:'',bfIdx:null,activity:null,meals:null,biggest:null,perMonth:2,diet:'Alles',intol:[],cuis:[],effort:'normal',likes:'',dislikes:'',tw:'',sport:null,breakfast:null,orders:null,aims:[],challenge:null,focus:[],motiv:[],track:[],pfreq:null,guide:null},
   eagle:egDef(),aichat:{msgs:[],busy:false},hist:{metric:'k',range:90,table:false,opened:{}},
   gen:{busy:false,key:null,dishes:[],err:'',ctl:null,swap:null,wbusy:''},tplan:null,tdone:{},wlog:{},w0:'',hview:'food',wmsg:'',tlog:{},tday:null,twk:0,tview:'plan',tsel:null,tgen:{busy:false,total:0,done:0,fail:0,err:''},recs:[],rk:{ex:'',kg:'',rp:'',msg:'',busy:false},sheet:null};
 
@@ -1570,9 +1675,9 @@ function eagle(opt){
   s+='</g>';
   s+=arm(-1)+arm(1);
   /* Gesicht: zwei schwarze Perlenaugen und ein kleiner Strich als Mund */
-  s+='<g class="head">';
+  s+='<g class="head"><g class="fc">';
   [[90,128],[148,124]].forEach(function(p){s+='<ellipse cx="'+p[0]+'" cy="'+p[1]+'" rx="6.2" ry="6.6" fill="#0F0C0A"/><ellipse cx="'+(p[0]-1.8)+'" cy="'+(p[1]-2.2)+'" rx="1.8" ry="1.5" fill="#fff" opacity=".85"/><ellipse class="lid" cx="'+p[0]+'" cy="'+p[1]+'" rx="7" ry="7.4" fill="'+shade(b,-.02)+'"/>'});
-  s+='<path d="M112 141Q122 143 132 140" stroke="#3A1608" stroke-width="2" fill="none" stroke-linecap="round"/></g>';
+  s+='<path d="M112 141Q122 143 132 140" stroke="#3A1608" stroke-width="2" fill="none" stroke-linecap="round"/></g></g>';
   s+='<g class="gi gi-face'+egFxCls('face')+'"><g transform="translate(-3 31)">';
   var Fc=E.face;
   if(Fc==='shades')s+='<rect x="72" y="82" width="44" height="26" rx="11" fill="#10141A" stroke="'+c.face+'" stroke-width="3"/><rect x="124" y="82" width="44" height="26" rx="11" fill="#10141A" stroke="'+c.face+'" stroke-width="3"/><path d="M116 90Q120 85 124 90M72 88L60 84M168 88L180 84" stroke="'+c.face+'" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M80 90L94 90M132 90L146 90" stroke="#fff" stroke-width="3" opacity=".25" stroke-linecap="round"/>';
@@ -1657,8 +1762,12 @@ function goalInfo(c){
 function single(k,list,withSmallIdx){return '<div class="stack">'+list.map(function(x){return opt(k,x[0],esc(x[1]&&x.length>2?x[1]:x[0]),x.length>2?x[2]:x[1])}).join('')+'</div>'}
 function multi(k,list){return '<p class="hint" style="margin:0 0 10px">Mehrfachauswahl möglich. Du kannst auch nichts auswählen.</p><div class="stack">'+list.map(function(x){return optm(k,x[0],x[0],x[1])}).join('')+'</div>'}
 /* ---------- Schritte ---------- */
+function tfield(key,label,ph){return '<div class="field"><label for="f-'+key+'">'+label+'</label><div class="num"><input id="f-'+key+'" data-key="'+key+'" type="text" maxlength="14" autocomplete="given-name" autocapitalize="words" placeholder="'+ph+'" value="'+esc(S.p[key])+'"></div></div>'}
+function withName(t){var n=((S.p&&S.p.uname)||'').trim();if(!n)return t;return /[?.!]$/.test(t)?t.replace(/([?.!])$/,', '+n+'$1'):t+', '+n}
 var STEPS=[
- {t:function(){return 'Was ist dein Ziel?'},s:'Daraus berechne ich deinen Kalorienbedarf und stelle jeden Tag 6 passende Gerichte zusammen.',
+ {t:function(){return 'Wie sollen wir dich nennen?'},s:'Ich freue mich, wenn ich dich beim Namen nennen darf. Ein Vorname oder Spitzname reicht völlig.',
+  b:function(){return tfield('uname','Dein Name','z. B. Tom')},ok:function(){return (S.p.uname||'').trim().length>0}},
+ {t:function(){return 'Was ist dein Ziel?'},s:'Keine Sorge, das geht ganz schnell. Daraus berechne ich deinen Kalorienbedarf und stelle dir jeden Tag 6 passende Gerichte zusammen.',
   b:function(){return '<div class="grid2">'+opt('goal','lose','Abnehmen','Körperfett reduzieren',icoDown)+opt('goal','gain','Zunehmen','Gewicht und Muskeln aufbauen',icoUp)+'</div>'},
   ok:function(){return !!S.p.goal}},
  {t:function(){return 'Möchtest du eine kurze Anleitung?'},s:'Ich zeige dir nach der Einrichtung, wie die App funktioniert, wo alles ist und wofür es da ist. Du kannst sie später jederzeit in den Einstellungen öffnen.',
@@ -1666,13 +1775,13 @@ var STEPS=[
  {t:function(){return 'Bist du männlich oder weiblich, und wie alt bist du?'},s:'Geschlecht und Alter bestimmen deinen Grundumsatz.',
   b:function(){return '<div class="grid2">'+opt('sex','m','Männlich','')+opt('sex','f','Weiblich','')+'</div>'+field('age','Alter','Jahre','z. B. 25')+'<div id="ageNote">'+ageNote()+'</div>'},
   ok:function(){var a=num(S.p.age);return !!S.p.sex&&a>=12&&a<=90}},
- {t:function(){return 'Wie viel wiegst du und wie groß bist du?'},s:'Tippe die Werte einfach ein.',
+ {t:function(){return 'Wie viel wiegst du und wie groß bist du?'},s:'Tippe die Werte einfach ein, ein ungefährer Wert ist völlig okay.',
   b:function(){return field('weight','Gewicht','kg','z. B. 75')+field('height','Größe','cm','z. B. 178')},
   ok:function(){var w=num(S.p.weight),h=num(S.p.height);return w>=30&&w<=300&&h>=120&&h<=230}},
  {t:function(){return 'Was ist dein Zielgewicht?'},s:'So sehe ich, wie weit es noch ist und wie lange du ungefähr brauchst.',
   b:function(){return field('tw','Zielgewicht','kg','z. B. 80')+'<div id="twNote">'+twNote()+'</div>'},
   ok:function(){var t=num(S.p.tw);return t>=30&&t<=300}},
- {t:function(){return 'Wie hoch ist dein Körperfettanteil?'},s:'Tippe auf die Figur, die dir am ähnlichsten sieht. Ein Schätzwert reicht.',
+ {t:function(){return 'Wie hoch ist dein Körperfettanteil?'},s:'Tippe auf die Figur, die dir am ähnlichsten sieht. Ein Schätzwert reicht, hier gibt es kein Richtig oder Falsch.',
   b:function(){var sx=S.p.sex||'m';return '<div class="grid3">'+BF[sx].map(function(v,i){var sel=S.p.bfIdx===i;return '<button type="button" class="opt bf'+(sel?' sel':'')+'" data-act="pick" data-k="bfIdx" data-v="'+i+'" aria-pressed="'+sel+'">'+bodyFig(sx,i/5,sx+i)+'<span class="tag">ca. '+v+(i===5?'+':'')+' %</span><small>'+BFTXT[i]+'</small></button>'}).join('')+'</div>'},
   ok:function(){return S.p.bfIdx!==null}},
  {t:function(){return 'Wie aktiv bist du im Alltag?'},s:'Zähle alle Schritte eines normalen Tages zusammen, mit Arbeit und Sport.',
@@ -1681,7 +1790,7 @@ var STEPS=[
  {t:function(){return 'Wie oft machst du in der Woche Sport?'},s:'Gemeint ist Training, nicht dein normaler Alltag.',
   b:function(){return '<div class="grid2">'+SPORT.map(function(x){return opt('sport',x[0],x[1],x[2])}).join('')+'</div>'},
   ok:function(){return S.p.sport!==null}},
- {t:function(){return 'Wie viele Mahlzeiten isst du am Tag?'},s:'Snacks zählen mit.',
+ {t:function(){return 'Wie viele Mahlzeiten isst du am Tag?'},s:'Snacks zählen mit, das ist ganz normal.',
   b:function(){return '<div class="grid2">'+[2,3,4,5,6].map(function(n){var sel=S.p.meals===n;return '<button type="button" class="opt'+(sel?' sel':'')+'" data-act="pick" data-k="meals" data-v="'+n+'" aria-pressed="'+sel+'"><b>'+n+' Mahlzeiten</b><small>'+MEALTXT[n]+'</small></button>'}).join('')+'</div>'},
   ok:function(){return !!S.p.meals}},
  {t:function(){return 'Bei welcher Mahlzeit isst du am meisten?'},s:'Diese Mahlzeit bekommt den größten Anteil deiner Kalorien.',
@@ -1708,7 +1817,7 @@ var STEPS=[
   b:function(){return multi('focus',FOCUS)},ok:function(){return true}},
  {t:function(){return 'Was motiviert dich?'},s:'So kann ich dich besser unterstützen.',
   b:function(){return multi('motiv',MOTIV)},ok:function(){return true}},
- {t:function(){return 'Wie möchtest du deinen Fortschritt verfolgen?'},s:'Du kannst mehrere Wege wählen.',
+ {t:function(){return 'Wie möchtest du deinen Fortschritt verfolgen?'},s:'Such dir einfach aus, was zu dir passt, du kannst auch mehrere wählen.',
   b:function(){return multi('track',TRACK)},ok:function(){return true}},
  {t:function(){return 'Wie oft möchtest du ein Foto von deinem Körper machen?'},s:'Aus deinen Fotos entsteht später ein kurzes Video deiner Veränderung, sobald du dein Zielgewicht erreichst. Am besten immer am gleichen Ort, im gleichen Licht und in gleicher Haltung. Die Fotos bleiben nur auf deinem Gerät.',
   b:function(){return pfOptions()},ok:function(){return !!S.p.pfreq}}
@@ -1732,22 +1841,22 @@ function render(){
   try{arTick()}catch(e){}
   ({welcome:renderWelcome,wizard:renderWizard,loading:renderLoading,result:renderResult,eagle:renderEagle,shop:renderShop,history:renderHistory,ai:renderAI,train:renderTrain,arena:renderArena,game:renderGame})[S.view]();
   var nav=S.done&&['result','history','ai','eagle','train','arena','game'].indexOf(S.view)>-1&&!(S.view==='train'&&!S.train.done);
-  document.body.classList.toggle('hasnav',nav);
+  document.body.classList.toggle('hasnav',nav);hgSync();
   if(nav)app.insertAdjacentHTML('beforeend',tabbar());
   if(S.view==='wizard'||S.view==='result')window.scrollTo(0,y);
 }
 function renderWelcome(){
-  app.innerHTML=topbar({tabs:true})+'<div class="stage"><div class="eg">'+eagle({tree:true})+'</div><div class="bubble"><h1>Hallo, ich bin '+esc(S.eagle.name||'Mango')+', dein Ernährungs-Coach.</h1><p class="sub" style="margin:8px 0 0">Ich stelle dir ein paar kurze Fragen und baue daraus deinen persönlichen Plan.</p></div><button type="button" class="btn pri full" style="flex:none;max-width:420px" data-act="start">Los geht\'s</button><p class="hint">Wische zur Seite, um die Mango zu gestalten.</p></div>';
+  app.innerHTML=topbar({tabs:true})+'<div class="stage"><div class="eg">'+eagle({tree:true})+'</div><div class="bubble"><h1>Hallo, ich bin '+esc(S.eagle.name||'Mango')+', dein Ernährungs-Coach.</h1><p class="sub" style="margin:8px 0 0">Schön, dass du da bist! Ich stelle dir ein paar kurze Fragen und baue daraus deinen persönlichen Plan. Du schaffst das, und ich bin die ganze Zeit bei dir.</p></div><button type="button" class="btn pri full" style="flex:none;max-width:420px" data-act="start">Los geht\'s</button><p class="hint">Wische zur Seite, um die Mango zu gestalten.</p></div>';
 }
 function renderWizard(){
-  var st=STEPS[S.step],last=S.step===STEPS.length-1,title=st.t();
+  var st=STEPS[S.step],last=S.step===STEPS.length-1,title=S.step===0?st.t():withName(st.t());
   app.innerHTML=topbar({count:'Frage '+(S.step+1)+' von '+STEPS.length})+
    eagleTrack('wiz',S.step,STEPS.length)+
    '<div class="coach"><div class="eg">'+eagle()+'</div><div class="bubble"><h1>'+esc(title)+'</h1></div></div>'+
    '<section class="card step"><p class="sub">'+esc(st.s||'')+'</p>'+st.b()+'</section>'+
    '<nav class="nav"><button type="button" class="btn" data-act="back">'+(S.step>0?'Zurück':(S.done?'Abbrechen':'Zurück'))+'</button><button type="button" class="btn pri" id="next" data-act="next"'+(st.ok()?'':' disabled')+'>'+(last?'Meinen Plan berechnen':'Weiter')+'</button></nav>';
   if(st.amt)updateAmount();
-  animTrack();
+  animTrack();hopEnter();
 }
 function updateNav(){var n=document.getElementById('next');if(n)n.disabled=!STEPS[S.step].ok()}
 function updateAmount(){
@@ -2209,13 +2318,13 @@ var TRK={};
 function eagleTrack(key,step,total){
   var pct=total>1?step/(total-1)*100:0,from=TRK[key]!==undefined?TRK[key]:pct;TRK[key]=pct;
   var dots='';if(total<=10)for(var i=0;i<total;i++){var p=i/(total-1)*100;dots+='<i class="et-dot'+(i<=step?' on':'')+'" style="left:'+p+'%"></i>'}
-  return '<div class="etrack" data-from="'+from+'" data-to="'+pct+'" aria-hidden="true"><div class="et-line"><i style="width:'+from+'%"></i></div>'+dots+'<div class="et-bird" style="left:'+from+'%"><div class="et-in">'+eagle({crop:true})+'</div></div></div>';
+  return '<div class="etrack" data-from="'+from+'" data-to="'+pct+'" aria-hidden="true"><div class="et-line"><i style="width:'+from+'%"></i></div>'+dots+'</div>';
 }
 function animTrack(){
   var t=document.querySelector('.etrack');if(!t)return;
-  var from=+t.dataset.from,to=+t.dataset.to,bird=t.querySelector('.et-bird'),fill=t.querySelector('.et-line i');
+  var from=+t.dataset.from,to=+t.dataset.to,fill=t.querySelector('.et-line i');
   if(from===to)return;
-  requestAnimationFrame(function(){requestAnimationFrame(function(){bird.style.left=to+'%';fill.style.width=to+'%';bird.classList.add('hop')})});
+  requestAnimationFrame(function(){requestAnimationFrame(function(){fill.style.width=to+'%'})});
 }
 function renderTrain(){
   var T=S.train,L=tqList();
@@ -2226,10 +2335,57 @@ function renderTrain(){
   if(q.split&&SPD===null&&!tAnswered(q))SPD=null;
   var body=q.split?splitHtml():q.search?avoidHtml():'<div class="'+(q.grid?'grid2':'stack')+'">'+q.o.map(function(o){return topt(q,o)}).join('')+'</div>';
   app.innerHTML=topbar({count:'Frage '+(T.step+1)+' von '+L.length})+eagleTrack('train',T.step,L.length)+
-   '<div class="coach"><div class="eg">'+eagle()+'</div><div class="bubble"><h1>'+esc(q.t)+'</h1></div></div>'+
+   '<div class="coach"><div class="eg">'+eagle()+'</div><div class="bubble"><h1>'+esc(withName(q.t))+'</h1></div></div>'+
    '<section class="card"><p class="sub">'+esc(q.s)+'</p>'+body+'</section>'+
    '<nav class="nav"><button type="button" class="btn" data-act="tback">Zurück</button><button type="button" class="btn pri" id="tnext" data-act="tnext"'+(tAnswered(q)?'':' disabled')+'>'+(last?'Fertig':'Weiter')+'</button></nav>';
-  animTrack();
+  animTrack();hopEnter();
+}
+
+/* ---------- Mango springt von Frage zu Frage, läuft im Verlauf vorbei ---------- */
+var HOPBUSY=false,HOPIN=false;
+function reduceMotion(){try{return window.matchMedia('(prefers-reduced-motion:reduce)').matches}catch(e){return false}}
+function hopGo(fn){
+  if(HOPBUSY)return;
+  var c=document.querySelector('.coach');
+  if(!c||reduceMotion()){fn();return}
+  HOPBUSY=true;c.classList.add('hopout');var sv=c.querySelector('.eagle');if(sv)sv.classList.add('lk-r');
+  var cd=document.querySelector('.coach ~ .card');if(cd)cd.classList.add('qout');
+  var nv=document.querySelector('.coach ~ .nav');if(nv)nv.classList.add('qout');
+  setTimeout(function(){HOPBUSY=false;HOPIN=true;fn()},1000);
+}
+function hopEnter(){
+  if(!HOPIN)return;HOPIN=false;
+  var c=document.querySelector('.coach');if(!c)return;
+  c.classList.add('hopin');var sv=c.querySelector('.eagle');if(sv){sv.classList.add('lk-r');setTimeout(function(){sv.classList.remove('lk-r')},800)}
+  var cd=document.querySelector('.coach ~ .card');if(cd)cd.classList.add('qin');
+  var nv=document.querySelector('.coach ~ .nav');if(nv)nv.classList.add('qin');
+  setTimeout(function(){c.classList.remove('hopin');if(cd)cd.classList.remove('qin');if(nv)nv.classList.remove('qin')},1700);
+}
+/* Verlauf: nach 40 s kommt die Mango von links, bleibt 10 s und geht wieder nach links raus */
+var HG={t:null,el:null,ts:[],shown:false};
+function hgClear(){if(HG.t){clearTimeout(HG.t);HG.t=null}HG.ts.forEach(clearTimeout);HG.ts=[];if(HG.el){HG.el.remove();HG.el=null}}
+function hgSync(){
+  if(S.view==='history'){if(!HG.shown&&!HG.t&&!HG.el&&!reduceMotion())HG.t=setTimeout(hgStart,40000)}
+  else if(HG.t||HG.el||HG.shown){hgClear();HG.shown=false}
+}
+function hgStart(){
+  HG.t=null;if(S.view!=='history'||document.hidden){return}
+  HG.shown=true;
+  var el=document.createElement('div');el.className='hgo';el.setAttribute('aria-live','polite');
+  el.innerHTML='<div class="hgb" style="opacity:0"></div>'+eagle();
+  document.body.appendChild(el);HG.el=el;
+  var svg=el.querySelector('svg'),bub=el.querySelector('.hgb'),W=window.innerWidth,stand=Math.max(16,Math.min(W*.4,W-200));
+  el.style.transform='translateX(-230px)';svg.classList.add('walk','lk-r');
+  void el.offsetWidth;
+  el.style.transition='transform 4.2s linear';el.style.transform='translateX('+stand+'px)';
+  var T=function(f,ms){HG.ts.push(setTimeout(f,ms))};
+  T(function(){svg.classList.remove('walk','lk-r');bub.textContent='Bist du beeindruckt von dir selbst?';bub.style.opacity='1'},4300);
+  T(function(){
+    bub.textContent='Da ist wohl jemand selbstverliebt.';svg.classList.add('lk-l');setTimeout(function(){svg.classList.add('walk')},500);
+    setTimeout(function(){el.style.transition='transform 4.4s linear';el.style.transform='translateX(-240px)'},500);
+  },14300);
+  T(function(){bub.style.opacity='0'},18300);
+  T(function(){if(HG.el){HG.el.remove();HG.el=null}},19300);
 }
 
 /* ---------- Trainingsplan: Übungsbibliothek, KI-Plan, Berechnungen, Kalender ---------- */
@@ -5676,10 +5832,10 @@ function onClick(e){
   case 'egrand':egFxSet('all');randomEagle();save();render();break;
   case 'next':
     if(!STEPS[S.step].ok())return;
-    if(S.step<STEPS.length-1)goStep(S.step+1);
+    if(S.step<STEPS.length-1)hopGo(function(){goStep(S.step+1)});
     else{S.view='loading';S.day=keyOf(today(0));var sig=JSON.stringify(S.p);try{if(localStorage.getItem(KEY+'.sig')!==sig)S.plans={};localStorage.setItem(KEY+'.sig',sig)}catch(e2){}save();render();window.scrollTo(0,0)}
     break;
-  case 'back':if(S.step>0)goStep(S.step-1);else if(S.done){S.view='result';render();window.scrollTo(0,0)}else{S.view='welcome';save();render()}break;
+  case 'back':if(S.step>0)hopGo(function(){goStep(S.step-1)});else if(S.done){S.view='result';render();window.scrollTo(0,0)}else{S.view='welcome';save();render()}break;
   case 'edit':closeSheet();TRK.wiz=undefined;S.view='wizard';goStep(0);break;
   case 'settings':openSheet(null,'settings');break;
   case 'wipe':if(sh){if(!sh.confirm){sh.confirm=true;renderSheet()}else{try{localStorage.removeItem(KEY);localStorage.removeItem('mahlzeit.v2');localStorage.removeItem(KEY+'.sig')}catch(e3){}location.reload()}}break;
@@ -5723,8 +5879,8 @@ function onClick(e){
     sp2[t.dataset.d]=dv;save();updateSplit();break;
   case 'tavoid':var av=S.train.avoid||(S.train.avoid=[]),ai=av.indexOf(t.dataset.v);if(ai>-1)av.splice(ai,1);else av.push(t.dataset.v);save();updateAvoid();break;
   case 'tcustom':var cu=String(S.train.q||'').trim();if(cu){var av2=S.train.avoid||(S.train.avoid=[]);if(av2.indexOf(cu)<0)av2.push(cu);S.train.q='';save();updateAvoid();var ts=document.getElementById('tsearch');if(ts){ts.value='';ts.focus()}}break;
-  case 'tnext':var tl=tqList(),tq2=tl[S.train.step];if(!tAnswered(tq2))break;if(S.train.step<tl.length-1)S.train.step++;else S.train.done=true;save();render();window.scrollTo(0,0);break;
-  case 'tback':if(S.train.step>0)S.train.step--;else S.view='result';save();render();window.scrollTo(0,0);break;
+  case 'tnext':var tl=tqList(),tq2=tl[S.train.step];if(!tAnswered(tq2))break;if(S.train.step<tl.length-1){hopGo(function(){S.train.step++;save();render();window.scrollTo(0,0)});break}S.train.done=true;save();render();window.scrollTo(0,0);break;
+  case 'tback':if(S.train.step>0){hopGo(function(){S.train.step--;save();render();window.scrollTo(0,0)});break}S.view='result';save();render();window.scrollTo(0,0);break;
   case 'tedit':SPD=null;TRK.train=undefined;S.train.done=false;S.train.step=0;S.train.q='';save();render();window.scrollTo(0,0);break;
   case 'openpremium':openSheet(null,'premium');break;
   case 'subscribe':toast('Bezahlen ist in dieser Version noch nicht möglich. Nutze den Code.');break;
