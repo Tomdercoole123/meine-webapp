@@ -1106,6 +1106,12 @@ html:not([data-theme="light"]) .dayq{background:rgba(79,209,165,.08)}
 /* Überall gleich große Ansicht wie auf dem Handy: schmale Spalte, mittig */
 .cmo{left:50%;right:auto;width:min(100%,480px);transform:translateX(-50%);box-shadow:0 0 0 100vmax rgba(0,0,0,.88)}
 .ph-ov>*,.gd-ov>*{max-width:480px}
+
+/* Ganzer Bildschirm: von oben bis unten und von Rand zu Rand (auch unter Notch und Statusleiste) */
+html{height:100%;min-height:100dvh}body{margin:0}
+body{min-height:100vh;min-height:100dvh;padding-top:max(14px,env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px));padding-left:max(12px,env(safe-area-inset-left,0px),var(--safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px),var(--safe-area-inset-right,0px));padding-bottom:max(8px,env(safe-area-inset-bottom,0px))}
+@media (max-width:520px){#app{max-width:none}.panel{max-width:none}.cmo{left:0;width:100%;transform:none;box-shadow:none}.tabbar{width:calc(100% - 20px)}}
+@media (display-mode:fullscreen),(display-mode:standalone){html,body{overscroll-behavior-y:none}}
 </style>
 
 <div id="app"></div>
@@ -3281,6 +3287,8 @@ function renderSheet(){
   if(v==='settings'){
     var opt=function(act,ic,t,sm,extra){return '<button type="button" class="mopt" data-act="'+act+'"'+(extra||'')+'>'+ic+'<div><b>'+t+'</b><small>'+sm+'</small></div></button>'};
     h+='<div class="setsec">Aussehen</div><div class="seg pad" role="tablist">'+[['dark','Dunkel'],['light','Hell'],['auto','Automatisch']].map(function(x){return '<button type="button" role="tab" class="'+(S.theme===x[0]?'on':'')+'" data-act="settheme" data-v="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</div>';
+    var fsOk=!!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen),fsOn=!!(document.fullscreenElement||document.webkitFullscreenElement),inst=window.matchMedia&&(matchMedia('(display-mode:fullscreen)').matches||matchMedia('(display-mode:standalone)').matches||window.navigator.standalone);
+    h+='<div class="setsec">Bildschirm</div><div class="menu">'+(inst?'<p class="hint" style="margin:0">Die App läuft schon als installierte App im Vollbild.</p>':fsOk?opt('fstoggle',I.gear,fsOn?'Vollbild beenden':'Vollbild einschalten','Blendet Adressleiste und Menüs aus. Tippe zum Beenden hier oder wische vom Rand'):'<p class="hint" style="margin:0">Dein Browser kann kein Vollbild von der Seite aus. Für den ganzen Bildschirm: Im Browser-Menü „Zum Startbildschirm hinzufügen“ oder „App installieren“ wählen und die App von dort öffnen.</p>')+'</div>';
     h+='<div class="setsec">Hilfe</div><div class="menu">'+opt('guide',I.book,'Anleitung','So funktioniert die App und wo alles zu finden ist')+'</div>';
     h+='<div class="setsec">Mein Konto</div><div class="menu">'+opt('openpremium',I.star,'Premium',S.premium?'Aktiv: Tagesplan, Essens-Assistent, Rekord-Check, unbegrenzt Minispiel':'Tagesplan, Essens-Assistent, Rekord-Check, Minispiel unbegrenzt, '+PREMIUM_PRICE+' pro Monat')+opt('edit',I.gear,'Angaben ändern','Ziel, Gewicht, Aktivität und mehr neu beantworten')+'</div>';
     h+='<div class="setsec">Pläne</div><div class="menu">'+opt('regenfood',I.dice,'Essensplan neu erstellen','6 neue Gerichte für heute')+opt('regentrain',I.dumbbell,sh.cT?'Wirklich neu erstellen? Nochmal tippen':'Trainingsplan neu erstellen','Baut den Plan aus deinen Antworten neu (zählt als Änderung)')+opt('edittrain',I.gear,'Trainingsfragen ändern','Ziel, Ort, Geräte, Wochenplan und mehr neu beantworten')+'</div>';
@@ -5685,6 +5693,7 @@ function onClick(e){
     save();render();break;
   case 'xeopen':case 'xeself':case 'xedone':case 'xesets':case 'xemove':case 'xedel':case 'xedelc':case 'xeswap':case 'xeswapc':case 'xeadd':case 'xeaddc':case 'xeclose':case 'xemus':case 'xeall':case 'xepickex':xeAct(a,t);break;
   case 'egsnd':S.egMute=!S.egMute;if(S.egMute)egmStop(.1);save();render();break;
+  case 'fstoggle':{var de=document.documentElement,on=document.fullscreenElement||document.webkitFullscreenElement;try{if(on){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else{var rq=de.requestFullscreen||de.webkitRequestFullscreen;var pr=rq.call(de,{navigationUI:'hide'});if(pr&&pr.catch)pr.catch(function(){toast('Vollbild wurde vom Browser nicht erlaubt.')})}}catch(e){toast('Vollbild wurde vom Browser nicht erlaubt.')}setTimeout(function(){if(S.sheet&&S.sheet.view==='settings')renderSheet()},350);break}
   case 'tdaysel':S.tday=S.tday===t.dataset.d?null:t.dataset.d;render();break;
   case 'twk':var lm=twkLimits();S.twk=clamp((S.twk||0)+(+t.dataset.v),lm[0],lm[1]);render();break;
   case 'hview':S.hview=t.dataset.v;S.wmsg='';save();render();window.scrollTo(0,0);break;
