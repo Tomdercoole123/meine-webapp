@@ -20,7 +20,7 @@
 html{background:var(--bg)}
 body{background:var(--bg);background-image:radial-gradient(900px 420px at 50% -120px,rgba(79,209,165,.13),transparent 70%);background-repeat:no-repeat;color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:16px 8px;min-height:100vh}
 body.lock{overflow:hidden}
-#app{max-width:680px;margin:0 auto}
+#app{max-width:480px;margin:0 auto}
 body.hasnav #app{padding-bottom:104px}
 h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.01em}
 p{margin:0}
@@ -306,7 +306,7 @@ details.how summary{cursor:pointer;font-weight:600}
 /* Sheet */
 #sheet{position:fixed;inset:0;z-index:60;display:none;background:rgba(0,0,0,.66);align-items:flex-end;justify-content:center}
 #sheet.open{display:flex}
-.panel{width:100%;max-width:680px;max-height:90vh;overflow-y:auto;background:var(--surface);border:1px solid var(--line);border-bottom:0;border-radius:26px 26px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom,0px));animation:up .22s ease-out}
+.panel{width:100%;max-width:480px;max-height:90vh;overflow-y:auto;background:var(--surface);border:1px solid var(--line);border-bottom:0;border-radius:26px 26px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom,0px));animation:up .22s ease-out}
 @keyframes up{from{transform:translateY(40px);opacity:.4}}
 @media (prefers-reduced-motion:reduce){.panel,.skel,.eagle .head,.eagle .lid,.load i{animation:none}.load i{width:100%}}
 .ph{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
@@ -1071,6 +1071,41 @@ html:not([data-theme="light"]) .dayq{background:rgba(79,209,165,.08)}
 .egsnd svg{width:20px;height:20px}
 .egsnd.off{color:var(--muted)}
 .xe-b .btn{padding:0 8px;font-size:.84rem}
+
+/* ---------- Kamera-Overlay ---------- */
+.cmo{position:fixed;inset:0;z-index:520;background:#05090a;color:#fff;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.cmo-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px}
+.cmo-top b{flex:1;text-align:center;font-size:1rem}
+.cmo-x{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-size:1.5rem;line-height:1;cursor:pointer}
+.cmo-x[hidden]{display:none}
+.cmo-stage{position:relative;flex:1;min-height:0;display:grid;place-items:center;background:#000;overflow:hidden}
+.cmo-stage video,.cmo-img{width:100%;height:100%;object-fit:contain;display:block}
+.cmo-stage video.mir{transform:scaleX(-1)}
+.cmo-stage [hidden]{display:none}
+.cmo-frame{position:absolute;left:10%;right:10%;top:32%;bottom:32%;border:2px solid rgba(255,255,255,.85);border-radius:14px;box-shadow:0 0 0 999px rgba(0,0,0,.35);pointer-events:none}
+.cmo-msg{position:absolute;left:16px;right:16px;top:50%;transform:translateY(-50%);text-align:center;font-size:.98rem;line-height:1.5;background:rgba(0,0,0,.6);border-radius:16px;padding:14px}
+.cmo-msg.err{background:rgba(120,30,24,.88)}
+.cmo-hint{margin:0;padding:8px 16px 0;text-align:center;font-size:.85rem;opacity:.8;min-height:1.4em}
+.cmo-bar{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;padding:12px 14px 16px}
+.cmo-b{min-height:48px;padding:0 18px;border-radius:14px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;font:600 .95rem var(--font-body);cursor:pointer}
+.cmo-b.pri{background:linear-gradient(135deg,#62E8B8,#37B9CF);border-color:transparent;color:#04201a}
+.cmo-shot{width:72px;height:72px;border-radius:50%;border:4px solid #fff;background:transparent;padding:0;cursor:pointer;display:grid;place-items:center}
+.cmo-shot i{width:54px;height:54px;border-radius:50%;background:#fff;display:block}
+.cmo-shot:active i{transform:scale(.9)}
+.cmo-vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
+.cmo-b{display:inline-flex;align-items:center;justify-content:center;text-align:center}
+.cmo-msg{max-height:88%;overflow:auto;text-align:left}
+.cmo-msg p{margin:0 0 8px}
+.cmo-help{margin-top:6px;font-size:.88rem;line-height:1.5}
+.cmo-help summary{cursor:pointer;font-weight:700;margin-bottom:6px}
+.cmo-help ol{margin:4px 0 8px 18px;padding:0}
+.cmo-help p{margin:0 0 6px}
+.cmo-msg,.cmo-msg.err,.cmo-msg *{color:#fff!important}
+.cmo-msg.err{background:#4a1612;border:1px solid rgba(255,255,255,.25)}
+
+/* Überall gleich große Ansicht wie auf dem Handy: schmale Spalte, mittig */
+.cmo{left:50%;right:auto;width:min(100%,480px);transform:translateX(-50%);box-shadow:0 0 0 100vmax rgba(0,0,0,.88)}
+.ph-ov>*,.gd-ov>*{max-width:480px}
 </style>
 
 <div id="app"></div>
@@ -2218,6 +2253,378 @@ var EXMORE_RAW=[
 'cardio|Radfahren (draußen)|1|n','cardio|Wandern|1|n','cardio|Schattenboxen|2|n','cardio|Hampelmänner|1|n','cardio|Burpees|3|n','cardio|High Knees|2|n','cardio|Skater-Sprünge|2|n','cardio|Aerobic-Tanzen|1|n','cardio|Stepper|1|g','cardio|Sprint-Intervalle|3|n','cardio|Crosstrainer-Intervalle|2|g','cardio|Ski-Ergometer|2|g','cardio|Seilspringen-Intervalle|3|n','cardio|Battle Ropes|3|g','cardio|Schlittenschieben|3|g','cardio|Rudern-Intervalle|3|g','cardio|Treppenläufe|2|n'
 ];
 EXLIB_RAW=EXLIB_RAW.concat(EXMORE_RAW);
+var EXMORE2_RAW=[
+'brust|Liegestütze mit Klatschen|3|n',
+'brust|Liegestütze mit breitem Griff|1|n',
+'brust|Liegestütze mit engem Griff|1|n',
+'brust|Liegestütze mit Rotation|2|n',
+'brust|Liegestütze mit Schulterblatt-Retraktion|1|n',
+'brust|Einarmige Liegestütze (assistiert)|3|n',
+'brust|Liegestütze auf Fäusten|1|n',
+'brust|Dive-Bomber-Liegestütze|2|n',
+'brust|Pseudo-Planche-Liegestütze|3|n',
+'brust|Isometrischer Brust-Squeeze|1|n',
+'brust|Gummiband-Brustpresse im Stehen|1|b',
+'brust|Gummiband-Fliegende von oben|2|b',
+'brust|Gummiband-Fliegende von unten|2|b',
+'brust|Gummiband-Liegestütze mit Widerstand|3|b',
+'brust|Kurzhantel-Fliegende auf der Schrägbank|2|w',
+'brust|Kurzhantel-Floor-Fliegende|1|w',
+'brust|Kurzhantel-Bankdrücken mit Pause|2|w',
+'brust|Schrägbankdrücken mit Kurzhanteln, enger Griff|2|w',
+'brust|Kurzhantel-Pullover quer über der Bank|2|w',
+'brust|Hex-Press mit Kurzhanteln|1|w',
+'brust|Kurzhantel-Pullover am Boden|1|w',
+'brust|Langhantel-Floor-Press|2|g',
+'brust|Negativbankdrücken mit der Langhantel|3|g',
+'brust|Bankdrücken mit Pause|3|g',
+'brust|Bankdrücken mit der Smith-Maschine, Schrägbank|2|g',
+'brust|Brustpresse einarmig an der Maschine|1|g',
+'brust|Kabelzug-Brustpresse im Stehen|1|g',
+'brust|Kabelzug-Fliegende einarmig|2|g',
+'brust|Kabelzug-Überkreuzen (Cable Crossover)|2|g',
+'brust|Schrägbank-Fliegende am Kabel|2|g',
+'brust|Dips an der Dip-Maschine|1|g',
+'brust|Pec-Deck einarmig|1|g',
+'ruecken|Klimmzüge mit breitem Griff|3|g',
+'ruecken|Klimmzüge mit engem Griff|3|g',
+'ruecken|Neutralgriff-Klimmzüge|3|g',
+'ruecken|Negative Klimmzüge|2|g',
+'ruecken|Australian Pull-ups|1|g',
+'ruecken|Klimmzug-Halten oben|3|g',
+'ruecken|Latziehen mit Neutralgriff|1|g',
+'ruecken|Seilzug-Rudern mit V-Griff|1|g',
+'ruecken|Einarmiges Kabelrudern im Sitzen|1|g',
+'ruecken|Rudern an der Maschine mit Brustpolster, einarmig|1|g',
+'ruecken|Rudern am Kabel im Stehen, einarmig|2|g',
+'ruecken|Seal Rows|2|g',
+'ruecken|Pendlay Rows|3|g',
+'ruecken|Yates Rows|3|g',
+'ruecken|Langhantel-Rudern mit breitem Griff|3|g',
+'ruecken|Straight-Arm Pulldown|1|g',
+'ruecken|Reverse-Hyperextension|2|g',
+'ruecken|Rückenstrecker auf der Hyperextension-Bank|1|g',
+'ruecken|Kreuzheben mit Trap-Bar|2|g',
+'ruecken|Sumo-Kreuzheben|3|g',
+'ruecken|Block Pulls|3|g',
+'ruecken|Deficit-Kreuzheben|3|g',
+'ruecken|Kurzhantel-Rudern auf der Schrägbank|2|w',
+'ruecken|Kettlebell-Rudern|1|w',
+'ruecken|Renegade Rows|3|w',
+'ruecken|Kurzhantel-Shrugs im Sitzen|1|w',
+'ruecken|Kurzhantel-Pullover für den Rücken|2|w',
+'ruecken|Gummiband-Latziehen im Knien|1|b',
+'ruecken|Gummiband-Rudern im Sitzen|1|b',
+'ruecken|Gummiband-Rudern im Stehen, einarmig|1|b',
+'ruecken|Gummiband-Straight-Arm-Pulldown|1|b',
+'ruecken|Gummiband-Face-Pulls im Stehen|1|b',
+'ruecken|Gummiband-Good-Mornings für den Rücken|1|b',
+'ruecken|Superman mit Armkreisen|1|n',
+'ruecken|Superman-Halten|1|n',
+'ruecken|Rückenheben in Bauchlage (Back Extension)|1|n',
+'ruecken|Wand-Engel (Wall Angels)|1|n',
+'ruecken|Prone T-Raises|1|n',
+'ruecken|Prone W-Raises|1|n',
+'ruecken|Inverted Rows an der Stange|2|n',
+'ruecken|Rudern mit dem Handtuch an der Türklinke|1|n',
+'ruecken|Rudern mit Rucksack|1|n',
+'ruecken|Rumänisches Kreuzheben mit Rucksack|1|n',
+'schulter|Schulterdrücken an der Smith-Maschine|2|g',
+'schulter|Langhantel-Schulterdrücken sitzend|3|g',
+'schulter|Schulterdrücken am Kabel|2|g',
+'schulter|Seitheben an der Maschine|1|g',
+'schulter|Seitheben am Kabel hinter dem Rücken|2|g',
+'schulter|Face Pulls am Kabelzug mit Seil|1|g',
+'schulter|Frontheben mit der Langhantel|2|g',
+'schulter|Frontheben mit der Scheibe|1|g',
+'schulter|Aufrechtes Rudern mit der SZ-Stange|2|g',
+'schulter|Aufrechtes Rudern am Kabel|2|g',
+'schulter|Reverse Fly am Kabel|2|g',
+'schulter|Kurzhantel-Seitheben vorgebeugt|1|w',
+'schulter|Kurzhantel-Seitheben mit Pause|2|w',
+'schulter|Kurzhantel-Seitheben in Schrägbauchlage|2|w',
+'schulter|Kurzhantel-Schulterdrücken einarmig|2|w',
+'schulter|Kurzhantel-Schulterdrücken Neutralgriff|2|w',
+'schulter|Kurzhantel-Frontheben im Wechsel|1|w',
+'schulter|Kurzhantel-Frontheben beidarmig|1|w',
+'schulter|Kettlebell-Schulterdrücken|2|w',
+'schulter|Bottoms-up Kettlebell Press|3|w',
+'schulter|Kurzhantel-W-Heben|2|w',
+'schulter|Kurzhantel-Cuban-Press|2|w',
+'schulter|Außenrotation mit Kurzhantel|1|w',
+'schulter|Außenrotation am Kabel|1|g',
+'schulter|Außenrotation mit dem Gummiband|1|b',
+'schulter|Innenrotation mit dem Gummiband|1|b',
+'schulter|Gummiband-Seitheben im Stehen auf dem Band|1|b',
+'schulter|Gummiband-Aufrechtes Rudern|1|b',
+'schulter|Band-Pull-Aparts|1|b',
+'schulter|Gummiband-Schulterdrücken einarmig|1|b',
+'schulter|Pike-Liegestütze auf einem Stuhl|2|n',
+'schulter|Handstand-Liegestütze an der Wand|3|n',
+'schulter|Wand-Handstand-Schulterklopfen|3|n',
+'schulter|Bear Crawl|2|n',
+'schulter|Plank-zu-Pike|2|n',
+'schulter|Down-Dog-Schulterdrücken|1|n',
+'schulter|Wandrutschen (Wall Slides)|1|n',
+'schulter|Rucksack-Seitheben|1|n',
+'schulter|Rucksack-Schulterdrücken|1|n',
+'trizeps|Trizepsdrücken mit V-Stange|1|g',
+'trizeps|Trizepsdrücken im Untergriff am Kabel|1|g',
+'trizeps|Trizepsstrecken über Kopf mit Seil|2|g',
+'trizeps|Trizepsstrecken über Kopf mit SZ-Stange|2|g',
+'trizeps|Trizepsstrecken liegend am Kabel|2|g',
+'trizeps|Trizeps-Dips an der Maschine|1|g',
+'trizeps|Trizeps-Kickbacks am Kabel|1|g',
+'trizeps|Enges Bankdrücken mit Pause|3|g',
+'trizeps|Stirndrücken mit der SZ-Stange|2|g',
+'trizeps|Trizepsstrecken über Kopf mit beiden Händen und Kurzhantel|1|w',
+'trizeps|Einarmige Trizepsstrecken über Kopf|2|w',
+'trizeps|Kurzhantel-Trizepsstrecken liegend|2|w',
+'trizeps|Trizeps-Kickbacks beidarmig|1|w',
+'trizeps|Tate Press|3|w',
+'trizeps|Trizeps-Dips mit Gewicht auf dem Schoß|2|w',
+'trizeps|Gummiband-Trizepsstrecken im Liegen|1|b',
+'trizeps|Gummiband-Trizepsdrücken einarmig|1|b',
+'trizeps|Gummiband-Overhead-Extension einarmig|1|b',
+'trizeps|Liegestütze mit Trizeps-Fokus (Ellbogen eng)|2|n',
+'trizeps|Bodyweight-Trizepsstrecken (Skull Crusher am Boden)|2|n',
+'trizeps|Bodyweight-Trizepsstrecken an der Stange|3|n',
+'trizeps|Trizeps-Dips auf dem Boden (Reverse Plank Dips)|1|n',
+'trizeps|Pike-Trizeps-Liegestütze|3|n',
+'trizeps|Trizeps-Liegestütze auf Knien|1|n',
+'trizeps|Isometrisches Trizepsdrücken gegen die Wand|1|n',
+'bizeps|Hammercurls im Wechsel|1|w',
+'bizeps|Hammercurls am Seil|1|g',
+'bizeps|Cross-Body-Hammercurls|1|w',
+'bizeps|Kurzhantel-Curls im Sitzen|1|w',
+'bizeps|Kurzhantel-Curls auf der Schrägbank im Wechsel|2|w',
+'bizeps|Kurzhantel-Curls mit Supination|1|w',
+'bizeps|Drag Curls|2|w',
+'bizeps|Kurzhantel-Curls einarmig an der Bank|1|w',
+'bizeps|Reverse Curls mit Kurzhanteln|1|w',
+'bizeps|Reverse Curls mit der SZ-Stange|1|g',
+'bizeps|Langhantel-Curls im Stehen eng|2|g',
+'bizeps|Langhantel-Curls im Stehen breit|2|g',
+'bizeps|Preacher Curls an der Maschine|1|g',
+'bizeps|Kabelcurls mit der Stange|1|g',
+'bizeps|Kabelcurls von oben (Cable Crossover Curl)|2|g',
+'bizeps|Kabel-Curls liegend|2|g',
+'bizeps|Bayesian Curls am Kabel|2|g',
+'bizeps|Chin-Ups mit Negativphase|2|g',
+'bizeps|Gummiband-Curls einarmig|1|b',
+'bizeps|Gummiband-Curls im Sitzen|1|b',
+'bizeps|Gummiband-Reverse-Curls|1|b',
+'bizeps|Gummiband-Zottman-Curls|2|b',
+'bizeps|Isometrische Curls mit dem Handtuch|1|n',
+'bizeps|Rucksack-Curls|1|n',
+'bizeps|Rucksack-Hammercurls|1|n',
+'bizeps|Tür-Rudern im Untergriff|1|n',
+'bizeps|Inverted Rows im Untergriff|2|n',
+'bauch|Plank auf den Händen|1|n',
+'bauch|Plank mit Beinheben|2|n',
+'bauch|Plank mit Armheben|2|n',
+'bauch|Plank mit Hüftrotation|2|n',
+'bauch|Seitstütz mit Beinheben|2|n',
+'bauch|Seitstütz auf den Händen|1|n',
+'bauch|Spiderman-Plank|2|n',
+'bauch|Bear Plank mit Knieheben|2|n',
+'bauch|Hollow Rocks|3|n',
+'bauch|Hollow Body Hold mit Armen über Kopf|3|n',
+'bauch|Dead Bug mit Gewicht|2|w',
+'bauch|Dead Bug mit Bein-Absenken|1|n',
+'bauch|Sit-ups|1|n',
+'bauch|Sit-ups mit Rotation|2|n',
+'bauch|Crunches mit erhöhten Beinen|1|n',
+'bauch|Crunch mit Beinen im 90-Grad-Winkel|1|n',
+'bauch|Crunches mit Armen über Kopf|2|n',
+'bauch|Fahrrad-Crunches langsam|1|n',
+'bauch|Windmühlen-Beinheben|3|n',
+'bauch|Beinheben im Sitzen (V-Sit)|2|n',
+'bauch|Knieheben im Liegen|1|n',
+'bauch|Scherenschläge|2|n',
+'bauch|Käfer-Crunches (Bug Crunches)|1|n',
+'bauch|Leg Raises mit Pause|2|n',
+'bauch|Seitliches Beinheben (Side Leg Raises)|1|n',
+'bauch|Russian Twists mit Gewicht|2|w',
+'bauch|Kurzhantel-Crunches|1|w',
+'bauch|Kurzhantel-Windmühle|2|w',
+'bauch|Kettlebell-Suitcase-Carry|1|w',
+'bauch|Farmer-Walk|1|w',
+'bauch|Kabel-Crunches kniend|2|g',
+'bauch|Kabel-Oblique-Crunches|2|g',
+'bauch|Kabel-Pallof-Press mit Rotation|2|g',
+'bauch|Hängendes Beinheben mit Rotation|3|g',
+'bauch|Toes to Bar|3|g',
+'bauch|Hängendes Knieheben mit Rotation|2|g',
+'bauch|Ab-Wheel Rollout auf den Knien|2|g',
+'bauch|Schrägbank-Sit-ups|2|g',
+'bauch|Schrägbank-Beinheben|2|g',
+'bauch|Römischer Stuhl Crunches|2|g',
+'bauch|Gummiband-Bird-Dog|1|b',
+'bauch|Gummiband-Holzfäller|2|b',
+'bauch|Gummiband-Pallof-Press im Knien|1|b',
+'bauch|Gummiband-Crunches|1|b',
+'bauch|Gummiband-Anti-Rotation-Halten|1|b',
+'po|Glute Bridge mit Pause|1|n',
+'po|Glute Bridge mit Marching|2|n',
+'po|Glute Bridge mit erhöhten Füßen|2|n',
+'po|Hip Thrust auf der Bank, Körpergewicht|1|n',
+'po|Hip Thrust mit Pause oben|2|n',
+'po|Kickbacks im Stand|1|n',
+'po|Seitliches Beinheben im Stehen|1|n',
+'po|Seitliches Beinheben in Seitlage|1|n',
+'po|Rückwärtiges Beinheben in Bauchlage|1|n',
+'po|Hip Abduction im Liegen|1|n',
+'po|Frog Pumps mit Pause|1|n',
+'po|Single-Leg Deadlift (Körpergewicht)|1|n',
+'po|Rückwärts-Ausfallschritte mit Pause|1|n',
+'po|Gehende Ausfallschritte|2|n',
+'po|Seitliche Ausfallschritte mit Kniehub|2|n',
+'po|Treppen-Step-ups seitlich|1|n',
+'po|Step-ups mit Knieheben|1|n',
+'po|Bulgarian Split Squat Hold|2|n',
+'po|Skater Squats|2|n',
+'po|Sumo-Kniebeugen (Körpergewicht)|1|n',
+'po|Sumo-Squat-Pulses|1|n',
+'po|Squat Pulses|1|n',
+'po|Quadruped Hip Circles|1|n',
+'po|Gummiband-Hip-Thrust|1|b',
+'po|Gummiband-Sumo-Walks|1|b',
+'po|Gummiband-Seitliche Beinheben|1|b',
+'po|Gummiband-Rückwärts-Ausfallschritte|2|b',
+'po|Gummiband-Glute-Bridge mit Abduktion|1|b',
+'po|Gummiband-Kniebeugen mit Seitschritt|1|b',
+'po|Gummiband-Kickbacks im Stand|1|b',
+'po|Gummiband-Donkey-Kicks|1|b',
+'po|Kurzhantel-Hip-Thrust einbeinig|3|w',
+'po|Kurzhantel-Sumo-Kniebeugen mit Pause|2|w',
+'po|Kurzhantel-Rumänisches Kreuzheben einbeinig|2|w',
+'po|Kurzhantel-Step-ups hoch|2|w',
+'po|Kurzhantel-Walking-Lunges|2|w',
+'po|Kettlebell-Goblet-Lunges|2|w',
+'po|Kettlebell-Hip-Hinge|1|w',
+'po|Langhantel-Hip-Thrust mit Pause|3|g',
+'po|Langhantel-Ausfallschritte|3|g',
+'po|Langhantel-Rückwärts-Ausfallschritte|3|g',
+'po|Kabel-Kickbacks mit Fußschlaufe|1|g',
+'po|Kabel-Abduktion im Stand|1|g',
+'po|Kabel-Glute-Kickback auf allen Vieren|1|g',
+'po|Gesäßmaschine (Glute Drive)|1|g',
+'po|Beinpresse mit hoher Fußstellung|1|g',
+'po|Beinpresse mit weiter Fußstellung|1|g',
+'oberschenkel|Kniebeugen mit schmalem Stand|1|n',
+'oberschenkel|Kniebeugen mit breitem Stand|1|n',
+'oberschenkel|Kniebeugen langsam (3 Sekunden ab)|1|n',
+'oberschenkel|Kniebeugen auf Zehenspitzen|1|n',
+'oberschenkel|Box-Kniebeugen|1|n',
+'oberschenkel|Bank-Kniebeugen|1|n',
+'oberschenkel|Kniebeugen mit Armen nach vorn|1|n',
+'oberschenkel|Spanische Kniebeuge (Wandstütze)|1|n',
+'oberschenkel|Skater-Kniebeugen|2|n',
+'oberschenkel|Einbeinige Kniebeugen auf der Bank|3|n',
+'oberschenkel|Shrimp Squats|3|n',
+'oberschenkel|Reverse-Nordic-Curls|3|n',
+'oberschenkel|Sprinter-Ausfallschritte|2|n',
+'oberschenkel|Ausfallschritte rückwärts|1|n',
+'oberschenkel|Ausfallschritte mit Pause unten|2|n',
+'oberschenkel|Lunge Jumps|3|n',
+'oberschenkel|Wall Sit mit einem Bein|3|n',
+'oberschenkel|Wandsitzen mit Pulsen|2|n',
+'oberschenkel|Hamstring-Curls mit Handtuch am Boden|2|n',
+'oberschenkel|Glute-Ham-Raise (assistiert)|3|g',
+'oberschenkel|Single-Leg Hamstring Bridge|2|n',
+'oberschenkel|Hip Hinge mit Besenstiel|1|n',
+'oberschenkel|Ausfallschritte vorwärts mit Gehen|2|n',
+'oberschenkel|Kurzhantel-Kniebeugen am Körper|1|w',
+'oberschenkel|Kurzhantel-Frontkniebeugen mit Pause|2|w',
+'oberschenkel|Kurzhantel-Ausfallschritte rückwärts|2|w',
+'oberschenkel|Kurzhantel-Rumänisches Kreuzheben mit Pause|2|w',
+'oberschenkel|Kurzhantel-Step-ups seitlich|2|w',
+'oberschenkel|Kurzhantel-Bulgarian-Split-Squats mit Pause|3|w',
+'oberschenkel|Kettlebell-Goblet-Kniebeugen mit Pause|1|w',
+'oberschenkel|Kettlebell-Sumo-Kniebeugen|1|w',
+'oberschenkel|Kettlebell-Rumänisches Kreuzheben|2|w',
+'oberschenkel|Kettlebell-Frontkniebeugen|2|w',
+'oberschenkel|Gummiband-Beinstrecken im Sitzen|1|b',
+'oberschenkel|Gummiband-Beinbeugen im Liegen|1|b',
+'oberschenkel|Gummiband-Kniebeugen mit Pause|1|b',
+'oberschenkel|Gummiband-Sumo-Kniebeugen|1|b',
+'oberschenkel|Gummiband-Step-ups|1|b',
+'oberschenkel|Langhantel-Kniebeugen mit Pause|3|g',
+'oberschenkel|Zercher-Kniebeugen|3|g',
+'oberschenkel|Langhantel-Ausfallschritte gehend|3|g',
+'oberschenkel|Langhantel-Good-Mornings|3|g',
+'oberschenkel|Steifbeiniges Kreuzheben|3|g',
+'oberschenkel|Sumo-Kreuzheben mit Langhantel|3|g',
+'oberschenkel|Beinpresse mit schmaler Fußstellung|1|g',
+'oberschenkel|Beinpresse mit Pause|2|g',
+'oberschenkel|Beinstrecken einbeinig|1|g',
+'oberschenkel|Beinbeugen liegend einbeinig|1|g',
+'oberschenkel|Beinbeugen stehend|1|g',
+'oberschenkel|Hackenschmidt-Maschine mit Pause|2|g',
+'oberschenkel|Pendulum Squats|2|g',
+'oberschenkel|Belt Squats|2|g',
+'oberschenkel|Smith-Maschine-Ausfallschritte|2|g',
+'oberschenkel|Smith-Maschine-Split-Squats|2|g',
+'oberschenkel|Kabel-Rumänisches Kreuzheben|2|g',
+'wade|Wadenheben auf der Stufe mit Pause|1|n',
+'wade|Wadenheben mit Zehen nach innen|1|n',
+'wade|Wadenheben mit Zehen nach außen|1|n',
+'wade|Wadenheben im Sitzen mit Rucksack|1|n',
+'wade|Wadenheben auf einem Bein mit Wandstütze|2|n',
+'wade|Wadenheben langsam (3 Sekunden ab)|1|n',
+'wade|Hüpfen auf der Stelle (Calf Jumps)|2|n',
+'wade|Fersengang|1|n',
+'wade|Wadenheben mit Kurzhanteln einbeinig|2|w',
+'wade|Wadenheben mit Langhantel|2|g',
+'wade|Wadenheben an der Smith-Maschine einbeinig|2|g',
+'wade|Donkey Calf Raises|2|g',
+'wade|Wadenheben an der Beinpresse einbeinig|2|g',
+'wade|Wadenheben im Sitzen an der Maschine mit Pause|1|g',
+'wade|Gummiband-Wadenheben im Sitzen|1|b',
+'wade|Gummiband-Fußdrücken|1|b',
+'wade|Gummiband-Wadenheben im Stehen|1|b',
+'cardio|Flotter Spaziergang|1|n',
+'cardio|Nordic Walking|1|n',
+'cardio|Bergaufgehen|2|n',
+'cardio|Dauerlauf locker|2|n',
+'cardio|Fartlek-Lauf|3|n',
+'cardio|Tempolauf|3|n',
+'cardio|Bergsprints|3|n',
+'cardio|Rückwärtsgehen|1|n',
+'cardio|Seilspringen locker|2|n',
+'cardio|Boxsprünge-Intervalle|3|n',
+'cardio|Jumping Jacks|1|n',
+'cardio|Mountain-Climber-Intervalle|3|n',
+'cardio|Tabata (Körpergewicht)|3|n',
+'cardio|Treppenlauf-Intervalle|3|n',
+'cardio|Kniehebelauf|2|n',
+'cardio|Anfersen im Lauf|2|n',
+'cardio|Step-Aerobic|1|n',
+'cardio|Zumba-Tanzen|1|n',
+'cardio|Radfahren locker (draußen)|1|n',
+'cardio|Radfahren Intervalle (draußen)|3|n',
+'cardio|Inlineskaten|1|n',
+'cardio|Schwimmen locker|2|g',
+'cardio|Wassergymnastik|1|g',
+'cardio|Spinning (Indoor Cycling)|2|g',
+'cardio|Ergometer locker|1|g',
+'cardio|Ergometer-Intervalle|3|g',
+'cardio|Laufband-Gehen mit Steigung|1|g',
+'cardio|Laufband-Intervalle|3|g',
+'cardio|Crosstrainer rückwärts|2|g',
+'cardio|Crosstrainer locker|1|g',
+'cardio|Stairmaster|2|g',
+'cardio|Air Bike|3|g',
+'cardio|Rudergerät locker|2|g',
+'cardio|Rudergerät Intervalle|3|g',
+'cardio|Kettlebell-Swing-Zirkel|3|w',
+'cardio|Medizinball-Slams|3|g',
+'cardio|Sandsack-Training|3|g',
+'cardio|Shadow-Kickboxen|2|n',
+'cardio|Treppensteigen locker|1|n'
+];
+EXLIB_RAW=EXLIB_RAW.concat(EXMORE2_RAW);
 var EXLIB=EXLIB_RAW.map(function(s){var a=s.split('|');return {m:a[0],n:a[1],lv:+a[2],eq:a[3]}});
 var EXBYN={};EXLIB.forEach(function(e){EXBYN[e.n.toLowerCase()]=e});
 EXLIB.forEach(function(e){if(e.m!=='cardio'&&EXERCISES.indexOf(e.n)<0)EXERCISES.push(e.n)});
@@ -2826,7 +3233,7 @@ function renderSheet(){
      '<button type="button" class="mopt" data-act="gotoai">'+I.chat+'<div><b>Essens-Assistent</b><small>Erzähl, was du gegessen hast, die KI trägt es ein</small></div></button></div>';
   }
   if(v==='search'){
-    if(sh.photo)h+='<div class="phprev"><img src="'+safeImg(sh.photo)+'" alt="Dein Foto"><div><b>Dein Foto</b><small>Wähle unten aus, was auf dem Teller ist. Das Foto wird beim ersten Eintrag gespeichert.</small></div><button type="button" class="x" data-act="phclear" aria-label="Foto entfernen">×</button></div>';
+    if(sh.photo)h+='<div class="phprev"><img src="'+safeImg(sh.photo)+'" alt="Dein Foto"><div><b>Dein Foto</b><small>Eine automatische Erkennung gibt es in dieser Version nicht. Wähle unten selbst aus, was auf dem Teller ist. Das Foto wird beim ersten Eintrag gespeichert.</small></div><button type="button" class="x" data-act="phclear" aria-label="Foto entfernen">×</button></div>';
     h+='<input class="text" id="q" type="text" autocomplete="off" placeholder="z. B. Haferflocken, Ei, Reis" value="'+esc(sh.q)+'"><div id="results">'+foodRows(sh.q)+'</div>';
   }
   if(v==='weight'){
@@ -3243,11 +3650,11 @@ function renderScan(){
   var bcPhoto='<label class="btn full" style="display:grid;place-items:center;cursor:pointer;flex:none;margin-top:8px" for="bcfile">Foto vom Barcode oder QR-Code</label><input id="bcfile" type="file" accept="image/*" capture="environment" hidden><input id="phfoodg" type="file" accept="image/*" hidden><input id="bcfileg" type="file" accept="image/*" hidden>';
   if(sc.status==='idle'||sc.status==='error'){
     if(sc.status==='error')h+='<div class="err">'+esc(sc.err)+'</div>';
-    h+='<h4 class="sh" style="margin:0 0 6px">Foto vom Essen</h4><p class="hint" style="margin:0 0 10px">Mach ein Foto von deinem Teller und wähle dann selbst aus der Liste, was drauf ist. Das Foto bleibt bei deinem Eintrag.</p>'+
-     '<div class="two"><button type="button" class="btn pri" style="flex:1" data-act="scanfood">Kamera</button><button type="button" class="btn" style="flex:1" data-act="scangal" data-i="phfoodg">Aus Galerie</button></div>'+
-     '<h4 class="sh" style="margin:18px 0 6px">Foto vom Barcode</h4><p class="hint" style="margin:0 0 10px">Mach ein Foto vom Strichcode einer Verpackung. Die Nährwerte kommen aus der Open-Food-Facts-Datenbank.</p>'+
-     '<div class="two"><button type="button" class="btn pri" style="flex:1" data-act="scanbc">Kamera</button><button type="button" class="btn" style="flex:1" data-act="scangal" data-i="bcfileg">Aus Galerie</button></div><p class="hint" style="margin:10px 0 0">Öffnet sich die Kamera nicht, nimm „Aus Galerie“.</p>'+
-     '<input id="phfood" type="file" accept="image/*" capture="environment" hidden><input id="bcfile" type="file" accept="image/*" capture="environment" hidden><input id="phfoodg" type="file" accept="image/*" hidden><input id="bcfileg" type="file" accept="image/*" hidden>';
+    h+='<h4 class="sh" style="margin:0 0 6px">Foto vom Essen</h4><p class="hint" style="margin:0 0 10px">Mach ein Foto von deinem Teller und wähle dann selbst aus der Liste, was drauf ist. Eine automatische Erkennung des Essens ist in dieser Version nicht eingebaut, es wird also nichts geraten. Das Foto bleibt bei deinem Eintrag.</p>'+
+     '<div class="two"><button type="button" class="btn pri" style="flex:1" data-act="scanfood">Kamera</button>'+camGalHtml('food','Aus Galerie','flex:1')+'</div>'+
+     '<h4 class="sh" style="margin:18px 0 6px">Barcode scannen</h4><p class="hint" style="margin:0 0 10px">Halte die Kamera auf den Strichcode einer Verpackung. Die Nährwerte kommen aus der Open-Food-Facts-Datenbank.</p>'+
+     '<div class="two"><button type="button" class="btn pri" style="flex:1" data-act="scanbc">Kamera</button>'+camGalHtml('bc','Aus Galerie','flex:1')+'</div><p class="hint" style="margin:10px 0 0">Der Strichcode wird live erkannt. Klappt die Kamera nicht, nimm „Aus Galerie“.</p>'+
+     '';
   }
   if(sc.status==='cam')h+='<div class="camwrap"><video id="scanvid" playsinline muted autoplay></video><i class="camline"></i></div><p class="hint" style="text-align:center;margin:8px 0">Halte den Barcode ruhig in den Rahmen. Gutes Licht hilft.</p><button type="button" class="btn full" style="flex:none" data-act="bcstop">Abbrechen</button>';
   if(sc.status==='busy')h+='<p class="sub">'+esc(sc.msg||'Ich schaue mir dein Essen an …')+'</p>';
@@ -3275,6 +3682,20 @@ function camAsk(cb){
   d.querySelector('#cayes').onclick=function(){S.p.camok=true;save();end();cb()};
   d.querySelector('#cayes').focus();
 }
+
+/* Ergebnis der Kamera oder Galerie an die richtige Stelle geben */
+function scanFoodFile(file,sh){
+  if(!sh||S.sheet!==sh)return;
+  photoThumb(file).then(function(u){if(S.sheet!==sh)return;sh.photo=u;sh.q='';sh.view='search';renderSheet();toast('Foto übernommen. Wähle jetzt das Essen aus.')}).catch(function(){toast('Das Foto konnte ich nicht öffnen.')});
+}
+function scanBcFile(file,sh){
+  if(!sh||S.sheet!==sh)return;
+  sh.view='scan';sh.scan.status='busy';sh.scan.msg='Ich suche den Barcode im Foto …';renderSheet();
+  bcFromFile(file).then(function(c){if(S.sheet!==sh)return;if(c)bcHandle(c);else{sh.scan.status='error';sh.scan.err='Ich konnte keinen Barcode im Foto lesen. Halte die Kamera näher und gerade, achte auf gutes Licht oder tippe die Nummer ein.';renderScan()}}).catch(function(){if(S.sheet!==sh)return;sh.scan.status='error';sh.scan.err='Das Foto konnte ich nicht öffnen.';renderScan()});
+}
+async function scanDetect(v){var c=await bcDetectCanvas(v);if(c)return c;var d=drawToData(v,v.videoWidth,v.videoHeight,900);return decodeEANImage(d.data)}
+function openFoodCam(){var sh=S.sheet;camOpen({title:'Foto vom Essen',facing:'environment',hint:'Halte den Teller gut sichtbar ins Bild.',onUse:function(f){scanFoodFile(f,sh)}})}
+function openBcCam(){var sh=S.sheet;camOpen({title:'Barcode scannen',facing:'environment',frame:true,hint:'Halte den Strichcode ruhig in den Rahmen. Er wird automatisch erkannt. Du kannst auch auslösen.',detect:scanDetect,onCode:function(c){if(S.sheet===sh)bcHandle(c)},onUse:function(f){scanBcFile(f,sh)}})}
 
 /* ---------- Fortschrittsfotos: Rahmen, Rhythmus, Video bei Zielgewicht (alles nur auf dem Gerät) ---------- */
 var PF=[['daily','Jeden Tag','Sehr genauer Verlauf, das Video wird flüssig',1],['every2','Alle 2 Tage','Guter Mix aus Aufwand und Detail',2],['weekly','Einmal pro Woche','Veränderungen sind gut sichtbar',7],['every2w','Alle 2 Wochen','Wenig Aufwand, grober Verlauf',14],['monthly','Einmal im Monat','Nur die großen Schritte',30],['never','Keine Fotos','Du kannst das jederzeit ändern',0]];
@@ -3347,9 +3768,8 @@ function phHtml(){
   }
   h+='<div class="card phinfo"><div><b>'+(f?esc(f[1]):'Noch kein Rhythmus')+'</b><small>'+(f&&f[3]?esc(phNextText()):(f?'Du machst gerade keine Fotos.':'Lege fest, wie oft du ein Foto machen möchtest.'))+'</small></div><button type="button" class="btn sm" data-act="pfchange">Ändern</button></div>';
   h+='<div class="phframe'+(mine?' has':'')+'">'+(mine?'<img src="'+safeImg(mine.img)+'" alt="Dein Foto von heute"><span class="phdate">Heute · '+(phW(mine)!=null?fmt1(phW(mine))+' kg':'')+'</span>':'<div class="phempty">'+I.cam+'<b>Dein Foto für heute</b><small>Gleicher Ort, gleiches Licht, gleiche Haltung. Dann siehst du den Unterschied am besten.</small></div>')+'</div>'+
-   '<div class="two"><button type="button" class="btn pri" style="flex:1" data-act="phpick" data-m="cam">'+(mine?'Neu aufnehmen':'Foto aufnehmen')+'</button><button type="button" class="btn" data-act="phpick" data-m="gal">Aus Galerie</button></div>'+
-   '<div class="field" style="margin-top:10px"><label for="phdate">Datum des Fotos</label><input class="text" id="phdate" type="date" max="'+td+'" value="'+td+'"></div>'+
-   '<input type="file" id="phfile" accept="image/*" capture="user" hidden><input type="file" id="phgal" accept="image/*" hidden>';
+   '<div class="two"><button type="button" class="btn pri" style="flex:1" data-act="phpick" data-m="cam">'+(mine?'Neu aufnehmen':'Foto aufnehmen')+'</button>'+camGalHtml('ph','Aus Galerie','flex:1')+'</div>'+
+   '<div class="field" style="margin-top:10px"><label for="phdate">Datum des Fotos</label><input class="text" id="phdate" type="date" max="'+td+'" value="'+td+'"></div>';
   if(S.phMsg)h+='<div class="note" role="alert">'+esc(S.phMsg)+'</div>';
   if(phMem)h+='<div class="note warn">Dein Gerät erlaubt hier keinen dauerhaften Speicher. Die Fotos bleiben nur, solange die App offen ist.</div>';
   var reached=phGoalReached(),tw=num(S.p.tw);
@@ -3470,6 +3890,174 @@ function phAsk(cb){
   d.querySelector('#phno').onclick=end;
   d.querySelector('#phyes').onclick=function(){S.p.phok=true;if(!S.p.pfreq||S.p.pfreq==='never')S.p.pfreq='weekly';save();end();render();cb()};
   d.querySelector('#phyes').focus();
+}
+
+/* ---------- Echte Kamera: Live-Bild, Auslöser, Vorschau, Galerie, verständliche Fehler ---------- */
+var CAM=null;
+function camPlat(){var u=navigator.userAgent||'';return /iPhone|iPad|iPod/.test(u)||(/Macintosh/.test(u)&&(navigator.maxTouchPoints||0)>1)?'ios':/Android/.test(u)?'android':'desk'}
+function camHelp(){
+  var pl=camPlat(),emb=false;try{emb=window.self!==window.top}catch(e){emb=true}
+  var h='';
+  if(emb)h+='<p><b>Wichtig:</b> Du siehst die App gerade in einem eingebetteten Fenster (zum Beispiel einer Vorschau). Dort sperrt oft das umgebende Programm die Kamera, und das lässt sich in der App nicht ändern. Öffne die App direkt im Browser oder als installierte App.</p>';
+  if(pl==='ios')h+='<p><b>iPhone oder iPad (Safari)</b></p><ol><li>Tippe in der Adressleiste auf „aA“ und dann auf „Webseiteneinstellungen“.</li><li>Stelle „Kamera“ auf „Erlauben“.</li><li>Lade die Seite neu und tippe auf „Nochmal versuchen“.</li></ol><p>Geht es so nicht: Einstellungen, dann Safari, dann „Kamera“, und wähle „Fragen“ oder „Erlauben“. Bei Chrome auf dem iPhone: Einstellungen, dann Chrome, dann „Kamera“ einschalten. Bei der installierten Mahlzeit-App: Einstellungen, dann Mahlzeit, dann „Kamera“ einschalten.</p>';
+  else if(pl==='android')h+='<p><b>Android (Chrome)</b></p><ol><li>Tippe links neben der Adresse auf das Schloss- oder Regler-Symbol.</li><li>Tippe auf „Berechtigungen“ und dann auf „Kamera“.</li><li>Wähle „Zulassen“, lade die Seite neu und tippe auf „Nochmal versuchen“.</li></ol><p>Alternativ: Chrome-Menü (drei Punkte), dann Einstellungen, dann Websiteeinstellungen, dann Kamera. Prüfe auch: Handy-Einstellungen, dann Apps, dann Chrome, dann Berechtigungen, dann Kamera auf „Nur während der Nutzung“. Bei der installierten Mahlzeit-App: Einstellungen, dann Apps, dann Mahlzeit, dann Berechtigungen, dann Kamera zulassen.</p>';
+  else h+='<p><b>Computer (Chrome, Edge, Firefox)</b></p><ol><li>Klicke links in der Adressleiste auf das Schloss- oder Kamera-Symbol.</li><li>Stelle „Kamera“ auf „Zulassen“.</li><li>Lade die Seite neu (F5) und klicke auf „Nochmal versuchen“.</li></ol><p>Alternativ: Chrome, dann Einstellungen, dann Datenschutz und Sicherheit, dann Website-Einstellungen, dann Kamera. Prüfe auch, ob in den System-Einstellungen deines Computers die Kamera für den Browser erlaubt ist (Windows: Datenschutz, Kamera. Mac: Datenschutz und Sicherheit, Kamera).</p>';
+  return h;
+}
+function camErr(e){
+  var n=e&&e.name,m=e&&e.message||'';
+  if(e&&e.code==='insecure')return {t:'Die Kamera funktioniert nur über eine sichere Verbindung (https). Öffne die App über eine https-Adresse oder nutze „Aus Galerie“.',k:'insecure'};
+  if(e&&e.code==='timeout')return {t:'Die Kamera antwortet nicht. Wahrscheinlich ist die Anfrage blockiert oder wurde nicht beantwortet. So prüfst du es (Anleitung unten), danach „Nochmal versuchen“. Du kannst auch ein Foto aus der Galerie wählen.',k:'timeout',help:true};
+  if(e&&e.code==='noapi')return {t:'Dieser Browser kann die Kamera nicht direkt öffnen. Nimm ein Foto mit der Kamera-App deines Geräts oder wähle eines aus der Galerie.',k:'noapi'};
+  if(n==='NotAllowedError'||n==='PermissionDeniedError'||n==='SecurityError')return {t:'Der Zugriff auf die Kamera ist blockiert. So erlaubst du ihn (Anleitung unten), danach „Nochmal versuchen“. Du kannst auch ein Foto aus der Galerie wählen.',k:'denied',help:true};
+  if(n==='NotFoundError'||n==='DevicesNotFoundError')return {t:'Ich habe keine Kamera gefunden. Du kannst stattdessen ein Foto aus der Galerie wählen.',k:'none'};
+  if(n==='NotReadableError'||n==='TrackStartError'||n==='AbortError')return {t:'Die Kamera lässt sich gerade nicht starten. Vielleicht nutzt sie eine andere App. Schließe die andere App und versuche es noch einmal.',k:'busy'};
+  return {t:'Die Kamera hat nicht geklappt'+(m?' ('+m.slice(0,80)+')':'')+'. Versuche es noch einmal oder wähle ein Foto aus der Galerie.',k:'other'};
+}
+function camStopStream(){
+  if(!CAM)return;
+  clearInterval(CAM.timer);CAM.timer=0;
+  if(CAM.stream){try{CAM.stream.getTracks().forEach(function(t){t.stop()})}catch(e){}CAM.stream=null}
+  var v=CAM.el&&CAM.el.querySelector('video');if(v){try{v.srcObject=null}catch(e){}}
+}
+function camClose(){
+  if(!CAM)return;
+  camStopStream();
+  if(CAM.url){try{URL.revokeObjectURL(CAM.url)}catch(e){}}
+  document.removeEventListener('keydown',camKey,true);
+  if(CAM.el&&CAM.el.parentNode)CAM.el.parentNode.removeChild(CAM.el);
+  var back=CAM.back;CAM=null;
+  if(back&&back.focus){try{back.focus()}catch(e){}}
+}
+function camKey(e){if(e.key==='Escape'&&CAM){e.stopPropagation();camClose()}}
+function camSet(state,msg,help){
+  if(!CAM)return;CAM.state=state;var el=CAM.el,q=function(s){return el.querySelector(s)};
+  var v=q('video'),im=q('.cmo-img'),fr=q('.cmo-frame'),ms=q('.cmo-msg'),bar=q('.cmo-bar'),hint=q('.cmo-hint'),flip=q('[data-cm=flip]');
+  v.hidden=state!=='live'&&state!=='start';im.hidden=state!=='preview';fr.hidden=!(state==='live'&&CAM.o.frame);
+  v.classList.toggle('mir',!!CAM.o.mirror&&CAM.facing==='user');
+  ms.hidden=!(state==='start'||state==='error');ms.className='cmo-msg'+(state==='error'?' err':'');
+  ms.innerHTML='<p>'+esc(msg||'')+'</p>'+(help?'<details class="cmo-help" open><summary>So erlaubst du die Kamera</summary>'+camHelp()+'</details>':'');
+  ms.setAttribute('role',state==='error'?'alert':'status');
+  flip.hidden=!(state==='live'&&CAM.multi);
+  var gal='<label class="cmo-b" for="cmoFile" role="button" tabindex="0">Galerie</label>',b='';
+  if(state==='live')b=gal+'<button type="button" class="cmo-shot" data-cm="shot" aria-label="Foto aufnehmen"><i></i></button><button type="button" class="cmo-b" data-cm="close">Abbrechen</button>';
+  else if(state==='start')b='<button type="button" class="cmo-b" data-cm="close">Abbrechen</button>';
+  else if(state==='preview')b=(CAM.src==='gal'?'<label class="cmo-b" for="cmoFile" role="button" tabindex="0">Anderes Foto</label>':'<button type="button" class="cmo-b" data-cm="again">Erneut aufnehmen</button>')+'<button type="button" class="cmo-b pri" data-cm="use">Foto verwenden</button>';
+  else if(state==='error'){
+    b='<button type="button" class="cmo-b pri" data-cm="retry">Nochmal versuchen</button><label class="cmo-b" for="cmoFile" role="button" tabindex="0">Aus Galerie wählen</label>';
+    if((navigator.maxTouchPoints||0)>0)b+='<label class="cmo-b" for="cmoNat" role="button" tabindex="0">Kamera-App öffnen</label>';
+    b+='<button type="button" class="cmo-b" data-cm="close">Schließen</button>';
+  }
+  bar.innerHTML=b;
+  bar.querySelectorAll('label[for]').forEach(function(l){l.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();l.click()}})});
+  hint.textContent=state==='live'?(CAM.o.hint||''):state==='preview'?'Passt das Foto? Sonst nimm ein neues auf.':'';
+  var f=bar.querySelector('.pri,.cmo-shot,.cmo-b');if(f&&state!=='start'&&state!=='error'){try{f.focus({preventScroll:true})}catch(e){}}
+}
+function camBuild(o){
+  var el=document.createElement('div');el.className='cmo';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label',o.title||'Kamera');
+  el.innerHTML='<div class="cmo-top"><button type="button" class="cmo-x" data-cm="close" aria-label="Schließen">×</button><b>'+esc(o.title||'Kamera')+'</b><button type="button" class="cmo-x" data-cm="flip" aria-label="Kamera wechseln" hidden>⟲</button></div>'+
+   '<div class="cmo-stage"><video playsinline muted autoplay></video><img class="cmo-img" alt="Vorschau deines Fotos" hidden><div class="cmo-frame" hidden></div><div class="cmo-msg" hidden></div></div>'+
+   '<p class="cmo-hint"></p><div class="cmo-bar"></div><input type="file" accept="image/*" id="cmoFile" class="cmo-file cmo-vh"><input type="file" accept="image/*" capture="environment" id="cmoNat" class="cmo-nat cmo-vh">';
+  el.addEventListener('click',function(e){var t=e.target.closest('[data-cm]');if(t)camAct(t.dataset.cm)});
+  var onFile=function(e){var f=e.target.files&&e.target.files[0];e.target.value='';if(f)camGot(f,'gal')};
+  el.querySelector('.cmo-file').addEventListener('change',onFile);el.querySelector('.cmo-nat').addEventListener('change',onFile);
+  document.body.appendChild(el);document.addEventListener('keydown',camKey,true);return el;
+}
+function camOpen(o){
+  if(CAM)camClose();if(typeof stopCam==='function')stopCam();
+  CAM={o:o,el:null,state:'start',stream:null,facing:o.facing||'environment',blob:null,url:'',src:'cam',timer:0,multi:false,back:document.activeElement};
+  CAM.el=camBuild(o);camStart();
+}
+/* Direkt die Galerie öffnen; erst nach der Auswahl erscheint die Vorschau */
+function camShowFile(o,f){
+  if(!f)return;if(CAM)camClose();
+  CAM={o:o,el:null,state:'preview',stream:null,facing:'environment',blob:null,url:'',src:'gal',timer:0,multi:false,back:document.activeElement};CAM.el=camBuild(o);camGot(f,'gal');
+}
+function camPick(o){
+  var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.className='cmo-vh';document.body.appendChild(inp);
+  var done=false,fin=function(){if(!done){done=true;if(inp.parentNode)inp.parentNode.removeChild(inp)}};
+  inp.addEventListener('change',function(){var f=inp.files&&inp.files[0];fin();camShowFile(o,f)});inp.addEventListener('cancel',fin);inp.click();
+}
+/* Galerie-Felder auf den Seiten: normales Label mit Datei-Feld, öffnet sich ohne Umweg über Skript */
+function camGalHtml(kind,label,style){return '<label class="btn" style="display:grid;place-items:center;cursor:pointer;'+(style||'')+'" for="cg-'+kind+'">'+label+'</label><input type="file" accept="image/*" id="cg-'+kind+'" data-cmsrc="'+kind+'" class="cmo-vh">'}
+document.addEventListener('change',function(e){
+  var t=e.target,k=t&&t.dataset&&t.dataset.cmsrc;if(!k)return;var f=t.files&&t.files[0];t.value='';if(!f)return;
+  var sh=S.sheet;
+  if(k==='food')camShowFile({title:'Foto vom Essen',onUse:function(x){scanFoodFile(x,sh)}},f);
+  else if(k==='bc')camShowFile({title:'Barcode aus der Galerie',onUse:function(x){scanBcFile(x,sh)}},f);
+  else if(k==='ph')phAsk(function(){camShowFile({title:'Fortschrittsfoto',onUse:phAdd},f)});
+},true);
+async function camStart(){
+  var me=CAM;if(!me)return;
+  camStopStream();me.src='cam';
+  if(me.url){try{URL.revokeObjectURL(me.url)}catch(e){}me.url=''}me.blob=null;
+  if(!window.isSecureContext&&location.protocol!=='file:'){camSet('error',camErr({code:'insecure'}).t,false);return}
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){camSet('error',camErr({code:'noapi'}).t);return}
+  camSet('start','Kamera wird geöffnet … Wenn dein Browser fragt, tippe auf „Erlauben“.');
+  var tries=[{video:{facingMode:{ideal:me.facing},width:{ideal:1920},height:{ideal:1080}},audio:false},{video:true,audio:false}],stream=null,err=null;
+  for(var i=0;i<tries.length&&!stream;i++){
+    try{stream=await Promise.race([navigator.mediaDevices.getUserMedia(tries[i]),new Promise(function(_,rej){setTimeout(function(){rej({code:'timeout',name:'Timeout'})},20000)})])}
+    catch(e){err=e;if(!(e&&(e.name==='OverconstrainedError'||e.name==='ConstraintNotSatisfiedError'||e.name==='TypeError')))break}
+  }
+  if(CAM!==me){if(stream)stream.getTracks().forEach(function(t){t.stop()});return}
+  if(!stream){var ce=camErr(err);camSet('error',ce.t,ce.help);return}
+  me.stream=stream;
+  var v=me.el.querySelector('video');v.srcObject=stream;
+  try{await v.play()}catch(e){}
+  if(CAM!==me)return;
+  var t0=Date.now();
+  while(!v.videoWidth&&Date.now()-t0<5000){await new Promise(function(r){setTimeout(r,80)});if(CAM!==me)return}
+  if(!v.videoWidth){camStopStream();camSet('error','Die Kamera liefert kein Bild. Versuche es noch einmal.',false);return}
+  try{var ds=await navigator.mediaDevices.enumerateDevices();me.multi=ds.filter(function(d){return d.kind==='videoinput'}).length>1}catch(e){me.multi=false}
+  if(CAM!==me)return;
+  camSet('live');
+  if(me.o.detect){
+    var busy=false;
+    me.timer=setInterval(async function(){
+      if(busy||!CAM||CAM!==me||me.state!=='live'||!v.videoWidth)return;busy=true;var c=null;
+      try{c=await me.o.detect(v)}catch(e){}
+      busy=false;
+      if(c&&CAM===me&&me.state==='live'){var cb=me.o.onCode;if(navigator.vibrate)try{navigator.vibrate(60)}catch(e){}camClose();if(cb)cb(c)}
+    },350);
+  }
+}
+function camShot(){
+  var me=CAM;if(!me||me.state!=='live')return;
+  var v=me.el.querySelector('video');if(!v.videoWidth)return;
+  var sc=Math.min(1,1600/Math.max(v.videoWidth,v.videoHeight)),cv=document.createElement('canvas');
+  cv.width=Math.round(v.videoWidth*sc);cv.height=Math.round(v.videoHeight*sc);
+  cv.getContext('2d').drawImage(v,0,0,cv.width,cv.height);
+  cv.toBlob(function(b){
+    if(CAM!==me)return;
+    if(!b){camSet('error','Das Foto konnte nicht erstellt werden. Versuche es noch einmal.');return}
+    camStopStream();camGot(b,'cam');
+  },'image/jpeg',.9);
+}
+function camGot(file,src){
+  var me=CAM;if(!me)return;
+  if(src==='gal'&&file.type&&file.type.indexOf('image')!==0){camSet('error','Das ist kein Foto. Wähle ein Bild aus (JPG, PNG, HEIC).');return}
+  camStopStream();
+  if(me.url){try{URL.revokeObjectURL(me.url)}catch(e){}}
+  me.blob=file;me.src=src;me.url=URL.createObjectURL(file);
+  var im=me.el.querySelector('.cmo-img');
+  im.onerror=function(){if(CAM===me)camSet('error','Dieses Foto kann ich nicht anzeigen. Wähle ein anderes (JPG oder PNG).')};
+  im.onload=null;im.src=me.url;
+  camSet('preview');
+}
+function camAct(a){
+  var me=CAM;if(!me)return;
+  switch(a){
+    case 'close':camClose();break;
+    case 'shot':camShot();break;
+    case 'retry':camStart();break;
+    case 'flip':me.facing=me.facing==='user'?'environment':'user';camStart();break;
+    case 'gal':me.el.querySelector('.cmo-file').click();break;
+    case 'native':me.el.querySelector('.cmo-nat').click();break;
+    case 'again':camStart();break;
+    case 'use':{
+      if(!me.blob)break;var b=me.blob,cb=me.o.onUse,f=(typeof File==='function')?(b instanceof File?b:new File([b],'foto.jpg',{type:b.type||'image/jpeg'})):b;
+      camClose();if(cb)cb(f);break}
+  }
 }
 
 /* ---------- Anleitung (fest einprogrammiert, ohne KI) ---------- */
@@ -5186,8 +5774,9 @@ function onClick(e){
     if(!sh)break;var po2=num(sh.por||'1');if(!(po2>0)){toast('Bitte Portionen eingeben');break}var rc=sh.rec;
     sh.basket.push({meal:sh.mealSel,name:rc.name+(po2!==1?' ('+po2.toLocaleString('de-DE')+' Portionen)':''),g:null,k:rc.per.k*po2,p:rc.per.p*po2,c:rc.per.c*po2,f:rc.per.f*po2,s:rc.score});toast('In der Auswahl: '+rc.name);sh.view='menu';renderSheet();break;
   case 'phclear':if(sh){sh.photo=null;renderSheet()}break;
-  case 'scangal':var gi=document.getElementById(t.dataset.i);if(gi){gi.value='';gi.click()}break;
-  case 'scanfood':case 'scanbc':var sid=a==='scanfood'?'phfood':'bcfile';camAsk(function(){var pi=document.getElementById(sid);if(pi){pi.value='';pi.click()}});break;
+  case 'scangal':var gsh=S.sheet,gid=t.dataset.i;camPick({title:gid==='bcfileg'?'Barcode aus der Galerie':'Foto vom Essen',onUse:function(f){if(gid==='bcfileg')scanBcFile(f,gsh);else scanFoodFile(f,gsh)}});break;
+  case 'scanfood':camAsk(openFoodCam);break;
+  case 'scanbc':camAsk(openBcCam);break;
   case 'bcstop':if(sh){stopCam();sh.scan.status='idle';sh.scan.err='';renderScan()}break;
   case 'bcreset':if(sh){stopCam();sh.scan={status:'idle',items:[],err:'',preview:'',hint:''};renderScan()}break;
   case 'bcgo':if(sh){var bn=document.getElementById('bcnum'),bv=bn?bn.value.replace(/\s/g,''):'';if(!/^\d{8,14}$/.test(bv)){sh.scan.status='error';sh.scan.err='Die Nummer hat 8 bis 14 Ziffern. Prüfe die Zahl unter dem Barcode.';renderScan();break}bcHandle(bv)}break;
@@ -5206,7 +5795,7 @@ function onClick(e){
   case 'pfchange':S.phChange=true;render();break;
   case 'pfdone':if(S.p.pfreq){S.phChange=false;save();render()}break;
   case 'openphoto':S.hview='photo';S.view='history';save();render();window.scrollTo(0,0);break;
-  case 'phpick':var pm=t.dataset.m;phAsk(function(){var pin=document.getElementById(pm==='cam'?'phfile':'phgal');if(pin){pin.value='';pin.click()}});break;
+  case 'phpick':var pm=t.dataset.m;if(pm==='gal'){phAsk(function(){camPick({title:'Fortschrittsfoto',onUse:phAdd})})}else{phAsk(function(){camOpen({title:'Fortschrittsfoto',facing:'user',mirror:true,hint:'Gleicher Ort, gleiches Licht, gleiche Haltung.',onUse:phAdd})})}break;
   case 'phopen':phView(t.dataset.id);break;
   case 'phplay':phPlay(false,false);break;
   case 'phsave':phPlay(false,true);break;
