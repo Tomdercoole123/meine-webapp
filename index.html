@@ -1235,6 +1235,32 @@ html,body{overflow-x:clip}
 .phsug .chips{display:flex;flex-wrap:wrap;gap:6px}
 .phres{margin:10px 0 6px;padding:14px;border:1.5px solid var(--accent);border-radius:16px;background:var(--accent-soft)}
 .phres>small{display:block;color:var(--muted);font-size:.8rem}.phres>b{display:block;font-size:1.15rem;margin:2px 0 8px}
+.phres .rhd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 8px}.phres .rhd b{font-size:1.15rem;min-width:0}.phres .rhd .btn{flex:none;min-height:38px;padding:0 14px}
+.phres .num{gap:6px}.phres .num .chip{flex:none;min-height:42px;padding:0 12px}
+/* v55: Gericht antippen, Rezept-Ansicht */
+.dish.tap{cursor:pointer}.dish.tap:hover{border-color:var(--accent)}
+.dtap{margin:8px 0 2px;color:var(--accent);font-weight:700;font-size:.9rem}
+.dvl{margin:6px 0 0;padding-left:20px;line-height:1.55}.dvl li{margin:4px 0}
+
+/* v56 Garten + Essen eintragen */
+.garden{position:relative;border-radius:28px;overflow:hidden;border:1px solid var(--line);min-height:430px;display:grid;justify-items:center;align-content:end;padding-bottom:0}
+.garden .gbg{position:absolute;inset:0;width:100%;height:100%}
+.garden .eg{position:relative;width:410px;max-width:none;justify-self:start;margin:0 calc(50% - 205px)}
+.garden{overflow:hidden}
+.glv{position:absolute;top:12px;left:12px;right:60px;z-index:2;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.88);border:2px solid #fff;border-radius:999px;padding:8px 14px;color:#1E3A5F;box-shadow:0 2px 8px rgba(30,58,95,.12)}
+.glv b{font-family:var(--font-display);font-size:1rem}.glv span{margin-left:auto;font-weight:700;color:#9A6A3F;font-size:.9rem}
+.glv i{flex:0 0 74px;height:12px;border-radius:99px;background:#E4EEF4;overflow:hidden;display:block}.glv u{display:block;height:100%;background:#9A6A3F;border-radius:99px;text-decoration:none}
+.garden .mgsay{position:absolute;top:62px;left:50%;transform:translateX(-50%);z-index:3;max-width:86%}
+.gbtns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.gb{display:flex;flex-direction:column;align-items:center;gap:6px;background:#E5EDB5;color:#1E3A5F;border:2px solid transparent;border-radius:22px;padding:14px 8px;min-height:92px;font:inherit;cursor:pointer}
+.gb.on,.gb:hover{border-color:var(--accent)}
+.gb .gi{display:flex;width:40px;height:40px;align-items:center;justify-content:center}.gb .gi svg{width:34px;height:34px;color:#C9822B}
+.gb b{font-size:1rem}
+.arts{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:14px;margin-bottom:8px}
+.arts .wlabel{margin:8px 0 6px}.arts .text{text-align:center;font-weight:700}
+.qt3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.qt3 button{display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--surface2);border:1.5px solid transparent;border-radius:16px;padding:12px 4px;min-height:84px;font:inherit;color:inherit;cursor:pointer;text-align:center}
+.qt3 button:hover{border-color:var(--accent)}.qt3 svg{width:26px;height:26px;color:var(--accent)}.qt3 b{font-size:.82rem;line-height:1.2}
 </style>
 
 <div id="app"></div>
@@ -1337,12 +1363,12 @@ var parseKey=function(k){var a=k.split('-');return new Date(+a[0],+a[1]-1,+a[2],
 var FEATHERS=[['Alphonso','#F2B21E','#E8572A','#B8760A'],['Tommy Atkins','#E7A12B','#C62E2E','#8A4E0A'],['Keitt','#8DB83F','#D9C84A','#4F7A1E'],['Ataulfo','#F6C928','#FFE27A','#C28A0A'],['Rosa Reife','#F0924A','#E04A6A','#A8481E']];
 function egDef(){return {name:'Mango',feat:0,head:'none',face:'none',top:'none',neck:'none',bg:'none',slot:'feat',c:{head:'#E5484D',face:'#2B323D',top:'#2F6BFF',neck:'#F2B51C',bg:'#4FD1A5'}}}
 var PREMIUM_CODE='42310',PREMIUM_PRICE='2,99 €';
-var S={theme:'light',guideSeen:false,tchanges:0,arena:null,view:'welcome',premium:false,train:{step:0,goal:null,place:null,equip:[],days:null,dur:null,exp:null,split:{},avoid:[],q:'',done:false},prev:'welcome',step:0,done:false,day:keyOf(today(0)),plans:{},log:{},tg:{},recipes:[],seenWeek:'',weekAI:{},
-  p:{uname:'',phok:false,camok:false,goal:null,sex:null,age:'',weight:'',height:'',bfIdx:null,activity:null,meals:null,biggest:null,perMonth:2,diet:'Alles',intol:[],cuis:[],effort:'normal',likes:'',dislikes:'',tw:'',sport:null,breakfast:null,orders:null,aims:[],challenge:null,focus:[],motiv:[],track:[],pfreq:null,guide:null},
+var S={theme:'light',guideSeen:false,tchanges:0,arena:null,view:'welcome',premium:true,train:{step:0,goal:null,place:null,equip:[],days:null,dur:null,exp:null,split:{},avoid:[],q:'',done:false},prev:'welcome',step:0,done:false,day:keyOf(today(0)),plans:{},log:{},tg:{},recipes:[],seenWeek:'',weekAI:{},
+  p:{uname:'',phok:false,camok:false,goal:null,sex:null,age:'',weight:'',height:'',bfIdx:null,activity:null,meals:null,biggest:null,perMonth:2,diet:'Alles',intol:[],cuis:[],effort:'normal',likes:'',dislikes:'',tw:'',sport:null,breakfast:[],orders:null,aims:[],challenge:[],focus:[],motiv:[],track:[],pfreq:null,guide:null},
   eagle:egDef(),aichat:{msgs:[],busy:false},hist:{metric:'k',range:90,table:false,opened:{}},
   gen:{busy:false,key:null,dishes:[],err:'',ctl:null,swap:null,wbusy:''},tplan:null,tdone:{},wlog:{},w0:'',hview:'food',wmsg:'',tlog:{},tday:null,twk:0,tview:'plan',tsel:null,tgen:{busy:false,total:0,done:0,fail:0,err:''},recs:[],rk:{ex:'',kg:'',rp:'',msg:'',busy:false},sheet:null};
 
-function load(){try{var r=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem('mahlzeit.v2')||'null');if(r&&r.p){Object.assign(S.p,r.p);S.done=!!r.done;S.step=r.step||0;S.plans=r.plans||{};S.log=r.log||{};S.tg=r.tg||{};S.recipes=r.recipes||[];S.seenWeek=r.seenWeek||'';S.premium=!!r.premium;if(r.train)Object.assign(S.train,r.train);S.tplan=r.tplan||null;S.tdone=r.tdone||{};S.recs=Array.isArray(r.recs)?r.recs:[];S.tlog=r.tlog||{};S.wlog=r.wlog||{};S.w0=r.w0||'';S.vidShown=r.vidShown||0;S.theme=['dark','light','auto'].indexOf(r.theme)>-1?r.theme:'light';S.guideSeen=!!r.guideSeen;S.tchanges=+r.tchanges||0;S.arena=r.arena||null;S.tview=r.tview||'plan';S.weekAI=r.weekAI||{};
+function load(){S.premium=true;try{var r=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem('mahlzeit.v2')||'null');if(r&&r.p){Object.assign(S.p,r.p);['breakfast','challenge'].forEach(function(k){var v=S.p[k];S.p[k]=Array.isArray(v)?v:(v?[v]:[])});S.done=!!r.done;S.step=r.step||0;S.plans=r.plans||{};S.log=r.log||{};S.tg=r.tg||{};S.recipes=r.recipes||[];S.seenWeek=r.seenWeek||'';if(r.train)Object.assign(S.train,r.train);S.tplan=r.tplan||null;S.tdone=r.tdone||{};S.recs=Array.isArray(r.recs)?r.recs:[];S.tlog=r.tlog||{};S.wlog=r.wlog||{};S.w0=r.w0||'';S.vidShown=r.vidShown||0;S.theme=['dark','light','auto'].indexOf(r.theme)>-1?r.theme:'light';S.guideSeen=!!r.guideSeen;S.tchanges=+r.tchanges||0;S.arena=r.arena||null;S.tview=r.tview||'plan';S.weekAI=r.weekAI||{};
   if(r.eagle){var d=egDef(),e=r.eagle;S.eagle=Object.assign(d,e);S.eagle.c=Object.assign(d.c,e.c||{});if(!(S.eagle.feat>=0&&S.eagle.feat<FEATHERS.length))S.eagle.feat=0;if(S.eagle.slot==='feat'||S.eagle.slot==='bg'||['head','face','top','neck'].indexOf(S.eagle.slot)<0)S.eagle.slot='feat'}
   if(r.aichat&&Array.isArray(r.aichat.msgs))S.aichat.msgs=r.aichat.msgs.slice(-40);
   var t=keyOf(today(0));Object.keys(S.plans).forEach(function(k){if(k<t)delete S.plans[k]});if(S.done)S.view='result';else if(r.step>0||r.started)S.view='wizard'}}catch(e){}}
@@ -1350,19 +1376,19 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify({premium:S.premium,t
 
 /* ---------- Berechnung ---------- */
 function calc(p,perMonth){
-  var w=num(p.weight),h=num(p.height),a=num(p.age),male=p.sex==='m',loss=p.goal==='lose';
+  var w=num(p.weight),h=num(p.height),a=num(p.age),male=p.sex==='m',loss=p.goal==='lose',keep=p.goal==='keep';
   var bf=BF[p.sex][p.bfIdx];
   var lbm=w*(1-bf/100);
   var bmr=((370+21.6*lbm)+(10*w+6.25*h-5*a+(male?5:-161)))/2;
   var tdee=bmr*ACT.filter(function(x){return x.id===p.activity})[0].f;
-  var want=perMonth*7700/30,t=loss?tdee-want:tdee+want,minor=a<16,limited=false;
+  var want=keep?0:perMonth*7700/30,t=keep?tdee:loss?tdee-want:tdee+want,minor=a<16,limited=false;
   if(minor){var lo=tdee*0.9,hi=tdee*1.1,t0=t;t=Math.min(hi,Math.max(lo,t));t=Math.min(3200,Math.max(1400,t));limited=Math.abs(t-t0)>5}
   else t=Math.max(1000,t);
   t=Math.round(t/10)*10;
   var P=2*w;
   var F=0.27*t/9;F=Math.max(0,Math.min(F,(t-4*P)/9));
   var C=Math.max(0,(t-4*P-9*F)/4);
-  return {bf:bf,lbm:lbm,bmr:bmr,tdee:tdee,target:t,delta:t-tdee,P:P,F:F,C:C,minor:minor,limited:limited,actual:Math.abs(t-tdee)*30/7700,loss:loss};
+  return {bf:bf,lbm:lbm,bmr:bmr,tdee:tdee,target:t,delta:t-tdee,P:P,F:F,C:C,minor:minor,limited:limited,actual:Math.abs(t-tdee)*30/7700,loss:loss,keep:keep};
 }
 function rating(loss,k){
   if(loss) return k<=1?'Sanft und gut durchzuhalten':k<=2.5?'Moderat':k<=4?'Ambitioniert':'Sehr aggressiv';
@@ -1440,6 +1466,8 @@ var FOODS_MORE=[
 'Gummibärchen;343;7;77;0.5;5;Süßes;','Nuss-Nougat-Creme;540;6;57;31;8;Süßes,Aufstrich;dn','Kekse;480;6;70;19;12;Süßes,Gebäck;gd;10;Keks','Rührkuchen;400;5;50;20;18;Süßes,Gebäck,Kuchen;gde;80;Stück','Vanilleeis;207;3.5;24;11;18;Süßes,Eis;d;60;Kugel','Pudding;110;3;18;3;30;Süßes;d','Dubai-Schokolade;550;7;50;35;8;Süßes,Schokolade;dgna;10;Stück',
 'Cheeseburger;260;13;28;11;25;Fast Food;gdm;120;Burger','Lasagne;150;8;14;7;45;Fertiggericht;gdm','Spaghetti Bolognese;140;7;18;4;55;Fertiggericht;gm','Gemüsesuppe;35;1.2;6;0.7;90;Suppe;','Linsensuppe;70;4;11;1;86;Suppe;','Hühnersuppe;35;3;3;1;75;Suppe;m','Sushi (Maki);140;5;28;1;52;Fisch,Reis;f','Guacamole;150;2;8;13;70;Dip;','Tzatziki;90;3;4;7;60;Dip;d','Pizza Salami;270;12;31;11;32;Fast Food,Pizza;gdm','Ketchup;100;1.5;25;0.1;15;Soße;','Mayonnaise;680;1;3;75;10;Soße;e','Senf;66;4;5;3.5;50;Soße;'
 ];
+var FOODS_BRAND=["Nutella;539;6.3;57.5;30.9;8;Süßes,Aufstrich,Marken;dn;15;Portion", "Kinder Bueno;572;8.6;49.5;37;8;Süßes,Schokolade,Marken;dgn;21;Riegel", "Kinder Schokolade;563;8.7;53.5;34;8;Süßes,Schokolade,Marken;d;12.5;Riegel", "Kinder Country;560;8.5;55;33;8;Süßes,Schokolade,Marken;dg;23.5;Riegel", "Hanuta;551;7;55;32;8;Süßes,Marken;dgn;22;Stück", "Duplo;541;6.9;52;33;8;Süßes,Marken;dgn;18.2;Riegel", "Knoppers;544;8;54;33;8;Süßes,Marken;dgn;25;Stück", "Milka Alpenmilch;530;6.6;59;29.5;6;Süßes,Schokolade,Marken;d;10;Stück", "Milka Haselnuss;540;7;55;32;6;Süßes,Schokolade,Marken;dn;10;Stück", "Milka Oreo;520;6;62;27;6;Süßes,Schokolade,Marken;dg;10;Stück", "Ritter Sport Vollmilch;540;7.2;56;31;6;Süßes,Schokolade,Marken;d;10;Stück", "Ritter Sport Nuss;565;9;46;38;6;Süßes,Schokolade,Marken;dn;10;Stück", "Lindt Excellence 70 %;570;9.5;30;42;18;Süßes,Schokolade,Marken;d;10;Stück", "Toblerone;535;6;59;30;6;Süßes,Schokolade,Marken;dn;8;Stück", "Snickers;488;9;58;24;6;Süßes,Marken;dnu;50;Riegel", "Mars;449;4;70;17;6;Süßes,Marken;d;51;Riegel", "Twix;495;5;66;24;6;Süßes,Marken;dg;50;Riegel", "Bounty;471;4;59;24;6;Süßes,Marken;d;57;Riegel", "KitKat;518;6.5;62;27;6;Süßes,Marken;dg;42;Riegel", "Raffaello;607;8;38;46;6;Süßes,Marken;dgn;10;Stück", "Ferrero Rocher;576;8;47;40;6;Süßes,Marken;dgn;12.5;Stück", "Haribo Goldbären;343;6.9;77;0.5;4;Süßes,Marken;;10;Bärchen", "Haribo Colorado;340;6;77;0.5;4;Süßes,Marken;;5;Stück", "Katjes Fruchtgummi;340;4;78;0.1;4;Süßes,Marken;;5;Stück", "Lakritz;350;3;80;1;4;Süßes,Marken;g;5;Stück", "Oreo Kekse;480;5;69;20;10;Süßes,Gebäck,Marken;g;11;Keks", "Prinzenrolle;480;6;65;21;10;Süßes,Gebäck,Marken;dg;17;Keks", "Leibniz Butterkeks;450;7.4;73;14;12;Süßes,Gebäck,Marken;dge;4.5;Keks", "Choco Leibniz;480;6.5;66;21;10;Süßes,Gebäck,Marken;dg;14;Keks", "Lebkuchen;380;5;70;10;12;Süßes,Gebäck;gen;50;Stück", "Spekulatius;480;6;72;18;12;Süßes,Gebäck;g;8;Keks", "Dominosteine;390;4;62;14;8;Süßes,Gebäck;gn;15;Stück", "Pringles Original;530;4.4;49;33;6;Snack,Chips,Marken;;30;Portion", "Chio Chips Paprika;520;6;51;32;6;Snack,Chips,Marken;;30;Portion", "Erdnussflips;497;13;55;25;8;Snack,Marken;u;30;Portion", "Studentenfutter;480;12;36;31;40;Snack,Nüsse;n;30;Portion", "Kellogg's Frosties;375;4.5;87;0.5;12;Müsli,Marken;g;30;Portion", "Kellogg's Special K;378;14;76;1;40;Müsli,Marken;g;30;Portion", "Nesquik Cerealien;375;6;76;3;20;Müsli,Marken;gd;30;Portion", "Knuspermüsli;430;9;62;16;45;Müsli;gn;50;Portion", "Müllermilch Schoko;77;3.4;11;1.6;20;Milch,Marken;d;400;Flasche", "Philadelphia Natur;223;5.4;3.5;21;30;Käse,Marken;d;20;Portion", "Brie;330;20;0.5;28;30;Käse;d;30;Stück", "Leerdammer;340;26;0;26;32;Käse;d;25;Scheibe", "Fleischwurst;280;12;2;25;12;Wurst;m;30;Scheibe", "Lyoner;300;12;2;27;12;Wurst;mp;30;Scheibe", "Frankfurter Würstchen;270;13;1;24;14;Wurst;mp;50;Stück", "Teewurst;360;13;1;33;10;Wurst;mp;20;Scheibe", "Big Mac;234;12;20;11;18;Fast Food,Marken;gdme;215;Burger", "McDonald's Cheeseburger;255;13;29;10;22;Fast Food,Marken;gdm;119;Burger", "McDonald's McNuggets;245;15;16;14;22;Fast Food,Marken;gm;16;Nugget", "McDonald's Pommes (mittel);290;3.5;38;14;22;Fast Food,Marken;;114;Portion", "Whopper;250;12;20;14;18;Fast Food,Marken;gdm;270;Burger", "Pizza Salami (Tiefkühl);250;10;28;11;28;Fertiggericht,Pizza,Marken;gdm;350;Pizza", "Pizza Margherita (Tiefkühl);240;10;29;9;30;Fertiggericht,Pizza,Marken;gd;330;Pizza", "Pizza Hawaii (Tiefkühl);235;10;29;8.5;30;Fertiggericht,Pizza,Marken;gdm;350;Pizza", "Tiefkühl-Lasagne;140;7;14;6;40;Fertiggericht;gdm;400;Packung", "Fischstäbchen (Iglo);190;12;17;8;38;Fisch,Marken;gf;28;Stück", "Maultaschen;200;8;25;7;35;Fertiggericht;gem;60;Stück", "Ravioli (Dose);90;3.5;13;2.5;30;Fertiggericht,Marken;gm;400;Dose", "Linseneintopf (Dose);75;4.5;10;1.5;70;Suppe;;400;Dose", "Tomatensuppe (Dose);40;1;7;1;60;Suppe;;400;Dose", "Spiegelei;196;13.6;0.8;15;50;Ei;e;50;Stück", "Rührei;165;11;1.5;13;50;Ei;ed;100;Portion", "Pfannkuchen;185;6;25;6.5;35;Süßes;gde;80;Stück", "Waffel;350;6;45;16;20;Süßes,Gebäck;gde;50;Stück", "Berliner (Krapfen);370;6;50;16;12;Süßes,Gebäck;gde;70;Stück", "Donut;420;5;50;22;10;Süßes,Gebäck;gde;60;Stück", "Muffin;390;5;50;19;12;Süßes,Gebäck;gde;80;Stück", "Käsekuchen;270;7;28;14;25;Süßes,Kuchen;gde;120;Stück", "Apfelkuchen;230;3;35;9;35;Süßes,Kuchen;gde;120;Stück", "Schwarzwälder Kirschtorte;270;4;28;15;12;Süßes,Kuchen;gde;120;Stück", "Pepsi;41;0;10.3;0;4;Getränk,Marken;;250;Glas", "Fanta Orange;38;0;9;0;4;Getränk,Marken;;250;Glas", "Coca-Cola Zero;0.3;0;0;0;50;Getränk,Marken;;250;Glas", "Red Bull;45;0.4;11;0;5;Getränk,Marken;;250;Dose", "Monster Energy;46;0;11;0;5;Getränk,Marken;;500;Dose", "Club-Mate;20;0;5;0;40;Getränk,Marken;;500;Flasche", "Apfelschorle;22;0;5;0;70;Getränk;;250;Glas", "Eistee (Pfirsich);20;0;5;0;30;Getränk,Marken;;330;Flasche", "Rotwein;85;0.1;0.2;0;20;Alkohol;;150;Glas", "Weißwein;80;0.1;0.5;0;20;Alkohol;;150;Glas", "Sekt;80;0.2;3;0;20;Alkohol;;100;Glas", "Wodka;231;0;0;0;5;Alkohol;;20;Shot", "Weizenbier;45;0.5;3;0;25;Alkohol;g;500;Glas", "Radler;38;0.3;8;0;25;Alkohol;g;500;Glas", "Hafer-Drink Barista;55;1;6.5;3;70;Milch,Pflanzendrink,Marken;g;250;Glas", "Protein-Pudding;75;10;7;0.7;70;Süßes,Protein;d;200;Becher", "Proteinriegel (Zucker reduziert);350;35;25;12;50;Süßes,Protein,Snack;dn;45;Riegel", "Skyr Vanille;66;9.5;5.5;0.2;78;Joghurt,Marken;d;150;Becher", "Joghurt Frucht (Becher);95;3.5;15;2.5;40;Joghurt;d;150;Becher", "Fruchtzwerge;115;5;14;4;30;Joghurt,Marken;d;50;Becher", "Müsli-Joghurt;110;4;17;3;45;Joghurt;dg;180;Becher", "Döner Kebab;215;13;16;11;30;Fast Food;gdm;350;Döner", "Falafel-Dürüm;200;8;27;7;45;Fast Food;g;350;Dürüm", "Currywurst mit Pommes;230;8;22;12;15;Fast Food;mp;400;Portion", "Pommes Currywurst Sauce;230;8;22;12;15;Fast Food;mp;400;Portion", "Schnitzel mit Pommes;240;12;22;11;18;Fertiggericht;gem;450;Portion", "Spaghetti Carbonara;180;7;21;7.5;40;Fertiggericht;gdem;350;Portion", "Pasta Pesto;175;5;22;7;50;Fertiggericht;gdn;350;Portion", "Sushi (Nigiri);140;6;27;1;55;Fisch,Sushi;f;30;Stück", "Hummus (Packung);230;7;11;17;70;Aufstrich;a;50;Portion", "Erdnussbutter Crunchy;600;25;12;50;40;Aufstrich,Nüsse;u;15;Portion", "Marmelade Erdbeer;240;0.4;58;0.1;10;Aufstrich,Süßes;;20;Portion", "Honig Flasche;304;0.4;76;0;15;Aufstrich,Süßes;h;20;Portion", "Ahornsirup Pfannkuchen;260;0;67;0.1;15;Zucker,Süßes;;20;Portion", "Kakao-Getränk (Trinkschokolade);80;3.4;11;2.5;30;Milch,Süßes;d;250;Tasse", "Latte Macchiato;55;3;5;2.5;50;Getränk,Kaffee;d;300;Glas", "Cappuccino;45;2.5;4;2;55;Getränk,Kaffee;d;200;Tasse", "Eiskaffee;120;2.5;18;4;20;Getränk,Kaffee;d;300;Glas", "Softeis;165;4;25;5;15;Süßes,Eis;d;100;Portion", "Eis am Stiel (Wasser);80;0;20;0;10;Süßes,Eis;;60;Stück", "Magnum Mandel;300;3.6;28;20;10;Süßes,Eis,Marken;dn;75;Stück", "Ben & Jerry's Cookie Dough;260;3.5;32;13;10;Süßes,Eis,Marken;dgen;100;Portion"];
+FOODS_MORE=FOODS_MORE.concat(FOODS_BRAND);
 var FOOD_GROUPS={};
 (function(){
   var have={};FOODS.forEach(function(f){have[f.name]=1});
@@ -1595,6 +1623,7 @@ function bodyFig(sex,t,id){
   return s+'</svg>';
 }
 var icoDown='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg>';
+var icoKeep='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9h14M5 15h14"/></svg>';
 var icoUp='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V5M6 11l6-6 6 6"/></svg>';
 var I={
  leaf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14z"/><path d="M5 19c3-4 6-7 10-9"/></svg>',
@@ -1779,6 +1808,7 @@ function goalInfo(c){
 }
 function single(k,list,withSmallIdx){return '<div class="stack">'+list.map(function(x){return opt(k,x[0],esc(x[1]&&x.length>2?x[1]:x[0]),x.length>2?x[2]:x[1])}).join('')+'</div>'}
 function multi(k,list){return '<p class="hint" style="margin:0 0 10px">Mehrfachauswahl möglich. Du kannst auch nichts auswählen.</p><div class="stack">'+list.map(function(x){return optm(k,x[0],x[0],x[1])}).join('')+'</div>'}
+function multiReq(k,list){return '<p class="hint" style="margin:0 0 10px">Mehrfachauswahl möglich. Wähle mindestens eins aus.</p><div class="stack">'+list.map(function(x){return optm(k,x[0],x[0],x[1])}).join('')+'</div>'}
 /* ---------- Schritte ---------- */
 function tfield(key,label,ph){return '<div class="field"><label for="f-'+key+'">'+label+'</label><div class="num"><input id="f-'+key+'" data-key="'+key+'" type="text" maxlength="14" autocomplete="given-name" autocapitalize="words" placeholder="'+ph+'" value="'+esc(S.p[key])+'"></div></div>'}
 function withName(t){var n=((S.p&&S.p.uname)||'').trim();if(!n)return t;return /[?.!]$/.test(t)?t.replace(/([?.!])$/,', '+n+'$1'):t+', '+n}
@@ -1786,7 +1816,7 @@ var STEPS=[
  {t:function(){return 'Wie sollen wir dich nennen?'},s:'Ich freue mich, wenn ich dich beim Namen nennen darf. Ein Vorname oder Spitzname reicht völlig.',
   b:function(){return tfield('uname','Dein Name','z. B. Tom')},ok:function(){return (S.p.uname||'').trim().length>0}},
  {t:function(){return 'Was ist dein Ziel?'},s:'Keine Sorge, das geht ganz schnell. Daraus berechne ich deinen Kalorienbedarf und stelle dir jeden Tag 6 passende Gerichte zusammen.',
-  b:function(){return '<div class="grid2">'+opt('goal','lose','Abnehmen','Körperfett reduzieren',icoDown)+opt('goal','gain','Zunehmen','Gewicht und Muskeln aufbauen',icoUp)+'</div>'},
+  b:function(){return '<div class="stack">'+opt('goal','lose','Abnehmen','Körperfett reduzieren',icoDown)+opt('goal','gain','Zunehmen','Gewicht und Muskeln aufbauen',icoUp)+opt('goal','keep','Gewicht halten','Dein Gewicht stabil halten und gesund essen',icoKeep)+'</div>'},
   ok:function(){return !!S.p.goal}},
  {t:function(){return 'Möchtest du eine kurze Anleitung?'},s:'Ich zeige dir nach der Einrichtung, wie die App funktioniert, wo alles ist und wofür es da ist. Du kannst sie später jederzeit in den Einstellungen öffnen.',
   b:function(){return '<div class="grid2">'+opt('guide','ja','Ja','Zeig mir, wie alles funktioniert')+opt('guide','nein','Nein','Ich finde mich allein zurecht')+'</div>'},ok:function(){return !!S.p.guide}},
@@ -1796,7 +1826,7 @@ var STEPS=[
  {t:function(){return 'Wie viel wiegst du und wie groß bist du?'},s:'Tippe die Werte einfach ein, ein ungefährer Wert ist völlig okay.',
   b:function(){return field('weight','Gewicht','kg','z. B. 75')+field('height','Größe','cm','z. B. 178')},
   ok:function(){var w=num(S.p.weight),h=num(S.p.height);return w>=30&&w<=300&&h>=120&&h<=230}},
- {t:function(){return 'Was ist dein Zielgewicht?'},s:'So sehe ich, wie weit es noch ist und wie lange du ungefähr brauchst.',
+ {sk:function(){return S.p.goal==='keep'},t:function(){return 'Was ist dein Zielgewicht?'},s:'So sehe ich, wie weit es noch ist und wie lange du ungefähr brauchst.',
   b:function(){return field('tw','Zielgewicht','kg','z. B. 80')+'<div id="twNote">'+twNote()+'</div>'},
   ok:function(){var t=num(S.p.tw);return t>=30&&t<=300}},
  {t:function(){return 'Wie hoch ist dein Körperfettanteil?'},s:'Tippe auf die Figur, die dir am ähnlichsten sieht. Ein Schätzwert reicht, hier gibt es kein Richtig oder Falsch.',
@@ -1814,7 +1844,7 @@ var STEPS=[
  {t:function(){return 'Bei welcher Mahlzeit isst du am meisten?'},s:'Diese Mahlzeit bekommt den größten Anteil deiner Kalorien.',
   b:function(){var avail=MAIN.filter(function(x){return (SLOTS[S.p.meals||3]).indexOf(x)>-1});return '<div class="stack">'+avail.map(function(x){return opt('biggest',x,x,'')}).join('')+opt('biggest','even','Gleichmäßig verteilt','Alle Hauptmahlzeiten etwa gleich groß')+'</div>'},
   ok:function(){return !!S.p.biggest}},
- {amt:true,t:function(){return S.p.goal==='lose'?'Wie viele Kilo möchtest du pro Monat abnehmen?':'Wie viele Kilo möchtest du pro Monat zunehmen?'},s:'Verschiebe den Regler.',
+ {sk:function(){return S.p.goal==='keep'},amt:true,t:function(){return S.p.goal==='lose'?'Wie viele Kilo möchtest du pro Monat abnehmen?':'Wie viele Kilo möchtest du pro Monat zunehmen?'},s:'Verschiebe den Regler.',
   b:function(){var loss=S.p.goal==='lose',mx=loss?10:6;return '<div class="big"><span id="amtVal"></span><span class="u">kg pro Monat</span></div><input class="rng" id="rng" data-key="perMonth" type="range" min="0.5" max="'+mx+'" step="0.5" value="'+Math.min(mx,S.p.perMonth)+'" aria-label="Kilogramm pro Monat"><div class="scale"><span>0,5 kg</span><span>'+mx+' kg</span></div><div class="info" id="amtInfo"></div>'},
   ok:function(){return true}},
  {t:function(){return 'Wie ernährst du dich, und was verträgst du nicht?'},s:'Damit kommt nichts auf den Teller, was du nicht isst oder nicht verträgst.',
@@ -1823,14 +1853,14 @@ var STEPS=[
  {t:function(){return 'Was isst du gern, und was magst du nicht?'},s:'Daraus entstehen Gerichte, die zu dir passen.',
   b:function(){return '<div class="group" style="margin-top:0"><h2>Lieblingsküchen</h2><p class="hint">Mehrfachauswahl möglich.</p>'+chips('cuis',CUIS,true)+'</div><div class="group"><h2>Wie viel Zeit zum Kochen?</h2><div class="stack">'+EFFORT.map(function(e){return opt('effort',e.id,e.n,e.d)}).join('')+'</div></div><div class="field"><label for="f-likes">Das esse ich besonders gern</label><input class="text" id="f-likes" data-key="likes" type="text" maxlength="200" placeholder="z. B. Hähnchen, Reis, Beeren, Skyr" value="'+esc(S.p.likes)+'"></div><div class="field"><label for="f-dislikes">Das mag ich nicht</label><input class="text" id="f-dislikes" data-key="dislikes" type="text" maxlength="200" placeholder="z. B. Pilze, Rosenkohl, Oliven" value="'+esc(S.p.dislikes)+'"></div>'},
   ok:function(){return true}},
- {t:function(){return 'Wie sieht dein Frühstück aus?'},s:'Wähle das, was am ehesten zu deinem normalen Frühstück passt.',
-  b:function(){return single('breakfast',BREAKFAST)},ok:function(){return !!S.p.breakfast}},
+ {t:function(){return 'Wie sieht dein Frühstück aus?'},s:'Wähle alles, was zu deinem Frühstück passt. Du kannst mehrere auswählen.',
+  b:function(){return multiReq('breakfast',BREAKFAST)},ok:function(){return S.p.breakfast.length>0}},
  {t:function(){return 'Wie oft im Monat bestellst du Essen?'},s:'Lieferdienst, Imbiss oder Essen zum Mitnehmen.',
   b:function(){return '<div class="grid2">'+ORDERS.map(function(x){return opt('orders',x[0],x[1],x[2])}).join('')+'</div>'},ok:function(){return !!S.p.orders}},
  {t:function(){return 'Was möchtest du erreichen?'},s:'Dein Hauptgrund für die App.',
   b:function(){return multi('aims',AIMS)},ok:function(){return true}},
- {t:function(){return 'Was ist deine größte Herausforderung?'},s:'Wähle die Sache, die dir am schwersten fällt.',
-  b:function(){return '<div class="stack">'+CHALL.map(function(x){return opt('challenge',x[0],x[0],x[1])}).join('')+'</div>'},ok:function(){return !!S.p.challenge}},
+ {t:function(){return 'Was ist deine größte Herausforderung?'},s:'Wähle alles, was dir schwerfällt. Du kannst mehrere auswählen.',
+  b:function(){return multiReq('challenge',CHALL)},ok:function(){return S.p.challenge.length>0}},
  {t:function(){return 'Worauf möchtest du besonders achten?'},s:'Darauf lege ich bei deinen Gerichten besonderen Wert.',
   b:function(){return multi('focus',FOCUS)},ok:function(){return true}},
  {t:function(){return 'Was motiviert dich?'},s:'So kann ich dich besser unterstützen.',
@@ -1868,8 +1898,9 @@ function renderWelcome(){
 }
 function renderWizard(){
   var st=STEPS[S.step],last=S.step===STEPS.length-1,title=S.step===0?st.t():withName(st.t());
-  app.innerHTML=topbar({count:'Frage '+(S.step+1)+' von '+STEPS.length})+
-   eagleTrack('wiz',S.step,STEPS.length)+
+  var vis=STEPS.map(function(_,i){return i}).filter(function(i){return !stepSkip(i)}),vi=Math.max(1,vis.indexOf(S.step)+1),vt=vis.length;
+  app.innerHTML=topbar({count:'Frage '+vi+' von '+vt})+
+   eagleTrack('wiz',vi-1,vt)+
    '<div class="coach"><div class="eg">'+eagle()+'</div><div class="bubble"><h1>'+esc(title)+'</h1></div></div>'+
    '<section class="card step"><p class="sub">'+esc(st.s||'')+'</p>'+st.b()+'</section>'+
    '<nav class="nav"><button type="button" class="btn" data-act="back">'+(S.step>0?'Zurück':(S.done?'Abbrechen':'Zurück'))+'</button><button type="button" class="btn pri" id="next" data-act="next"'+(st.ok()?'':' disabled')+'>'+(last?'Meinen Plan berechnen':'Weiter')+'</button></nav>';
@@ -1893,12 +1924,16 @@ function renderLoading(){
 
 /* Mango-Schrank */
 function renderEagle(){
-  var E=S.eagle;
+  var E=S.eagle,n=0;Object.keys(S.log).forEach(function(k){n+=S.log[k].length});
+  var lv=1+Math.floor(n/10),fr=(n%10)/10;
+  var scene='<div class="garden"><svg class="gbg" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="gsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9DAF2"/><stop offset="1" stop-color="#E6F2EA"/></linearGradient></defs><rect width="400" height="300" fill="url(#gsky)"/><circle cx="64" cy="96" r="22" fill="#FFE98A" opacity=".85"/><path d="M0 170Q90 130 190 160T400 150V300H0Z" fill="#EAF2C9"/><ellipse cx="300" cy="86" rx="30" ry="10" fill="#fff"/><ellipse cx="318" cy="78" rx="18" ry="9" fill="#fff"/><ellipse cx="70" cy="140" rx="24" ry="8" fill="#fff"/><rect y="168" width="400" height="6" fill="none"/><path d="M0 176H400M0 196H400" stroke="#fff" stroke-width="5"/><g fill="#fff">'+[0,1,2,3,4,5,6,7,8,9,10,11,12,13].map(function(i){return '<rect x="'+(6+i*29)+'" y="158" width="18" height="46" rx="8"/>'}).join('')+'</g><rect y="204" width="400" height="100" fill="#D8E48C"/><g fill="#BDD14A"><path d="M30 262q14-18 28 0z"/><path d="M290 232q12-14 24 0z"/></g></svg>'+
+   '<div class="glv"><b>'+esc(E.name||'Mango')+'</b><span>Level '+lv+'</span><i><u style="width:'+Math.round(fr*100)+'%"></u></i></div>'+
+   (window.egSayHtml?window.egSayHtml():'')+'<div class="eg">'+eagle({tree:true})+'</div></div>';
+  var arts='';
+  if(S.egArts)arts='<div class="arts"><div class="wlabel">Name</div><input class="text" id="egname" type="text" maxlength="14" value="'+esc(E.name)+'" aria-label="Name deiner Mango" placeholder="Name"><div class="wlabel">Looks</div><div class="looks">'+EG_LOOKS.map(function(l,i){return '<button type="button" class="chip" data-act="eglook" data-v="'+i+'">'+l[0]+'</button>'}).join('')+'<button type="button" class="chip" data-act="egrand">Zufällig</button></div></div>';
   app.innerHTML=(S.done?topbar({gear:true}):topbar({tabs:true}))+
-   '<div class="wardrobe"><div class="stagebox">'+(window.egSayHtml?window.egSayHtml():'')+'<div class="eg">'+eagle({tree:true})+'</div><div class="nm"><input class="text" id="egname" type="text" maxlength="14" value="'+esc(E.name)+'" aria-label="Name deiner Mango" placeholder="Name"></div></div>'+
-   '<div class="wlabel">Looks</div><div class="looks">'+EG_LOOKS.map(function(l,i){return '<button type="button" class="chip" data-act="eglook" data-v="'+i+'">'+l[0]+'</button>'}).join('')+'<button type="button" class="chip" data-act="egrand">Zufällig</button></div>'+
-   '<button type="button" class="trcard" style="margin-top:14px" data-act="openshop"><span class="ic">'+I.star+'</span><div><b>Zum Shop</b><small>Alle Kleidungsstücke, Brillen, Sorten und Hintergründe</small></div><span class="ch">'+I.chev+'</span></button>'+
-   '<p class="hint" style="margin-top:18px">Deine Mango wird automatisch gespeichert.</p></div>';
+   '<div class="wardrobe">'+scene+'<div class="gbtns"><button type="button" class="gb" data-act="openshop"><span class="gi">'+I.star+'</span><b>Shop</b></button><button type="button" class="gb'+(S.egArts?' on':'')+'" data-act="egarts" aria-expanded="'+!!S.egArts+'"><span class="gi">'+I.bird+'</span><b>Meine Artikel</b></button></div>'+arts+
+   '<p class="hint" style="margin-top:14px">Deine Mango wird automatisch gespeichert. Mit jedem Eintrag steigt ihr Level.</p></div>';
 }
 
 function ring(size,stroke,frac,color){
@@ -1922,7 +1957,7 @@ function renderResult(){
   var meals=sl.map(function(s){
     var mi=items.filter(function(i){return i.meal===s.slot}),ms=sums(mi);
     return '<div class="meal" role="button" tabindex="0" data-act="openmeal" data-m="'+esc(s.slot)+'"><div class="mh"><div><b>'+esc(s.slot)+'</b><small>Ziel ca. '+fmt(s.kcal)+' kcal</small></div><div class="mk"><span><b>'+fmt(ms.k)+'</b> kcal</span><span class="plus" aria-hidden="true">+</span></div></div><div class="mbar"><i style="width:'+Math.min(100,ms.k/s.kcal*100)+'%"></i></div>'+
-     (mi.length?'<ul class="mi">'+mi.map(function(i){return '<li><span>'+(i.ph?'<img class="mph" src="'+safeImg(i.ph)+'" alt="Foto"> ':'')+esc(i.name)+(i.g?' <em>'+fmt(i.g)+' g</em>':'')+'</span><span style="display:flex;align-items:center;gap:6px"><em>'+fmt(i.k)+' kcal</em>'+scBadge(itemScore(i))+'<button type="button" class="x" data-act="delitem" data-id="'+i.id+'" aria-label="Eintrag löschen">×</button></span></li>'}).join('')+'</ul>':'')+'</div>';
+     (mi.length?'<ul class="mi">'+mi.map(function(i){return '<li><span>'+(i.ph?'<img class="mph" src="'+safeImg(i.ph)+'" alt="Foto"> ':'')+esc(i.name)+(i.g?' <em>'+fmt(i.g)+' g</em>':'')+'</span><span style="display:flex;align-items:center;gap:6px"><em>'+fmt(i.k)+' kcal</em>'+scBadge(itemScore(i))+'<button type="button" class="x" data-act="itemedit" data-id="'+i.id+'" aria-label="Eintrag ändern" style="font-size:.95rem">✎</button><button type="button" class="x" data-act="delitem" data-id="'+i.id+'" aria-label="Eintrag löschen">×</button></span></li>'}).join('')+'</ul>':'')+'</div>';
   }).join('');
   var sb=st.score==null?null:band(st.score),wk=newWeek();
   app.innerHTML=topbar({gear:true})+
@@ -1934,7 +1969,6 @@ function renderResult(){
   '<div class="scorecard">'+gaugeHtml(st.score,52)+'<div><h3>Gesundheits-Score heute'+(sb?': '+sb[1]:'')+'</h3><p>'+(sb?SCTXT[sb[0]]:'Trag etwas ein, dann berechne ich deinen Score von 1 bis 100.')+'</p></div></div>'+
   (wk?'<div class="banner"><div><b>Dein Wochenrückblick ist da</b><small>KW '+isoWeek(parseKey(wk))+' · alle Mahlzeiten im Überblick</small></div><button type="button" class="btn sm" data-act="openweek" data-k="'+wk+'">Ansehen</button></div>':'')+
   phBanner()+qBanner()+
-  '<div class="qgrid">'+[['openweight',I.chart,'Gewicht',Object.keys(S.wlog).length?fkg(+S.p.weight)+' kg':'Eintragen'],['opentrain',I.dumbbell,'Training',S.train.done?'Dein Plan':'Starten'],['openquests',I.trophy||I.star,'Quests','Heute 4 Aufgaben'],['opengame',I.dice,'Minispiel',S.premium?'Küstenkampf':(gFreeLeft()?gFreeLeft()+' Freispiele':'Quests lösen')]].map(function(x){return '<button type="button" class="qtile" data-act="'+x[0]+'"><span class="ic">'+x[1]+'</span><b>'+x[2]+'</b><small>'+x[3]+'</small></button>'}).join('')+'</div>'+
   '<section class="sec"><h2>Getränke</h2><p class="sub">Tippe auf ein Getränk, um es einzutragen.</p>'+drinksHtml(items,p)+'</section>'+
   '<section class="sec"><h2>Heute essen</h2><p class="sub">Tippe auf eine Mahlzeit, um etwas einzutragen.</p><div class="meals">'+meals+'</div>'+
   '<div class="two"><button type="button" class="btn" data-act="openrecipe">Eigenes Rezept</button><button type="button" class="btn" data-act="nav" data-v="ai">Essens-Assistent fragen</button></div></section>'+
@@ -1954,9 +1988,10 @@ function drinksHtml(items,p){
 
 function dishHtml(d,i,busy){
   var sw=S.gen.swap===i,isToday=S.day===keyOf(today(0));
-  return '<article class="dish"><div class="meta"><span>'+esc(d.slot)+'</span><span>'+(d.minuten?esc(d.minuten)+' Min':'')+(d.score!=null?scBadge(d.score):'')+'</span></div><h3>'+esc(d.name)+'</h3>'+(d.kurz?'<p>'+esc(d.kurz)+'</p>':'')+
+  var has=(d.zutaten&&d.zutaten.length)||(d.schritte&&d.schritte.length);
+  return '<article class="dish'+(has?' tap':'')+'"'+(has?' role="button" tabindex="0" data-act="dishopen" data-i="'+i+'" aria-label="Rezept von '+esc(d.name)+' öffnen"':'')+'><div class="meta"><span>'+esc(d.slot)+'</span><span>'+(d.minuten?esc(d.minuten)+' Min':'')+(d.score!=null?scBadge(d.score):'')+'</span></div><h3>'+esc(d.name)+'</h3>'+(d.kurz?'<p>'+esc(d.kurz)+'</p>':'')+
   '<div class="pills"><span class="pill k">'+fmt(d.kcal)+' kcal</span><span class="pill p">'+fmt(d.protein)+' g Protein</span><span class="pill c">'+fmt(d.carbs)+' g Kohlenhydrate</span><span class="pill f">'+fmt(d.fett)+' g Fett</span></div>'+
-  ((d.zutaten.length||d.schritte.length)?'<details><summary>Zutaten und Zubereitung</summary>'+(d.zutaten.length?'<h4>Zutaten</h4><ul>'+d.zutaten.map(function(z){return '<li>'+esc(z)+'</li>'}).join('')+'</ul>':'')+(d.schritte.length?'<h4>Zubereitung</h4><ol>'+d.schritte.map(function(z){return '<li>'+esc(z)+'</li>'}).join('')+'</ol>':'')+'</details>':'')+
+  (has?'<div class="dtap">Tippen für Zutaten und Zubereitung ›</div>':'')+
   (busy?'':'<div class="acts">'+(isToday?'<button type="button" class="btn sm" data-act="dishlog" data-i="'+i+'">Gegessen</button>':'')+'<button type="button" class="btn sm" data-act="swap" data-i="'+i+'"'+(S.gen.busy?' disabled':'')+'>'+(sw?'Suche Alternative …':'Anderes Gericht')+'</button></div>')+'</article>';
 }
 function renderPlan(){
@@ -2276,19 +2311,25 @@ function renderHistExtra(hv){
 /* ---------- Trainingsplan (Premium): Fragen zum Training ---------- */
 var EXERCISES=['Kniebeugen','Goblet-Kniebeugen','Sumo-Kniebeugen','Bulgarische Kniebeugen','Pistol Squats','Jump Squats','Ausfallschritte','Step-ups','Box Jumps','Kreuzheben','Rumänisches Kreuzheben','Good Mornings','Hip Thrusts','Glute Bridge','Beinpresse','Beinstrecken','Beinbeugen','Wadenheben','Liegestütze','Diamant-Liegestütze','Handstand-Liegestütze','Bankdrücken','Schrägbankdrücken','Fliegende','Schulterdrücken','Seitheben','Frontheben','Face Pulls','Schulterzucken','Klimmzüge','Latziehen','Rudern vorgebeugt','Rudern am Kabel','Dips','Bizepscurls','Hammercurls','Trizepsdrücken','Trizepsstrecken über Kopf','Plank','Seitstütz','Crunches','Beinheben hängend','Beinheben liegend','Russian Twists','Bauchroller','Mountain Climbers','Dead Bug','Bird Dog','Superman','Hyperextensions','Burpees','Hampelmänner','Seilspringen','Kettlebell Swings','Thrusters','Joggen','Sprints','Radfahren','Rudergerät','Treppensteigen','Schwimmen'];
 var TQ=[
+ {k:'exp',t:'Wie viel Trainingserfahrung hast du?',s:'Sei ehrlich, so wird das Training passend.',o:[['anfaenger','Anfänger','0 bis 12 Monate'],['fortgeschritten','Fortgeschritten','1 bis 3 Jahre'],['gymbro','Gym-Bro','3 bis 20 Jahre']]},
  {k:'goal',t:'Was ist dein Trainingsziel?',s:'Wähle, was dir gerade am wichtigsten ist.',o:[['muskel','Muskeln aufbauen','Kraft und Muskelmasse aufbauen'],['definiert','Definierter aussehen','Körperfett senken und Muskeln sichtbar machen'],['ausdauer','Ausdauer aufbauen','Kondition und Laufleistung verbessern']]},
  {k:'place',t:'Wo kannst du trainieren?',s:'So passe ich später die Übungen an deine Möglichkeiten an.',o:[['gym','Gym','Fitnessstudio mit Geräten und Gewichten'],['home','Zuhause','Mit wenig oder ohne Geräte']],grid:true},
  {k:'equip',multi:true,excl:'none',cond:function(){return S.train.place==='home'},t:'Welche Trainingsgeräte stehen dir zur Verfügung?',s:'Mehrfachauswahl möglich.',o:[['weights','Gewichte','Hanteln, Kurzhanteln, Kettlebells'],['bands','Gummibänder','Widerstandsbänder'],['none','Gar nichts','Training nur mit dem eigenen Körper']]},
  {k:'days',t:'Wie oft kannst du trainieren?',s:'Wähle die Zahl der Trainingstage pro Woche, die du wirklich schaffst.',o:[['1','1 mal pro Woche',''],['2','2 mal pro Woche',''],['3','3 mal pro Woche',''],['4','4 mal pro Woche',''],['5','5 mal pro Woche',''],['6','6 mal pro Woche','']],grid:true},
- {k:'split',split:true,t:'Wann möchtest du welche Muskeln trainieren?',s:'Tippe jeden Wochentag an und wähle bis zu 4 Muskelgruppen. Für einen freien Tag wähle Restday. Jeder Tag muss ausgefüllt sein.'},
+ {k:'split',split:true,cond:function(){return S.train.exp!=='anfaenger'},t:'Wann möchtest du welche Muskeln trainieren?',s:'Tippe jeden Wochentag an und wähle bis zu 4 Muskelgruppen. Für einen freien Tag wähle Restday. Jeder Tag muss ausgefüllt sein.'},
  {k:'dur',t:'Wie lange möchtest du pro Trainingseinheit trainieren?',s:'Wähle die Zeitspanne, die in deinen Alltag passt.',o:[['20-30','20 bis 30 Minuten','Kurz und kompakt'],['30-45','30 bis 45 Minuten','Effektiv und flexibel'],['45-60','45 bis 60 Minuten','Die klassische Einheit'],['60-90','60 bis 90 Minuten','Ausführlich'],['90+','Mehr als 90 Minuten','Sehr lang']]},
- {k:'exp',t:'Wie viel Trainingserfahrung hast du?',s:'Sei ehrlich, so wird das Training passend.',o:[['anfaenger','Anfänger','0 bis 12 Monate'],['fortgeschritten','Fortgeschritten','1 bis 3 Jahre'],['gymbro','Gym-Bro','3 bis 20 Jahre']]},
  {k:'avoid',search:true,optional:true,t:'Gibt es Übungen, die du nicht ausführen kannst?',s:'Suche die Übung, tippe sie an und wähle so viele aus, wie du brauchst. Du kannst auch überspringen.'}
 ];
 var DAYS=[['mo','Montag'],['di','Dienstag'],['mi','Mittwoch'],['do','Donnerstag'],['fr','Freitag'],['sa','Samstag'],['so','Sonntag']];
 var MUS=[['brust','Brust'],['ruecken','Rücken'],['schulter','Schulter'],['trizeps','Trizeps'],['bizeps','Bizeps'],['bauch','Bauch'],['po','Po (Gluteus Maximus)'],['oberschenkel','Oberbeine (Oberschenkel)'],['wade','Wade'],['cardio','Cardio (Ausdauer)'],['rest','Restday']];
 function musName(k){var m=MUS.filter(function(x){return x[0]===k})[0];return m?m[1]:k}
 var SPD=null;
+function autoSplit(){
+  var n=Math.max(1,Math.min(6,+S.train.days||3)),pat={1:['mi'],2:['mo','do'],3:['mo','mi','fr'],4:['mo','di','do','fr'],5:['mo','di','mi','fr','sa'],6:['mo','di','mi','do','fr','sa']}[n];
+  var A=S.train.goal==='ausdauer'?['oberschenkel','brust','ruecken','cardio']:['brust','ruecken','oberschenkel','bauch'],B=S.train.goal==='ausdauer'?['po','schulter','bauch','cardio']:['schulter','po','bizeps','trizeps'],sp={};
+  DAYS.forEach(function(d){var i=pat.indexOf(d[0]);sp[d[0]]=i<0?['rest']:(i%2?B:A).slice()});
+  return sp;
+}
 function splitOf(){return S.train.split||(S.train.split={})}
 function splitHtml(){
   var sp=splitOf();
@@ -3392,17 +3433,30 @@ function summaryHtml(){
    '<div class="two" style="margin-top:14px"><button type="button" class="btn" data-act="goview" data-v="menu">Noch mehr eintragen</button><button type="button" class="btn pri" data-act="closesheet">Fertig</button></div></div>';
 }
 var RGD=[];
+function quickHtml(sh){
+  var rec=[],seen={},ks=Object.keys(S.log).sort().reverse();
+  for(var i=0;i<ks.length&&rec.length<6;i++){var a=S.log[ks[i]];for(var j=a.length-1;j>=0&&rec.length<6;j--){var it=a[j];if(isDrink(it)||seen[it.name])continue;seen[it.name]=1;if(FOODS.some(function(f){return f.name===it.name}))rec.push(it.name)}}
+  var h='';
+  if(!sh.photo)h+='<div class="qt3"><button type="button" data-act="goview" data-v="scan">'+I.cam+'<b>Foto / Barcode</b></button><button type="button" data-act="goview" data-v="recipes">'+I.book+'<b>Eigenes Rezept</b></button><button type="button" data-act="gotoai">'+I.chat+'<b>Assistent</b></button></div>';
+  if(rec.length)h+='<p class="hint" style="margin:14px 0 6px">Zuletzt gegessen</p><div class="chips">'+rec.map(function(n){return '<button type="button" class="chip" data-act="pickfood" data-n="'+esc(n)+'">'+esc(n)+'</button>'}).join('')+'</div>';
+  return h+'<p class="hint" style="margin:14px 0 6px">Beliebt</p>';
+}
 function foodRows(q){
+  var qh=(q.trim()===''&&S.sheet&&!S.sheet.swapId)?quickHtml(S.sheet):'';
+  return qh+foodRows0(q);
+}
+function foodRows0(q){
   var l=q.trim().toLowerCase(),fs=foodSearch(q),list=fs.list,ds=dishSearch(q);RGD=ds;
   var dh=ds.length?'<p class="hint" style="margin:12px 0 6px">Fertige Gerichte und Rezepte</p><div class="list">'+ds.map(function(d,i){return '<button type="button" class="row" data-act="pickdish" data-i="'+i+'"><div><b>'+esc(d.name)+'</b><small>'+(d.rec?'Rezept':'Gericht')+' · '+fmt(d.k*d.u/100)+' kcal pro Portion ('+d.u+' g)</small></div><span style="margin-left:8px">'+scBadge(foodScore(d))+'</span></button>'}).join('')+'</div>':'';
+  var offh=offHtml(S.sheet,q);
   var own=l.length>=2?'<button type="button" class="btn full" style="margin-top:10px" data-act="cfnew">Nicht dabei? Eigenes Essen anlegen: '+esc(q.trim())+'</button>':'';
-  if(!list.length)return '<p class="hint">Nichts Passendes bei den Lebensmitteln.</p>'+dh+own+(l.length>=3?'<button type="button" class="btn full" style="margin-top:8px" data-act="aiest">'+(S.sheet.estimating?'Ich schätze …':'Mit KI schätzen: '+esc(q.trim()))+'</button>':'');
-  return (fs.group?'<p class="hint" style="margin:0 0 8px">Alle Sorten zu „'+esc(fs.group)+'“ und passende Treffer:</p>':'')+'<div class="list">'+list.slice(0,40).map(function(f){return '<button type="button" class="row" data-act="pickfood" data-n="'+esc(f.name)+'"><div><b>'+esc(f.name)+'</b></div><em>'+fmt(f.k)+' kcal / 100 g</em><span style="margin-left:8px">'+scBadge(foodScore(f))+'</span></button>'}).join('')+'</div>'+dh+own;
+  if(!list.length)return '<p class="hint">Nichts Passendes bei den Lebensmitteln.</p>'+dh+offh+own+(l.length>=3?'<button type="button" class="btn full" style="margin-top:8px" data-act="aiest">'+(S.sheet.estimating?'Ich schätze …':'Mit KI schätzen: '+esc(q.trim()))+'</button>':'');
+  return (fs.group?'<p class="hint" style="margin:0 0 8px">Alle Sorten zu „'+esc(fs.group)+'“ und passende Treffer:</p>':'')+'<div class="list">'+list.slice(0,40).map(function(f){return '<button type="button" class="row" data-act="pickfood" data-n="'+esc(f.name)+'"><div><b>'+esc(f.name)+'</b></div><em>'+fmt(f.k)+' kcal / 100 g</em><span style="margin-left:8px">'+scBadge(foodScore(f))+'</span></button>'}).join('')+'</div>'+dh+offh+own;
 }
 function renderSheet(){
   var sh=S.sheet;if(!sh)return;
   if(!(sh.view==='scan'&&sh.scan.status==='cam'))stopCam();
-  var v=sh.view,h='<div class="panel">',title={premium:'Premium',drink:'Getränk eintragen',settings:'Einstellungen und Info',menu:sh.meal||'Eintragen',search:'Essen eingeben',weight:'Menge bestimmen',recipes:'Eigenes Rezept',recipenew:'Neues Rezept',recweight:'Portionen',scan:'Essen scannen',chat:'Mit KI sprechen',summary:'Eingetragen',custom:'Eigenes Essen'}[v];
+  var v=sh.view,h='<div class="panel">',title={premium:'Premium',drink:'Getränk eintragen',settings:'Einstellungen und Info',menu:sh.meal||'Eintragen',search:'Essen eingeben',weight:'Menge bestimmen',recipes:'Eigenes Rezept',recipenew:'Neues Rezept',recweight:'Portionen',scan:'Essen scannen',chat:'Mit KI sprechen',summary:'Eingetragen',custom:'Eigenes Essen',itemedit:'Eintrag ändern',dishview:'Rezept'}[v];
   var back=(v==='menu'||v==='summary'||v==='drink'||v==='settings'||v==='premium'||(v==='recipes'&&!sh.meal))?'':'<button type="button" class="bk" data-act="sheetback">‹ Zurück</button>';
   h+='<div class="ph"><div style="display:flex;align-items:center;gap:6px;min-width:0">'+back+'<h2>'+esc(title)+'</h2></div>'+(sh.res&&sh.photo&&v==='search'?'<button type="button" class="btn pri" style="min-height:40px;padding:0 18px;margin-left:auto;margin-right:8px" data-act="phdone">Fertig</button>':'')+'<button type="button" class="ib" data-act="closesheet" aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';
   if(!sh.meal&&sh.view!=='menu'&&!sh.mealSel)sh.mealSel=guessMeal();
@@ -3410,15 +3464,30 @@ function renderSheet(){
   if(['search','weight','menu','recipes','recweight','scan'].indexOf(v)>-1)h+=basketBar();
   if(v==='summary')h+=summaryHtml();
   if(v==='menu'){
-    h+='<div class="menu"><button type="button" class="mopt" data-act="goview" data-v="scan">'+I.cam+'<div><b>Essen scannen</b><small>Foto vom Essen oder vom Barcode</small></div></button>'+
-     '<button type="button" class="mopt" data-act="goview" data-v="search">'+I.search+'<div><b>Essen eingeben</b><small>Suchen, Menge bestimmen, hinzufügen</small></div></button>'+
-     '<button type="button" class="mopt" data-act="goview" data-v="recipes">'+I.book+'<div><b>Eigenes Rezept</b><small>'+(S.recipes.length?S.recipes.length+' gespeichert, oder neues erstellen':'Eigene Gerichte anlegen und speichern')+'</small></div></button>'+
-     '<button type="button" class="mopt" data-act="gotoai">'+I.chat+'<div><b>Essens-Assistent</b><small>Erzähl, was du gegessen hast, die KI trägt es ein</small></div></button></div>';
+    h+='<input class="text" id="q" type="text" autocomplete="off" placeholder="Essen suchen, z. B. Haferflocken, Ei, Reis" value="'+esc(sh.q)+'"><div id="results">'+foodRows(sh.q)+'</div>';
   }
   if(v==='search'){
     if(sh.photo)rgStart(sh);
     if(sh.photo)h+='<div class="phprev"><img src="'+safeImg(sh.photo)+'" alt="Dein Foto"><div><b>Dein Foto</b><small>Das Foto bleibt auf deinem Gerät und wird beim ersten Eintrag gespeichert.</small></div><button type="button" class="x" data-act="phclear" aria-label="Foto entfernen">×</button></div>'+rgVariantsHtml(sh)+(sh.ask?'<p class="hint" style="margin:10px 0 4px"><b>Welches Essen ist das?</b> Tippe den Namen ein. Wenn ich es nicht kenne, kannst du es selbst anlegen.</p>':'');
     if(!(sh.photo&&sh.res))h+='<input class="text" id="q" type="text" autocomplete="off" placeholder="z. B. Haferflocken, Ei, Reis" value="'+esc(sh.q)+'"><div id="results">'+foodRows(sh.q)+'</div>';
+  }
+  if(v==='dishview'&&sh.dv){
+    var dv=sh.dv,isT=S.day===keyOf(today(0));
+    h+='<div class="dvh"><small>'+esc(dv.slot||'')+(dv.minuten?' · '+esc(dv.minuten)+' Min':'')+'</small><h3 style="margin:2px 0 6px;font-size:1.25rem">'+esc(dv.name)+'</h3>'+(dv.kurz?'<p class="sub" style="margin:0 0 10px">'+esc(dv.kurz)+'</p>':'')+'</div>'+
+     '<div class="pills"><span class="pill k">'+fmt(dv.kcal)+' kcal</span><span class="pill p">'+fmt(dv.protein)+' g Protein</span><span class="pill c">'+fmt(dv.carbs)+' g Kohlenhydrate</span><span class="pill f">'+fmt(dv.fett)+' g Fett</span></div>'+
+     (dv.zutaten&&dv.zutaten.length?'<h4 class="sh">Das brauchst du</h4><ul class="dvl">'+dv.zutaten.map(function(z){return '<li>'+esc(z)+'</li>'}).join('')+'</ul>':'')+
+     (dv.schritte&&dv.schritte.length?'<h4 class="sh">So machst du es</h4><ol class="dvl">'+dv.schritte.map(function(z){return '<li>'+esc(z)+'</li>'}).join('')+'</ol>':'')+
+     (isT?'<button type="button" class="btn pri full" style="margin-top:16px" data-act="dishlog" data-i="'+sh.dvi+'">Gegessen: eintragen</button>':'')+
+     '<button type="button" class="btn full" style="margin-top:8px" data-act="closesheet">Schließen</button>';
+  }
+  if(v==='itemedit'&&sh.it){
+    var it=sh.it,pg0=it.g>0?(num(sh.ieg)||0)/it.g:1;
+    h+=(it.ph?'<div class="phprev"><img src="'+safeImg(it.ph)+'" alt="Foto"><div><b>'+esc(it.name)+'</b><small>'+esc(it.meal||'')+'</small></div></div>':'<div class="row" style="margin-bottom:8px"><div><b>'+esc(it.name)+'</b><small>'+esc(it.meal||'')+'</small></div></div>')+
+     '<div class="pills" id="iepre"><span class="pill k">'+fmt(it.k*pg0)+' kcal</span><span class="pill p">'+fmt1(it.p*pg0)+' g Eiweiß</span><span class="pill c">'+fmt1(it.c*pg0)+' g Kohlenhydrate</span><span class="pill f">'+fmt1(it.f*pg0)+' g Fett</span></div>'+
+     (it.g>0?'<div class="field"><label for="ieg">Menge in Gramm</label><div class="num"><input id="ieg" data-ie="1" type="text" inputmode="decimal" autocomplete="off" value="'+esc(sh.ieg)+'"><span class="unit">g</span></div></div>':'<p class="hint">Bei diesem Eintrag gibt es keine Grammangabe. Du kannst ihn ändern, indem du ein anderes Essen wählst.</p>')+
+     '<button type="button" class="btn pri full" style="margin-top:14px" data-act="iesave">Speichern</button>'+
+     '<button type="button" class="btn full" style="margin-top:8px" data-act="iechange">Anderes Essen wählen</button>'+
+     '<button type="button" class="btn full" style="margin-top:8px;color:var(--bad,#E5484D)" data-act="iedel">Eintrag löschen</button>';
   }
   if(v==='custom'){
     var cf=sh.cf||(sh.cf={n:'',k:'',p:'',c:'',f:'',u:''});
@@ -3479,9 +3548,9 @@ function renderSheet(){
     var fsOk=!!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen),fsOn=!!(document.fullscreenElement||document.webkitFullscreenElement),inst=window.matchMedia&&(matchMedia('(display-mode:fullscreen)').matches||matchMedia('(display-mode:standalone)').matches||window.navigator.standalone);
     h+='<div class="setsec">Bildschirm</div><div class="menu">'+(inst?'<p class="hint" style="margin:0">Die App läuft schon als installierte App im Vollbild.</p>':fsOk?opt('fstoggle',I.gear,fsOn?'Vollbild beenden':'Vollbild einschalten','Blendet Adressleiste und Menüs aus. Tippe zum Beenden hier oder wische vom Rand'):'<p class="hint" style="margin:0">Dein Browser kann kein Vollbild von der Seite aus. Für den ganzen Bildschirm: Im Browser-Menü „Zum Startbildschirm hinzufügen“ oder „App installieren“ wählen und die App von dort öffnen.</p>')+'</div>';
     h+='<div class="setsec">Hilfe</div><div class="menu">'+opt('guide',I.book,'Anleitung','So funktioniert die App und wo alles zu finden ist')+'</div>';
-    h+='<div class="setsec">Mein Konto</div><div class="menu">'+opt('openpremium',I.star,'Premium',S.premium?'Aktiv: Tagesplan, Essens-Assistent, Rekord-Check, unbegrenzt Minispiel':'Tagesplan, Essens-Assistent, Rekord-Check, Minispiel unbegrenzt, '+PREMIUM_PRICE+' pro Monat')+opt('edit',I.gear,'Angaben ändern','Ziel, Gewicht, Aktivität und mehr neu beantworten')+'</div>';
+    h+='<div class="setsec">Mein Konto</div><div class="menu">'+opt('edit',I.gear,'Angaben ändern','Ziel, Gewicht, Aktivität und mehr neu beantworten')+'</div>';
     h+='<div class="setsec">Pläne</div><div class="menu">'+opt('regenfood',I.dice,'Essensplan neu erstellen','6 neue Gerichte für heute')+opt('regentrain',I.dumbbell,sh.cT?'Wirklich neu erstellen? Nochmal tippen':'Trainingsplan neu erstellen','Baut den Plan aus deinen Antworten neu (zählt als Änderung)')+opt('edittrain',I.gear,'Trainingsfragen ändern','Ziel, Ort, Geräte, Wochenplan und mehr neu beantworten')+'</div>';
-    h+='<div class="setsec">Technik und Daten</div><div class="menu">'+opt('aitest',I.spark,'KI testen',sh.diag?esc(sh.diag):'Prüft, ob die KI antwortet, und zeigt den Grund, falls nicht')+(S.premium?opt('unpremium',I.lock,'Premium zurücksetzen','Sperrt Premium wieder, zum Testen'):'')+opt('wipe',I.book,sh.confirm?'Wirklich alles löschen? Nochmal tippen':'Alle Daten löschen','Entfernt Profil, Tagebuch, Rezepte und Mango von diesem Gerät')+'</div>'+
+    h+='<div class="setsec">Technik und Daten</div><div class="menu">'+opt('aitest',I.spark,'KI testen',sh.diag?esc(sh.diag):'Prüft, ob die KI antwortet, und zeigt den Grund, falls nicht')+opt('wipe',I.book,sh.confirm?'Wirklich alles löschen? Nochmal tippen':'Alle Daten löschen','Entfernt Profil, Tagebuch, Rezepte und Mango von diesem Gerät')+'</div>'+
      '<div class="legal" style="margin-top:16px"><p><b>Datenschutz.</b> Deine Angaben, dein Tagebuch und deine Mango werden nur auf diesem Gerät gespeichert. Deine Fortschrittsfotos bleiben nur auf diesem Gerät und werden nie gesendet. Tagesgerichte, Essens-Assistent, Rekord-Rang und Barcode-Scan laufen ohne KI direkt in der App. Nur die optionalen KI-Funktionen (zum Beispiel das Wochenfazit) senden deine Eingaben zur Verarbeitung.</p><p><b>Hinweis.</b> Alle Werte sind Richtwerte und kein medizinischer Rat. Der Gesundheits-Score von 1 bis 100 ist eine Schätzung. Bei Erkrankungen, Allergien oder in der Schwangerschaft sprich mit deiner Ärztin oder deinem Arzt.</p></div>';
   }
   if(v==='scan'){h+='<div id="scanbox"></div>'}
@@ -4082,8 +4151,8 @@ function rgVariantsHtml(sh){
    '<div class="chips" role="group" aria-label="Was ist auf dem Teller">'+RGCAT.map(function(c){var on=cats.indexOf(c[0])>-1;return '<button type="button" class="chip'+(on?' on':'')+'" data-act="sugcat" data-k="'+c[0]+'" aria-pressed="'+on+'">'+c[1]+'</button>'}).join('')+'</div>';
   if(sh.pf==='err')h+='<small>Das Foto konnte ich nicht auswerten. Wähle trotzdem aus, was du siehst, oder such unten selbst.</small>';
   else if(!top.length)h+='<p class="hint" style="margin:10px 0 0">Dazu kenne ich nichts Passendes. Such unten nach dem Namen oder leg es als eigenes Essen an.</p>';
-  else h+='<div class="list" style="margin-top:10px">'+top.map(function(c,i){var f=c.f;return '<button type="button" class="row" data-act="sugpick" data-i="'+i+'"><div><b>'+esc(f.name)+'</b><small>'+(c.learned?'Von dir gemerkt · ':f.rec?'Rezept · ':f.cm?'Gericht · ':'')+fmt(f.k*(f.u||100)/100)+' kcal pro '+(f.u?'Portion':'100 g')+'</small></div></button>'}).join('')+'</div>';
-  h+='<button type="button" class="btn full" style="margin-top:8px" data-act="sugnone">Nichts davon. Welches Essen ist das?</button></div>';
+  else h+='<div class="list" style="margin-top:10px">'+top.map(function(c,i){var f=c.f;return '<button type="button" class="row" data-act="sugpick" data-i="'+i+'"><div><b>'+esc(f.name)+'</b><small>'+(c.learned?'Von dir gemerkt · ':f.rec?'Rezept · ':f.cm?'Gericht · ':'')+fmt(f.k)+' kcal pro 100 g'+'</small></div></button>'}).join('')+'</div>';
+  h+='<button type="button" class="btn full" style="margin-top:8px" data-act="sugnone">Nichts davon. Welches Essen ist das?</button><button type="button" class="btn pri full" style="margin-top:8px" data-act="cfnew">Neues Essen mit eigenen Angaben eintragen</button></div>';
   return h;
 }
 function rgPills(){
@@ -4092,14 +4161,14 @@ function rgPills(){
   el.innerHTML='<span class="pill k">'+fmt(f.k*g/100)+' kcal</span><span class="pill p">'+fmt1(f.p*g/100)+' g Eiweiß</span><span class="pill c">'+fmt1(f.c*g/100)+' g Kohlenhydrate</span><span class="pill f">'+fmt1(f.f*g/100)+' g Fett</span>';
 }
 function rgResHtml(sh){
-  var r=sh.res,f=r.food,g=num(r.g)||0,u=f.u||0;
-  var chips=(u?[.5,1,1.5,2].map(function(m){return [Math.round(u*m),m===1?'1 Portion':m===.5?'½ Portion':m===1.5?'1½ Portion':'2 Portionen']}):[[100,'100 g'],[150,'150 g'],[200,'200 g'],[250,'250 g']]).map(function(x){return '<button type="button" class="chip" data-act="setrg" data-g="'+x[0]+'">'+x[1]+'</button>'}).join('');
-  return '<div class="phres"><small>'+(r.src==='learned'?'Das habe ich an deinem Foto wiedererkannt':'Das ist es also')+'</small><b>'+esc(f.name)+'</b>'+
+  var r=sh.res,f=r.food;
+  var chips=[50,100,150,200,250,300].map(function(x){return '<button type="button" class="chip" data-act="setrg" data-g="'+x+'">'+x+' g</button>'}).join('');
+  return '<div class="phres"><small>'+(r.src==='learned'?'Das habe ich an deinem Foto wiedererkannt':'Das ist es also')+'</small>'+
+   '<div class="rhd"><b>'+esc(f.name)+'</b><button type="button" class="btn" data-act="phchange">Essen ändern</button></div>'+
    '<div class="pills" id="rpre"></div>'+
-   '<div class="field" style="margin:10px 0 6px"><label for="rg">Menge'+(u?' (eine Portion sind ungefähr '+u+' g)':'')+'</label><div class="num"><input id="rg" data-rg="1" type="text" inputmode="decimal" autocomplete="off" value="'+esc(r.g)+'"><span class="unit">g</span></div></div>'+
+   '<div class="field" style="margin:10px 0 6px"><label for="rg">Menge in Gramm</label><div class="num"><button type="button" class="chip" data-act="rgstep" data-d="-10" aria-label="10 Gramm weniger">−10</button><input id="rg" data-rg="1" type="text" inputmode="decimal" autocomplete="off" value="'+esc(r.g)+'"><span class="unit">g</span><button type="button" class="chip" data-act="rgstep" data-d="10" aria-label="10 Gramm mehr">+10</button></div></div>'+
    '<div class="prev">'+chips+'</div>'+
-   '<p class="hint" style="margin:10px 0 0">Stimmt es? Dann tippe oben auf <b>Fertig</b>. Wenn nicht, tippe auf Ändern.</p>'+
-   '<button type="button" class="btn full" style="margin-top:8px" data-act="phchange">Ändern</button></div>';
+   '<p class="hint" style="margin:10px 0 0">Wiege oder schätze, wie viel Gramm auf deinem Teller liegen, und gib es oben ein. Die Nährwerte rechnen sich mit. Wenn alles stimmt, tippe oben auf <b>Fertig</b>.</p></div>';
 }
 /* Analyse anstoßen, sobald ein Foto da ist */
 function rgStart(sh){
@@ -4119,6 +4188,35 @@ function rgLearn(sh,f){
   RG.learn.push({n:f.name,h:sh.pft.h.map(function(x){return Math.round(x*1000)/1000}),t:sh.pft.t,k:+f.k.toFixed(1),p:+f.p.toFixed(1),c:+f.c.toFixed(1),f:+f.f.toFixed(1),u:f.u||0,un:f.un||'',sc:foodScore(f)});
   if(RG.learn.length>300)RG.learn.shift();rgSave();
 }
+/* Online-Suche in Open Food Facts (Millionen echte Produkte mit Marken, zum Beispiel Nutella). Nur auf Tipp, ohne KI, ohne Konto. */
+async function offSearch(q){
+  var ctl=new AbortController(),tm=setTimeout(function(){ctl.abort()},14000),r;
+  try{r=await fetch('https://world.openfoodfacts.org/cgi/search.pl?search_terms='+encodeURIComponent(q)+'&search_simple=1&action=process&json=1&page_size=20&lc=de&cc=de&fields=product_name,product_name_de,brands,nutriments,serving_quantity,nutriscore_grade',{signal:ctl.signal})}
+  catch(e){clearTimeout(tm);throw {code:'network'}}
+  clearTimeout(tm);
+  var j=null;try{j=await r.json()}catch(e){}
+  var out=[],seen={};
+  ((j&&j.products)||[]).forEach(function(p){
+    var n=p.nutriments||{},kcal=n['energy-kcal_100g'];
+    if(kcal==null&&n['energy_100g']!=null)kcal=n['energy_100g']/4.184;
+    if(kcal==null||!isFinite(+kcal))return;
+    var name=String(p.product_name_de||p.product_name||'').trim(),br=String(p.brands||'').split(',')[0].trim();
+    if(!name)return;if(br&&name.toLowerCase().indexOf(br.toLowerCase())<0)name=br+' '+name;
+    name=name.slice(0,60);if(seen[name])return;seen[name]=1;
+    var pr=+n.proteins_100g||0,ch=+n.carbohydrates_100g||0,fa=+n.fat_100g||0,sv=+p.serving_quantity>0?Math.round(+p.serving_quantity):0;
+    var ns={a:90,b:75,c:55,d:35,e:15}[String(p.nutriscore_grade||'').toLowerCase()];
+    out.push({name:name,k:+kcal,p:pr,c:ch,f:fa,u:sv,un:sv?'Portion':'',s:ns!=null?ns:heurScore(+kcal,pr,ch,fa,100),gr:['Online'],off:true});
+  });
+  return out;
+}
+function offHtml(sh,q){
+  var o=sh.off;if(!o||o.q!==q.trim())return q.trim().length>=3?'<button type="button" class="btn full" style="margin-top:10px" data-act="offsearch">Online suchen: '+esc(q.trim())+' (Millionen Produkte, Open Food Facts)</button>':'';
+  if(o.st==='busy')return '<p class="hint" style="margin-top:10px">Ich suche online nach „'+esc(o.q)+'“ …</p>';
+  if(o.st==='err')return '<p class="hint" style="margin-top:10px">Online-Suche nicht möglich. Prüfe dein Internet und versuche es noch einmal.</p><button type="button" class="btn full" data-act="offsearch">Nochmal versuchen</button>';
+  if(!o.list.length)return '<p class="hint" style="margin-top:10px">Online habe ich dazu nichts mit Nährwerten gefunden. Du kannst es als eigenes Essen anlegen.</p>';
+  return '<p class="hint" style="margin:12px 0 6px">Online gefunden (Open Food Facts, Werte pro 100 g laut Packung)</p><div class="list">'+o.list.map(function(f,i){return '<button type="button" class="row" data-act="pickoff" data-i="'+i+'"><div><b>'+esc(f.name)+'</b><small>'+fmt(f.k)+' kcal pro 100 g'+(f.u?' · Portion '+f.u+' g':'')+'</small></div><span style="margin-left:8px">'+scBadge(foodScore(f))+'</span></button>'}).join('')+'</div>';
+}
+function findItem(id){var ks=Object.keys(S.log);for(var i=0;i<ks.length;i++){var a=S.log[ks[i]];for(var j=0;j<a.length;j++)if(a[j].id===id)return a[j]}return null}
 /* Suche nach fertigen Gerichten und Rezepten */
 function dishSearch(q){
   var n=fsNorm(q);if(n.length<3)return [];
@@ -4182,6 +4280,7 @@ function phNextText(){
   return 'Nächstes Foto in '+(n===1?'1 Tag':n+' Tagen')+'.';
 }
 function phGoalReached(){
+  if(S.p.goal==='keep')return false;
   var tw=num(S.p.tw);if(!isFinite(tw)||S.p.tw==='')return false;
   var es=wEntries(),w=es.length?es[es.length-1].v:num(S.p.weight);if(!isFinite(w))return false;
   var st=num(S.w0);if(!isFinite(st))st=es.length?es[0].v:w;
@@ -4498,21 +4597,16 @@ function camAct(a){
 
 /* ---------- Anleitung (fest einprogrammiert, ohne KI) ---------- */
 var GUIDE=[
- {i:'dumbbell',t:'Willkommen bei Mahlzeit',tx:'Mahlzeit hilft dir, dein Gewicht zu erreichen: mit einem Kalorienziel, Essen und Training eintragen, einer Mango als Coach, einer Arena und einem Minispiel. Diese Anleitung zeigt dir, wo alles ist.',b:['Unten in der Leiste: Heute, Verlauf, Assistent, Arena, Mango, Training','Oben rechts: hell oder dunkel und die Einstellungen','Die Anleitung kannst du jederzeit in den Einstellungen wieder öffnen']},
- {i:'book',t:'Wo finde ich was?',tx:'Die wichtigsten Dinge auf einen Blick.',b:['Essen oder Getränk eintragen: Heute, dann auf eine Mahlzeit oder ein Getränk tippen','Foto vom Essen oder Barcode scannen: Heute, Mahlzeit antippen, dann Scannen','Gewicht eintragen: Heute, Kachel Gewicht','Training starten: Heute, Kachel Training, oder unten Training','Quests und doppelte EP: Heute, Kachel Quests, oder Arena, Tab Quests','Minispiel Küstenkampf: Arena, oben die Karte Minispiel, oder Heute, Kachel Minispiel','Mango ankleiden: unten Mango, dort auch der Shop','Premium und Anleitung: oben rechts das Zahnrad','Fortschrittsfotos und Wochenrückblick: Verlauf']},
- {i:'home',t:'Heute',tx:'Hier siehst du deinen Tag auf einen Blick. Ganz oben steht jeden Tag ein neuer Spruch des Tages.',b:['Die Flamme zeigt deine Essens-Serie: Trag jeden Tag mindestens ein Essen ein, dann wächst sie. Ohne Eintrag geht sie aus','Der große Ring zeigt, wie viele Kalorien noch übrig sind','Darunter: Protein, Fett und Kohlenhydrate mit Tagesziel','Gesundheits-Score: 1 bis 100, wie gesund du heute gegessen hast','Vier Kacheln: Gewicht, Training, Quests und Minispiel','Getränke: tippe auf Wasser, Kaffee oder Tee, um es einzutragen','Mahlzeiten: tippe auf Frühstück, Mittagessen und so weiter, um etwas einzutragen','Dein Tagesplan: 6 Gerichte pro Tag, abgestimmt auf dein Ziel (Premium)']},
- {i:'book',t:'Essen eintragen',tx:'Tippe bei Heute auf eine Mahlzeit. Dort gibt es mehrere Wege.',b:['Essen eingeben: suche ein Lebensmittel und wähle die Menge. Die Suche findet auch Sorten und verzeiht Tippfehler: „Mehl“ zeigt Weizenmehl, Roggenmehl, Dinkelmehl und mehr','Foto vom Essen: die App fragt kurz, ob sie die Kamera oder Fotos nutzen darf, dann wählst du aus, was auf dem Teller ist','Barcode: ein Foto vom Barcode machen oder aus der Galerie wählen','Eigenes Rezept: speichere Gerichte, die du oft isst','Du sammelst mehrere Lebensmittel im Korb und trägst sie zusammen ein','Pro eingetragenem Essen gibt es 5 EP, bis zu 10 Mal am Tag']},
- {i:'chart',t:'Verlauf',tx:'Hier siehst du, wie es dir über die Zeit geht. Oben wählst du den Bereich.',b:['Essen: 90 Tage, Wochenrückblick und eine Tabelle','Training: dein Kalender mit Quote und Serie','Gewicht: trage dein Gewicht ein, die Kurve zeigt den Weg zu deinem Zielgewicht','Fotos: ein Rahmen für dein Fortschrittsfoto, aus allen Fotos wird später ein Video']},
- {i:'chat',t:'Assistent',tx:'Ein Chat nur für Essen und Ernährung, ohne KI und ohne Internet.',b:['Schreib zum Beispiel „Ich hatte eine Banane und zwei Eier“, dann trägt er es ein','Frag nach Kalorien, Nährwerten und Ideen für Mahlzeiten','Schreib zum Beispiel „Ich brauche ein veganes Abendessen“ oder „glutenfreies Frühstück“: Du bekommst ein Rezept mit Mengen, Schritten und Tipps, auch wenn dein Profil nicht auf vegan steht','Mit „noch eins“ bekommst du ein anderes Gericht, mit „Gib mir Tipps“ Ernährungstipps','Über 1000 Gerichte sind eingebaut','Gehört zu Premium']},
- {i:'trophy',t:'Arena',tx:'Tritt jede Woche gegen 9 andere an. Oben wechselst du zwischen Tabelle und Quests.',b:['EP gibt es für: Essen eintragen 5 (bis zu 10 Mal am Tag), Training beenden 20, Tagesziel erreichen 50, Wasserziel erreichen 15, Minispiel gewinnen 5','Am Ende der Woche zählt dein Platz in der Tabelle mit 10 Plätzen','Platz 1 bis 3: du steigst auf. Platz 4 bis 7: du bleibst. Platz 8 bis 10: du steigst ab','Ligen: Bronze, Silber, Gold, Platin, Diamant und die Bodybuilder-Arena']},
- {i:'star',t:'Quests und doppelte EP',tx:'Jeden Tag gibt es 4 neue Aufgaben, die alle mit der App zu tun haben.',b:['Du findest sie bei Heute (Kachel Quests) oder in der Arena im Tab Quests','Für jede geschaffte Quest bekommst du 5 Minuten doppelte EP','Die restliche Zeit läuft oben als Zähler, die Zeiten addieren sich']},
- {i:'dice',t:'Minispiel Küstenkampf',tx:'Ein Schleuder-Duell unter Wasser. Du findest es in der Arena und bei Heute.',b:['Wähle deinen Gegner und ziele, indem du die Waffe in der Hand deiner Mango nach hinten ziehst und loslässt','Ziel ist, das gegnerische Gebäude zu zerstören, in der Mitte steht eine Sandwand, die du erst durchschießen musst','Über 15 Früchte, zum Beispiel Banane, Mango, Ananas, Kiwi oder Kokosnuss, dazu Pizza, Burger und die seltene Dubai-Schokolade. Der Schaden ist so hoch wie die Kalorien','Nach dem ersten Treffer gibt es doppelten Schaden, nach dem dritten dreifachen (nicht mehr). Drei Punkte über deiner Mango zeigen die Serie. Ein Fehlschuss oder eine neue Frucht setzt den Bonus zurück. Burger und Dubai-Schokolade bekommen keinen Bonus','Treffer in den Sand reißen ein Loch, die zwei Eisenminen sind unzerstörbar','Du kannst so schnell schießen, wie du willst. Ist die Munition leer, kommt nach 3 Sekunden eine neue Frucht','Dein Gegner wird im Laufe des Spiels besser, und die Minen werden schneller','Der Gegner hat so viele Leben wie dein Kalorienziel','Ein Sieg gibt 5 EP, ohne Tageslimit','Schaffst du alle 4 Quests eines Tages, bekommst du 2 Freispiele. Mit Premium spielst du so oft du willst','Die Doppel-EP aus den Quests laufen in echter Uhrzeit weiter, auch wenn die App geschlossen ist','Bots in der Arena verdienen mehr EP, je höher deine Liga ist']},
- {i:'star',t:'Mango',tx:'Deine Mango ist dein Coach und wächst mit dir.',b:['Gib ihm einen Namen und wähle einen Look','Beim Ankleiden gibt es eine kleine Animation','Im Shop gibt es Kleidung, Brillen, Sorten und Hintergründe','Die Mango begleitet dich durch die Fragen und die App','Bleibst du 30 Sekunden ruhig, tanzt sie 30 Sekunden mit Musik, am Ende mit Breakdance, und sagt dir dann etwas Lustiges. Oben rechts schaltest du den Ton aus']},
- {i:'dumbbell',t:'Training',tx:'Dein Trainingsplan ist kostenlos.',b:['Beantworte ein paar Fragen zu Ziel, Ort, Geräten und Wochenplan, daraus entsteht dein Plan','Pro Trainingstag öffnest du die Übungen und trägst Sätze und Wiederholungen ein','Mit „Training beenden“ schließt du den Tag ab und bekommst deine Serie und 20 EP','Den Plan kannst du 2 mal neu erstellen lassen, mit Premium so oft du willst','Mit „Plan ändern“ tauschst du Übungen, fügst eigene hinzu und stellst Sätze (höchstens 3) und Wiederholungen selbst ein. Das ist jederzeit frei','Pro Übung gibt es höchstens 3 Sätze, dafür mehr verschiedene Übungen']},
- {i:'trophy',t:'Rekord-Check und Ränge',tx:'Finde heraus, wie stark du im Vergleich bist.',b:['Trage bei Training einen Rekord ein (Premium)','Die App rechnet mit Alter, Gewicht und Geschlecht, wie viele Menschen das schaffen','Ränge von Silber bis Olympia, bei „Alle Ränge“ siehst du die ganze Leiter']},
- {i:'lock',t:'Premium',tx:'Premium schaltet mehr frei.',b:['Tagesplan, Essens-Assistent und Rekord-Check','Das Minispiel unbegrenzt, ohne Premium nur mit Freispielen aus den Quests','Freischalten in den Einstellungen mit einem Code']},
- {i:'gear',t:'Einstellungen',tx:'Oben rechts findest du das Zahnrad. Alles ist in Bereiche sortiert.',b:['Aussehen: dunkel, hell oder automatisch, standardmäßig hell mit Blättern','Hilfe: diese Anleitung','Mein Konto: Premium und Angaben ändern','Pläne: Essensplan und Trainingsplan neu erstellen','Technik und Daten: KI testen und alle Daten löschen','Deine Daten und Fotos bleiben auf deinem Gerät']},
- {i:'check',t:'Los geht es',tx:'Fang mit dem Tag an: trag dein erstes Essen oder dein Wasser ein. Jeder Punkt bringt dich in der Arena nach oben.',b:['Tippe unten auf Heute','Du findest diese Anleitung jederzeit in den Einstellungen']}
+ {i:'dumbbell',t:'Willkommen bei Mahlzeit',tx:'Ernährung und Training in einer App. Diese Anleitung dauert eine Minute.',b:[]},
+ {i:'home',t:'Heute',tx:'Dein Tag auf einen Blick.',b:['Tippe auf eine Mahlzeit, um Essen einzutragen','Im Tagesplan öffnet ein Tipp auf ein Gericht die Zutaten und die Zubereitung','Die Flamme wächst, wenn du jeden Tag etwas einträgst']},
+ {i:'book',t:'Essen eintragen',tx:'Drei Wege, alle ohne KI.',b:['Suchen: Gerichte, Rezepte und Marken, online sogar Millionen Produkte','Foto: Ich schätze nach Farben und Muster, du bestätigst und die App lernt dazu','Barcode scannen für Packungen']},
+ {i:'chart',t:'Verlauf',tx:'Alles über die Zeit, an einem Ort.',b:['Essen, Training, Gewicht und Fotos','Hier trägst du auch dein Gewicht ein','Mit dem Stift bei Heute änderst du Einträge']},
+ {i:'chat',t:'Assistent',tx:'Schreib, was du gegessen hast, oder frag nach Rezepten.',b:['Zum Beispiel: „Abendessen für 4 Personen ohne Fleisch“']},
+ {i:'trophy',t:'Arena',tx:'Sammle EP und tritt gegen andere an.',b:['Jeden Tag 4 Quests','Minispiel Küstenkampf']},
+ {i:'star',t:'Mango',tx:'Deine Mango ist dein Coach.',b:['Gib ihr einen Namen und einen Look','Tipp eine Weile nichts, dann tanzt sie']},
+ {i:'dumbbell',t:'Training',tx:'Dein Trainingsplan ist kostenlos.',b:['Beantworte ein paar Fragen und erhalte deinen Plan','Mit „Plan ändern“ wählst du eigene Übungen']},
+ {i:'gear',t:'Einstellungen',tx:'Das Zahnrad oben rechts öffnet die Einstellungen.',b:['Dort findest du auch diese Anleitung wieder']},
+ {i:'check',t:'Los geht es',tx:'Trag dein erstes Essen oder dein Wasser ein.',b:[]}
 ];
 var gdStep=0;
 function guideOpen(){
@@ -5181,13 +5275,13 @@ function normDish(o){
 function parseLines(text){return text.split('\n').map(tryParse).filter(Boolean)}
 function extraProfile(p){
   var L=[],j=function(a){return a.join(', ')};
-  if(p.tw)L.push('Zielgewicht: '+p.tw+' kg (aktuell '+p.weight+' kg).');
+  if(p.goal==='keep')L.push('Ziel: Gewicht halten (aktuell '+p.weight+' kg), Kalorien auf Erhaltungsniveau.');else if(p.tw)L.push('Zielgewicht: '+p.tw+' kg (aktuell '+p.weight+' kg).');
   if(p.sport)L.push('Sport: '+p.sport+' mal pro Woche.');
   if(p.focus&&p.focus.length)L.push('Möchte besonders achten auf: '+j(p.focus)+'. Berücksichtige das bei der Auswahl der Gerichte.');
-  if(p.breakfast)L.push('Typisches Frühstück bisher: '+p.breakfast+'.');
+  if(p.breakfast&&p.breakfast.length)L.push('Typisches Frühstück bisher: '+[].concat(p.breakfast).join(', ')+'.');
   if(p.orders)L.push('Bestellt Essen: '+p.orders+' mal pro Monat (bei häufigem Bestellen gern einfache, schnelle Alternativen für zuhause).');
   if(p.aims&&p.aims.length)L.push('Möchte erreichen: '+j(p.aims)+'.');
-  if(p.challenge)L.push('Größte Herausforderung: '+p.challenge+'. Gehe darauf ein.');
+  if(p.challenge&&p.challenge.length)L.push('Größte Herausforderungen: '+[].concat(p.challenge).join(', ')+'. Gehe darauf ein.');
   if(p.motiv&&p.motiv.length)L.push('Motivation: '+j(p.motiv)+'.');
   if(p.track&&p.track.length)L.push('Verfolgt den Fortschritt per: '+j(p.track)+'.');
   return L.length?'\n'+L.join('\n'):'';
@@ -5977,6 +6071,10 @@ function botParseReq(text){
   if(/\bvegan/.test(l))o.diet='vegan';else if(/vegetar|veggie|ohne fleisch|fleischlos/.test(l))o.diet='vegetarisch';else if(/pescetar|pesce|nur fisch/.test(l))o.diet='pescetarisch';
   o.gf=/glutenfrei|ohne gluten/.test(l);o.lf=/laktosefrei|ohne laktose|milchfrei|ohne milch/.test(l);
   o.protein=/protein|eiweiß|eiweiss|muskel|high protein/.test(l);o.lowcarb=/low ?carb|kohlenhydratarm|wenig kohlenhydrate/.test(l);o.quick=/schnell|einfach|wenig zeit|unter 20|kurz|eilig/.test(l);o.light=/leicht|wenig kalorien|kalorienarm|abnehm|diät/.test(l);
+  o.persons=1;
+  var pm=l.match(/\b(?:für|fuer|fur)\s+(\d{1,2}|ein|eine|einen|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|zwölf)\s*(?:personen?|leute[n]?|portionen?|gäste|gaeste|mann|erwachsene|kinder|freunde|esser)?\b/);
+  if(pm){var pv=/^\d/.test(pm[1])?+pm[1]:({ein:1,eine:1,einen:1,zwei:2,drei:3,vier:4,'fünf':5,sechs:6,sieben:7,acht:8,neun:9,zehn:10,'zwölf':12})[pm[1]];if(pv>=1&&pv<=20)o.persons=pv}
+  else if(/\bzu zweit\b|\bfür uns zwei\b/.test(l))o.persons=2;else if(/\bzu dritt\b/.test(l))o.persons=3;else if(/\bzu viert\b|\bfür die familie\b|\bfamilie\b/.test(l))o.persons=4;
   var m=botMealIn(text);o.meal=m;o.cat=lcat(m);
   var kw=[['salat','Salat'],['suppe','Suppe'],['eintopf','Suppe'],['nudel','Nudeln|Penne|Spaghetti|Tagliatelle|Gnocchi|Vollkornnudeln|Reisnudeln'],['pasta','Nudeln|Penne|Spaghetti|Tagliatelle|Gnocchi|Vollkornnudeln|Reisnudeln'],['curry','Curry'],['bowl','Bowl'],['pfanne','Pfanne'],['wrap','Wrap'],['porridge','Porridge'],['müsli','Müsli'],['shake','Shake'],['smoothie','Shake'],['auflauf','Auflauf'],['ofen','Ofen'],['reis','Reis|Risotto'],['kartoffel','Kartoffel'],['pfannkuchen','Pfannkuchen'],['brot','brot|Brötchen|Toast|Baguette'],['ei','Ei|Omelett|Rührei']];
   o.kw=null;kw.forEach(function(k){if(!o.kw&&new RegExp('\\b'+k[0]).test(l))o.kw=new RegExp(k[1]);});
@@ -6009,12 +6107,13 @@ function botRecipe(text,again){
     if(o.light)sc+=d.kcal>mt*1.05?15:0;
     sc-=d.score*.08;
     return {d:d,r:r,sc:sc}}).sort(function(a,b){return a.sc-b.sc});
-  var top=cand[0],d=top.d;botSeen[top.r.n]=1;if(Object.keys(botSeen).length>60)botSeen={};
+  var top=cand[0],d=top.d;botSeen[top.r.n]=1;
+  var np=o.persons>1?o.persons:1;if(np>1){var zs=lscale(top.r,d._f*np);d=Object.assign({},d,{zutaten:zs.zutaten})}if(Object.keys(botSeen).length>60)botSeen={};
   var others=cand.slice(1,4).map(function(x){return x.d.name});
   var en=cat==='S'?'er':'es',adj=[];if(o.diet)adj.push(o.diet+en);if(o.gf)adj.push('glutenfrei'+en);if(o.lf)adj.push('laktosefrei'+en);if(o.lowcarb)adj.push('kohlenhydratarm'+en);if(o.protein)adj.push('eiweißreich'+en);if(o.quick)adj.push('schnell'+en);if(o.light)adj.push('leicht'+en);
   var dietTxt=adj.length?adj.join(', ')+' ':'',extra='';
   var tips=botTips({diet:o.diet,gf:o.gf,lf:o.lf,protein:o.protein||leftP>40,quick:o.quick,light:o.light,cat:cat},2);
-  var t='Hier ist ein '+dietTxt+(cat==='F'?'Frühstück':cat==='M'?'Mittagessen':cat==='A'?'Abendessen':'Snack')+' für dich:\n\n'+d.name+' ('+d.minuten+' Minuten)\n'+d.kurz+'\n\nCa. '+botSayNum(d.kcal)+' kcal, '+botSayNum(d.protein)+' g Protein, '+botSayNum(d.carbs)+' g Kohlenhydrate, '+botSayNum(d.fett)+' g Fett pro Portion.\n\nZutaten:\n'+d.zutaten.map(function(z){return '• '+z}).join('\n')+'\n\nZubereitung:\n'+d.schritte.map(function(x,i){return (i+1)+'. '+x}).join('\n');
+  var t='Hier ist ein '+dietTxt+(cat==='F'?'Frühstück':cat==='M'?'Mittagessen':cat==='A'?'Abendessen':'Snack')+(np>1?' für '+np+' Personen':' für dich')+':\n\n'+d.name+' ('+d.minuten+' Minuten)\n'+d.kurz+'\n\nCa. '+botSayNum(d.kcal)+' kcal, '+botSayNum(d.protein)+' g Protein, '+botSayNum(d.carbs)+' g Kohlenhydrate, '+botSayNum(d.fett)+' g Fett pro '+(np>1?'Person':'Portion')+'.\n\nZutaten'+(np>1?' (insgesamt für '+np+' Personen)':'')+':\n'+d.zutaten.map(function(z){return '• '+z}).join('\n')+'\n\nZubereitung:\n'+d.schritte.map(function(x,i){return (i+1)+'. '+x}).join('\n');
   if(!o.diet&&S.p.diet&&S.p.diet!=='Alles')t+='\n\nDein Profil ist auf „'+S.p.diet+'“ eingestellt, deshalb habe ich darauf geachtet.';
   t+='\n\nTipps:\n'+tips.map(function(x){return '• '+x}).join('\n');
   if(others.length)t+='\n\nWeitere Ideen: '+others.join(', ')+'. Schreib „noch eins", dann zeige ich dir ein anderes Gericht.';
@@ -6026,7 +6125,7 @@ function botAnswer(text){
   st=dayStats(dayLog());
   if(/^(hallo|hi|hey|moin|servus|guten (morgen|tag|abend)|na)\b/.test(l)&&l.split(' ').length<4)return {antwort:'Hallo! Sag mir einfach, was du gegessen oder getrunken hast, zum Beispiel „2 Eier und eine Scheibe Vollkornbrot". Ich trage es für dich ein.'};
   if(/^(danke|dankeschön|super|top|ok|okay|cool|alles klar)\b/.test(l)&&l.split(' ').length<4)return {antwort:'Gern! Sag Bescheid, wenn du noch etwas gegessen hast.'};
-  if(/hilfe|was kannst du|was kann ich dich|wie funktioniert/.test(l))return {antwort:'Das kann ich:\n• Essen und Getränke eintragen: „Ich hatte 2 Eier und 200 g Skyr" oder „einen Kaffee"\n• Fragen beantworten: „Wie viel Protein fehlt mir noch?", „Wie viele Kalorien habe ich noch?", „Wie viel habe ich getrunken?"\n• Essen bewerten: „Wie gesund ist Pizza?", „Kalorien von Banane"\n• Gerichte vorschlagen mit Rezept und Tipps: „Ich brauche ein veganes Abendessen“, „glutenfreies Frühstück“, „schnelles Mittagessen mit Tofu“, „noch eins“ für ein anderes\n• Tipps: „Gib mir Tipps“, „Tipps für Veganer“\n• Überblick: „Was habe ich heute gegessen?"\n• Rückgängig: „letzten Eintrag löschen"\nIch bin kein KI-Chat, sondern ein fester Assistent mit vorgegebenen Antworten.'};
+  if(/hilfe|was kannst du|was kann ich dich|wie funktioniert/.test(l))return {antwort:'Das kann ich:\n• Essen und Getränke eintragen: „Ich hatte 2 Eier und 200 g Skyr" oder „einen Kaffee"\n• Fragen beantworten: „Wie viel Protein fehlt mir noch?", „Wie viele Kalorien habe ich noch?", „Wie viel habe ich getrunken?"\n• Essen bewerten: „Wie gesund ist Pizza?", „Kalorien von Banane"\n• Gerichte vorschlagen mit Rezept und Tipps: „Ich brauche ein veganes Abendessen“, „glutenfreies Frühstück“, „schnelles Mittagessen mit Tofu“, „Abendessen für 5 Personen ohne Fleisch“ (mit Mengen für alle), „noch eins“ für ein anderes\n• Tipps: „Gib mir Tipps“, „Tipps für Veganer“\n• Überblick: „Was habe ich heute gegessen?"\n• Rückgängig: „letzten Eintrag löschen"\nIch bin kein KI-Chat, sondern ein fester Assistent mit vorgegebenen Antworten.'};
   if(/(rückgängig|letzten eintrag|letztes löschen|lösche.*(letzt|eintrag)|falsch eingetragen)/.test(l)){
     var key=keyOf(today(0)),arr=S.log[key]||[];if(!arr.length)return {antwort:'Heute ist noch nichts eingetragen, da gibt es nichts zu löschen.'};
     var last=arr.pop();save();return {antwort:'Okay, ich habe „'+last.name+'" wieder entfernt.'};
@@ -6046,7 +6145,7 @@ function botAnswer(text){
   }
   if(/^(noch (eins|eine|ein|was|mal)|anderes|andere idee|etwas anderes|was anderes|mehr ideen|nächstes)\b/.test(l)&&botLastReq)return {antwort:botRecipe(text,true)};
   if(/\b(tipp|tipps|ratschlag|ratschläge|ernährungstipp)\b/.test(l)&&!/(hatte|habe|gegessen)/.test(l)&&!/(vegan|vegetar|glutenfrei|laktosefrei)/.test(l)){var tt=botTips({protein:leftPFor(c,st)>30,cat:botMealIn(text)?lcat(botMealIn(text)):'M'},3);return {antwort:'Meine Tipps für dich:\n'+tt.map(function(x){return '• '+x}).join('\n')+'\nFrag mich auch nach Tipps für vegane, vegetarische oder glutenfreie Ernährung.'}}
-  if((/(was (kann|soll|könnte|gibt)|\bideen?\b|vorschlag|empfiehl|rezept|was essen|was koche|gericht|essen für|koch|zeig mir|gib mir|mach mir|brauche|hast du|frühstück|mittagessen|abendessen|snack|vegan|vegetar|veggie|pescetar|glutenfrei|laktosefrei|low ?carb|eiweißreich|proteinreich|high protein)/.test(l)&&!/(hatte|habe|hab|gegessen|getrunken|gehabt|gefrühstückt|gesund|kalorien|kcal|score|bewert|nährwert)/.test(l)&&!/\d/.test(l))||/\b(vegan\w*|vegetarisch\w*|glutenfrei\w*|laktosefrei\w*)\b/.test(l)&&!/(hatte|habe|hab|gegessen|getrunken|gehabt|gesund|kalorien|kcal)/.test(l)&&!/\d/.test(l))return {antwort:botRecipe(text,false)};
+  if((/(was (kann|soll|könnte|gibt)|\bideen?\b|vorschlag|empfiehl|rezept|was essen|was koche|gericht|essen für|koch|zeig mir|gib mir|mach mir|brauche|hast du|frühstück|mittagessen|abendessen|snack|ohne fleisch|ohne fisch|für \d+ personen|für (zwei|drei|vier|fünf|sechs|acht|zehn) personen|zu zweit|zu dritt|zu viert|vegan|vegetar|veggie|pescetar|glutenfrei|laktosefrei|low ?carb|eiweißreich|proteinreich|high protein)/.test(l)&&!/(hatte|habe|hab|gegessen|getrunken|gehabt|gefrühstückt|gesund|kalorien|kcal|score|bewert|nährwert)/.test(l)&&(!/\d/.test(l)||/für \d+ (personen|leute|leuten|portionen|gäste|mann)/.test(l)))||/\b(vegan\w*|vegetarisch\w*|glutenfrei\w*|laktosefrei\w*)\b/.test(l)&&!/(hatte|habe|hab|gegessen|getrunken|gehabt|gesund|kalorien|kcal)/.test(l)&&(!/\d/.test(l)||/für \d+ (personen|leute|leuten|portionen|gäste|mann)/.test(l)))return {antwort:botRecipe(text,false)};
   var asksScore=/\b(gesund|score|ungesund|bewertung|bewerten)\b/.test(l),asksNut=/\b(kalorien|kcal|nährwerte?|protein|eiweiß|kohlenhydrate?|fett|enthält|steckt|hat)\b/.test(l);
   if((asksScore||asksNut)&&!/\b(hatte|habe|hab|gegessen|getrunken|gehabt)\b/.test(l)&&!/\d/.test(l)){
     var m=botFindFoodIn(text);
@@ -6079,6 +6178,9 @@ function setVal(k,v){
   if(k==='meals'&&p.meals!==v&&p.biggest&&p.biggest!=='even'&&SLOTS[v].indexOf(p.biggest)<0)p.biggest=null;
   p[k]=v;
 }
+function stepSkip(i){var st=STEPS[i];return !!(st&&st.sk&&st.sk())}
+function stepNext(){var i=S.step+1;while(i<STEPS.length&&stepSkip(i))i++;return i}
+function stepPrev(){var i=S.step-1;while(i>0&&stepSkip(i))i--;return i}
 function goStep(n){S.step=n;save();render();window.scrollTo(0,0)}
 function onClick(e){
   var t=e.target.closest('[data-act]');if(!t)return;var a=t.dataset.act,sh=S.sheet;
@@ -6088,6 +6190,7 @@ function onClick(e){
   case 'start':TRK.wiz=undefined;S.view='wizard';goStep(0);break;
   case 'tab':if(t.dataset.v==='eagle'){if(S.view!=='eagle')S.prev=S.view;S.view='eagle'}else S.view=S.done?'result':(S.prev==='wizard'?'wizard':'welcome');render();window.scrollTo(0,0);break;
   case 'nav':go(t.dataset.v);break;
+  case 'egarts':S.egArts=!S.egArts;render();break;
   case 'openshop':S.prev=S.view;S.view='shop';save();render();window.scrollTo(0,0);break;
   case 'shopback':S.view='eagle';save();render();window.scrollTo(0,0);break;
   case 'opengame':gMode='home';G=null;S.view='game';save();render();window.scrollTo(0,0);break;
@@ -6104,10 +6207,11 @@ function onClick(e){
   case 'egrand':egFxSet('all');randomEagle();save();render();break;
   case 'next':
     if(!STEPS[S.step].ok())return;
-    if(S.step<STEPS.length-1)hopGo(function(){goStep(S.step+1)});
+    if(S.p.goal==='keep'){S.p.tw=S.p.weight;S.p.perMonth=0}
+    if(stepNext()<STEPS.length)hopGo(function(){goStep(stepNext())});
     else{S.view='loading';S.day=keyOf(today(0));var sig=JSON.stringify(S.p);try{if(localStorage.getItem(KEY+'.sig')!==sig)S.plans={};localStorage.setItem(KEY+'.sig',sig)}catch(e2){}save();render();window.scrollTo(0,0)}
     break;
-  case 'back':if(S.step>0)hopGo(function(){goStep(S.step-1)},true);else if(S.done){S.view='result';render();window.scrollTo(0,0)}else{S.view='welcome';save();render()}break;
+  case 'back':if(S.step>0)hopGo(function(){goStep(stepPrev())},true);else if(S.done){S.view='result';render();window.scrollTo(0,0)}else{S.view='welcome';save();render()}break;
   case 'edit':closeSheet();TRK.wiz=undefined;S.view='wizard';goStep(0);break;
   case 'settings':openSheet(null,'settings');break;
   case 'wipe':if(sh){if(!sh.confirm){sh.confirm=true;renderSheet()}else{try{localStorage.removeItem(KEY);localStorage.removeItem('mahlzeit.v2');localStorage.removeItem(KEY+'.sig')}catch(e3){}location.reload()}}break;
@@ -6151,10 +6255,9 @@ function onClick(e){
     sp2[t.dataset.d]=dv;save();updateSplit();break;
   case 'tavoid':var av=S.train.avoid||(S.train.avoid=[]),ai=av.indexOf(t.dataset.v);if(ai>-1)av.splice(ai,1);else av.push(t.dataset.v);save();updateAvoid();break;
   case 'tcustom':var cu=String(S.train.q||'').trim();if(cu){var av2=S.train.avoid||(S.train.avoid=[]);if(av2.indexOf(cu)<0)av2.push(cu);S.train.q='';save();updateAvoid();var ts=document.getElementById('tsearch');if(ts){ts.value='';ts.focus()}}break;
-  case 'tnext':var tl=tqList(),tq2=tl[S.train.step];if(!tAnswered(tq2))break;if(S.train.step<tl.length-1){hopGo(function(){S.train.step++;save();render();window.scrollTo(0,0)});break}S.train.done=true;save();render();window.scrollTo(0,0);break;
+  case 'tnext':var tl=tqList(),tq2=tl[S.train.step];if(!tAnswered(tq2))break;if(S.train.exp==='anfaenger'&&S.train.days)S.train.split=autoSplit();if(S.train.step<tl.length-1){hopGo(function(){S.train.step++;save();render();window.scrollTo(0,0)});break}S.train.done=true;save();render();window.scrollTo(0,0);break;
   case 'tback':if(S.train.step>0){hopGo(function(){S.train.step--;save();render();window.scrollTo(0,0)},true);break}S.view='result';save();render();window.scrollTo(0,0);break;
   case 'tedit':SPD=null;TRK.train=undefined;S.train.done=false;S.train.step=0;S.train.q='';save();render();window.scrollTo(0,0);break;
-  case 'openpremium':openSheet(null,'premium');break;
   case 'subscribe':toast('Bezahlen ist in dieser Version noch nicht möglich. Nutze den Code.');break;
   case 'redeem':if(sh){if(String(sh.pcode||'').trim()===PREMIUM_CODE){S.premium=true;save();closeSheet();toast('Premium ist freigeschaltet');render()}else{sh.pmsg='Der Code stimmt nicht. Prüfe ihn und versuche es noch einmal.';renderSheet();var pc=document.getElementById('pcode');if(pc)pc.focus()}}break;
   case 'unpremium':S.premium=false;save();closeSheet();render();break;
@@ -6167,7 +6270,7 @@ function onClick(e){
   case 'gen':generate();break;
   case 'swap':swapDish(+t.dataset.i);break;
   case 'stop':if(S.gen.ctl)S.gen.ctl.abort();break;
-  case 'dishlog':var d=(S.plans[S.day]||{dishes:[]}).dishes[+t.dataset.i];if(d){addItem(mapMeal(d.slot),d.name,null,d.kcal,d.protein,d.carbs,d.fett,d.score);toast('Eingetragen: '+d.name);render()}break;
+  case 'dishlog':var d=(S.plans[S.day]||{dishes:[]}).dishes[+t.dataset.i];if(d){addItem(mapMeal(d.slot),d.name,null,d.kcal,d.protein,d.carbs,d.fett,d.score);toast('Eingetragen: '+d.name);if(sh&&sh.view==='dishview')closeSheet();render()}break;
   case 'openmeal':openSheet(t.dataset.m,'menu');break;
   case 'openrecipe':openSheet(null,'recipes');break;
   case 'openchat':go('ai');break;
@@ -6184,8 +6287,9 @@ function onClick(e){
   case 'closesheet':closeSheet();break;
   case 'sheetback':
     if(!sh)break;
-    if(sh.view==='weight')sh.view='search';
+    if(sh.view==='weight')sh.view=sh.from||'search';
     else if(sh.view==='custom')sh.view='search';
+    else if(sh.view==='search'&&sh.swapId){sh.swapId=null;sh.view='itemedit'}
     else if(sh.view==='search')sh.view=sh.ing?'recipenew':'menu';
     else if(sh.view==='recipenew'){sh.ing=false;sh.view='recipes'}
     else if(sh.view==='recweight')sh.view='recipes';
@@ -6193,11 +6297,12 @@ function onClick(e){
     renderSheet();break;
   case 'goview':if(sh){sh.view=t.dataset.v;renderSheet()}break;
   case 'mealsel':if(sh){sh.mealSel=t.dataset.v;document.querySelectorAll('[data-act=mealsel]').forEach(function(b){b.classList.toggle('on',b.dataset.v===sh.mealSel)})}break;
-  case 'pickfood':if(sh){sh.food=FOODS.filter(function(f){return f.name===t.dataset.n})[0];sh.g=sh.food.u?sh.food.u:100;if(sh.photo&&!sh.ing){sh.res={food:sh.food,g:sh.g,src:'pick'};renderSheet();rgPills();break}sh.view='weight';renderSheet()}break;
+  case 'pickfood':if(sh){sh.from=sh.view==='menu'?'menu':'search';sh.food=FOODS.filter(function(f){return f.name===t.dataset.n})[0];sh.g=sh.food.u?sh.food.u:100;if(sh.photo&&!sh.ing){sh.res={food:sh.food,g:sh.g,src:'pick'};renderSheet();rgPills();break}sh.view='weight';renderSheet()}break;
   case 'aiest':aiEstimate();break;
   case 'setg':if(sh){sh.g=t.dataset.g;var gi=document.getElementById('g');if(gi)gi.value=sh.g;updateWprev()}break;
   case 'addfood':
     if(!sh)break;var g=num(sh.g);if(!(g>0)){toast('Bitte ein Gewicht eingeben');break}var f=sh.food;
+    if(sh.swapId){var sw=findItem(sh.swapId);if(sw){sw.name=f.name;sw.g=g;sw.k=f.k*g/100;sw.p=f.p*g/100;sw.c=f.c*g/100;sw.f=f.f*g/100;sw.s=foodScore(f);save();closeSheet();render();toast('Essen geändert: '+f.name)}break}
     if(sh.ing){sh.recipe.ings.push({name:f.name,g:g,s:foodScore(f),k:f.k*g/100,p:f.p*g/100,c:f.c*g/100,f:f.f*g/100});sh.ing=false;sh.view='recipenew';renderSheet();break}
     var bi={meal:sh.mealSel,name:f.name,g:g,k:f.k*g/100,p:f.p*g/100,c:f.c*g/100,f:f.f*g/100,s:foodScore(f)};if(sh.photo){rgLearn(sh,f);bi.ph=sh.photo;sh.photo=null;sh.pf=undefined;sh.pfFor=null;sh.sug=null;sh.pft=null;sh.ask=false}sh.basket.push(bi);toast('In der Auswahl: '+f.name);sh.q='';sh.view='search';renderSheet();break;
   case 'recnew':if(sh){sh.recipe={name:'',portions:'2',ings:[]};sh.view='recipenew';renderSheet()}break;
@@ -6214,6 +6319,9 @@ function onClick(e){
   case 'phclear':if(sh){sh.photo=null;sh.pf=undefined;sh.pfFor=null;sh.sug=null;sh.pft=null;sh.ask=false;sh.res=null;renderSheet()}break;
   case 'sugpick':if(sh&&sh.sug&&sh.sug[+t.dataset.i]){var sf=sh.sug[+t.dataset.i].f;sh.res={food:sf,g:sf.u?sf.u:100,src:'pick'};renderSheet();rgPills()}break;
   case 'pickdish':if(sh&&RGD[+t.dataset.i]){sh.food=RGD[+t.dataset.i];sh.g=sh.food.u?sh.food.u:100;if(sh.photo&&!sh.ing){sh.res={food:sh.food,g:sh.g,src:'pick'};renderSheet();rgPills();break}sh.view='weight';renderSheet()}break;
+  case 'offsearch':if(sh){var oq=(sh.q||'').trim();if(oq.length<2)break;sh.off={q:oq,st:'busy',list:[]};var re0=document.getElementById('results');if(re0)re0.innerHTML=foodRows(sh.q);
+    offSearch(oq).then(function(l){if(S.sheet!==sh||!sh.off||sh.off.q!==oq)return;sh.off.st='ok';sh.off.list=l;var r1=document.getElementById('results');if(r1)r1.innerHTML=foodRows(sh.q)}).catch(function(){if(S.sheet!==sh||!sh.off)return;sh.off.st='err';var r2=document.getElementById('results');if(r2)r2.innerHTML=foodRows(sh.q)})}break;
+  case 'pickoff':if(sh&&sh.off&&sh.off.list[+t.dataset.i]){sh.food=sh.off.list[+t.dataset.i];sh.g=sh.food.u?sh.food.u:100;if(sh.photo&&!sh.ing){sh.res={food:sh.food,g:sh.g,src:'pick'};renderSheet();rgPills();break}sh.view='weight';renderSheet()}break;
   case 'sugcat':if(sh&&sh.pft){sh.cats=sh.cats||[];var ci=sh.cats.indexOf(t.dataset.k);ci>-1?sh.cats.splice(ci,1):sh.cats.push(t.dataset.k);sh.sug=rgRank(sh.pft,sh.cats);renderSheet()}break;
   case 'sugnone':if(sh){sh.ask=true;renderSheet();var qi=document.getElementById('q');if(qi){qi.focus();try{qi.scrollIntoView({block:'center'})}catch(e5){}}}break;
   case 'cfnew':if(sh){sh.cf={n:(sh.q||'').trim(),k:'',p:'',c:'',f:'',u:''};sh.view='custom';renderSheet()}break;
@@ -6236,6 +6344,12 @@ function onClick(e){
     rgLearn(sh,rf);rb.ph=sh.photo;sh.photo=null;sh.pf=undefined;sh.pfFor=null;sh.sug=null;sh.pft=null;sh.ask=false;sh.res=null;sh.basket.push(rb);
     var bt0=sums(sh.basket),bsc0=avgScore(sh.basket);sh.basket.forEach(function(x){addItem(x.meal,x.name,x.g,x.k,x.p,x.c,x.f,x.s,x.ph?{ph:x.ph}:null)});
     sh.sum={k:bt0.k,p:bt0.p,c:bt0.c,f:bt0.f,n:sh.basket.length,score:bsc0};sh.basket=[];sh.view='summary';renderSheet();render()}break;
+  case 'rgstep':if(sh&&sh.res){var ng=Math.max(0,(num(sh.res.g)||0)+(+t.dataset.d));sh.res.g=String(ng);var rgi=document.getElementById('rg');if(rgi)rgi.value=sh.res.g;rgPills()}break;
+  case 'itemedit':e.stopPropagation();var fi=findItem(t.dataset.id);if(fi){openSheet(null,'itemedit');S.sheet.it=fi;S.sheet.ieg=fi.g?String(Math.round(fi.g*10)/10):'';renderSheet()}break;
+  case 'iesave':if(sh&&sh.it){var it0=sh.it,ng2=num(sh.ieg);if(it0.g>0){if(!(ng2>0)){toast('Bitte eine Menge in Gramm eingeben');break}var fc=ng2/it0.g;it0.k*=fc;it0.p*=fc;it0.c*=fc;it0.f*=fc;it0.g=ng2}save();closeSheet();render();toast('Eintrag geändert')}break;
+  case 'iedel':if(sh&&sh.it){var dk2=sh.it.id;Object.keys(S.log).forEach(function(k){S.log[k]=S.log[k].filter(function(x){return x.id!==dk2})});save();closeSheet();render()}break;
+  case 'iechange':if(sh&&sh.it){sh.swapId=sh.it.id;sh.mealSel=sh.it.meal;sh.q='';sh.view='search';renderSheet()}break;
+  case 'dishopen':{var pl=S.plans[S.day],ds0=(S.gen.busy&&S.gen.key===S.day&&S.gen.swap===null)?S.gen.dishes:(pl?pl.dishes:[]),dd0=ds0[+t.dataset.i];if(dd0){openSheet(null,'dishview');S.sheet.dv=dd0;S.sheet.dvi=+t.dataset.i;renderSheet()}}break;
   case 'phchange':if(sh){sh.res=null;sh.ask=false;renderSheet()}break;
   case 'setrg':if(sh&&sh.res){sh.res.g=t.dataset.g;var ri=document.getElementById('rg');if(ri)ri.value=sh.res.g;rgPills()}break;
   case 'basketdone':
@@ -6270,6 +6384,7 @@ function onInput(e){
   if(t.id==='q'&&S.sheet){S.sheet.q=t.value;var r=document.getElementById('results');if(r)r.innerHTML=foodRows(t.value);return}
   if(t.id==='g'&&S.sheet){S.sheet.g=t.value;updateWprev();return}
   if(t.id==='por'&&S.sheet){S.sheet.por=t.value;updateWprev();return}
+  if(t.dataset&&t.dataset.ie&&S.sheet&&S.sheet.it){var ii=S.sheet.it,ig=ii.g>0?(num(t.value)||0)/ii.g:1,pe=document.getElementById('iepre');S.sheet.ieg=t.value;if(pe)pe.innerHTML='<span class="pill k">'+fmt(ii.k*ig)+' kcal</span><span class="pill p">'+fmt1(ii.p*ig)+' g Eiweiß</span><span class="pill c">'+fmt1(ii.c*ig)+' g Kohlenhydrate</span><span class="pill f">'+fmt1(ii.f*ig)+' g Fett</span>';return}
   if(t.dataset&&t.dataset.rg&&S.sheet&&S.sheet.res){S.sheet.res.g=t.value;rgPills();return}
   if(t.dataset&&t.dataset.cf&&S.sheet&&S.sheet.cf){S.sheet.cf[t.dataset.cf]=t.value;return}
   if(t.dataset&&t.dataset.rk&&S.sheet){S.sheet.recipe[t.dataset.rk]=t.value;var b=document.querySelector('[data-act=recsave]');if(b)b.disabled=!(S.sheet.recipe.ings.length&&S.sheet.recipe.name.trim());return}
