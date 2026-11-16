@@ -1,5 +1,20 @@
+<!doctype html>
+<html lang="de">
+<head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-iFShu2aw97PObTjp9VBXaz7Lf4alVRmfy2XX3FJO+9w=' 'sha256-5EDkrP4B+TQo0pkHY5cowZkeQfPLfyttLltlc2oGzXc='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob: data:; connect-src 'self' https:; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06100B">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Mahlzeit: Kalorien, Makros, Getränke und Gesundheits-Score mit Ernährungs-KI.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<script src="config.js"></script>
 <title>Mahlzeit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1261,6 +1276,12 @@ html,body{overflow-x:clip}
 .qt3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
 .qt3 button{display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--surface2);border:1.5px solid transparent;border-radius:16px;padding:12px 4px;min-height:84px;font:inherit;color:inherit;cursor:pointer;text-align:center}
 .qt3 button:hover{border-color:var(--accent)}.qt3 svg{width:26px;height:26px;color:var(--accent)}.qt3 b{font-size:.82rem;line-height:1.2}
+
+/* v59 Eintragen */
+.qt5{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.qt5 button{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--surface2);border:1.5px solid transparent;border-radius:18px;padding:16px 8px;min-height:112px;font:inherit;color:inherit;cursor:pointer;text-align:center}
+.qt5 button:last-child{grid-column:1/-1;min-height:92px}
+.qt5 button:hover{border-color:var(--accent)}.qt5 svg{width:30px;height:30px;color:var(--accent)}.qt5 b{font-size:1rem}.qt5 small{font-size:.78rem;opacity:.75}
 </style>
 
 <div id="app"></div>
@@ -1772,6 +1793,13 @@ function field(key,label,unit,ph){
 function chips(k,list,multi){
   return '<div class="chips">'+list.map(function(x){var on=multi?S.p[k].indexOf(x)>-1:S.p[k]===x;return '<button type="button" class="chip" data-act="'+(multi?'toggle':'pick')+'" data-k="'+k+'" data-v="'+esc(x)+'" aria-pressed="'+on+'">'+esc(x)+'</button>'}).join('')+'</div>';
 }
+function hgtCm(v){var n=num(v);return n>0&&n<3?Math.round(n*100):n}
+function whNote(){
+  var w=num(S.p.weight),h=hgtCm(S.p.height),m=[];
+  if(S.p.weight!==''&&S.p.weight!=null&&!(w>=25&&w<=350))m.push('Gewicht bitte zwischen 25 und 350 kg');
+  if(S.p.height!==''&&S.p.height!=null&&!(h>=100&&h<=250))m.push('Größe bitte zwischen 100 und 250 cm (oder in Metern, z. B. 1,78)');
+  return m.length?'<div class="note">'+m.join('. ')+'.</div>':'';
+}
 function ageNote(){
   var a=num(S.p.age);
   if(!isFinite(a)||S.p.age==='')return '';
@@ -1816,7 +1844,7 @@ var STEPS=[
  {t:function(){return 'Wie sollen wir dich nennen?'},s:'Ich freue mich, wenn ich dich beim Namen nennen darf. Ein Vorname oder Spitzname reicht völlig.',
   b:function(){return tfield('uname','Dein Name','z. B. Tom')},ok:function(){return (S.p.uname||'').trim().length>0}},
  {t:function(){return 'Was ist dein Ziel?'},s:'Keine Sorge, das geht ganz schnell. Daraus berechne ich deinen Kalorienbedarf und stelle dir jeden Tag 6 passende Gerichte zusammen.',
-  b:function(){return '<div class="stack">'+opt('goal','lose','Abnehmen','Körperfett reduzieren',icoDown)+opt('goal','gain','Zunehmen','Gewicht und Muskeln aufbauen',icoUp)+opt('goal','keep','Gewicht halten','Dein Gewicht stabil halten und gesund essen',icoKeep)+'</div>'},
+  b:function(){return '<div class="stack">'+opt('goal','gain','Muskeln aufbauen und zunehmen','Gesund und gezielt Muskeln und Gewicht aufbauen',icoUp)+opt('goal','lose','Abnehmen','Körperfett reduzieren, dabei Muskeln halten',icoDown)+opt('goal','keep','Gewicht halten','Dein Gewicht stabil halten und gesund essen',icoKeep)+'</div>'},
   ok:function(){return !!S.p.goal}},
  {t:function(){return 'Möchtest du eine kurze Anleitung?'},s:'Ich zeige dir nach der Einrichtung, wie die App funktioniert, wo alles ist und wofür es da ist. Du kannst sie später jederzeit in den Einstellungen öffnen.',
   b:function(){return '<div class="grid2">'+opt('guide','ja','Ja','Zeig mir, wie alles funktioniert')+opt('guide','nein','Nein','Ich finde mich allein zurecht')+'</div>'},ok:function(){return !!S.p.guide}},
@@ -1824,11 +1852,11 @@ var STEPS=[
   b:function(){return '<div class="grid2">'+opt('sex','m','Männlich','')+opt('sex','f','Weiblich','')+'</div>'+field('age','Alter','Jahre','z. B. 25')+'<div id="ageNote">'+ageNote()+'</div>'},
   ok:function(){var a=num(S.p.age);return !!S.p.sex&&a>=12&&a<=90}},
  {t:function(){return 'Wie viel wiegst du und wie groß bist du?'},s:'Tippe die Werte einfach ein, ein ungefährer Wert ist völlig okay.',
-  b:function(){return field('weight','Gewicht','kg','z. B. 75')+field('height','Größe','cm','z. B. 178')},
-  ok:function(){var w=num(S.p.weight),h=num(S.p.height);return w>=30&&w<=300&&h>=120&&h<=230}},
+  b:function(){return field('weight','Gewicht','kg','z. B. 75')+field('height','Größe','cm','z. B. 178')+'<div id="whNote">'+whNote()+'</div>'},
+  ok:function(){var w=num(S.p.weight),h=hgtCm(S.p.height);return w>=25&&w<=350&&h>=100&&h<=250}},
  {sk:function(){return S.p.goal==='keep'},t:function(){return 'Was ist dein Zielgewicht?'},s:'So sehe ich, wie weit es noch ist und wie lange du ungefähr brauchst.',
   b:function(){return field('tw','Zielgewicht','kg','z. B. 80')+'<div id="twNote">'+twNote()+'</div>'},
-  ok:function(){var t=num(S.p.tw);return t>=30&&t<=300}},
+  ok:function(){var t=num(S.p.tw);return t>=25&&t<=350}},
  {t:function(){return 'Wie hoch ist dein Körperfettanteil?'},s:'Tippe auf die Figur, die dir am ähnlichsten sieht. Ein Schätzwert reicht, hier gibt es kein Richtig oder Falsch.',
   b:function(){var sx=S.p.sex||'m';return '<div class="grid3">'+BF[sx].map(function(v,i){var sel=S.p.bfIdx===i;return '<button type="button" class="opt bf'+(sel?' sel':'')+'" data-act="pick" data-k="bfIdx" data-v="'+i+'" aria-pressed="'+sel+'">'+bodyFig(sx,i/5,sx+i)+'<span class="tag">ca. '+v+(i===5?'+':'')+' %</span><small>'+BFTXT[i]+'</small></button>'}).join('')+'</div>'},
   ok:function(){return S.p.bfIdx!==null}},
@@ -2204,7 +2232,7 @@ async function weekAI(k){
 }
 
 /* ---------- Essens-KI: nur Essen, Trinken, Ernährung ---------- */
-var AI_SUGG=['Ich hatte 2 Eier und eine Scheibe Vollkornbrot','Wie gesund ist Pizza?','Was kann ich heute Abend essen?','Was ersetzt Milch in meinem Frühstück?','Wie viel Protein fehlt mir noch?'];
+var AI_SUGG=['Ich hatte 2 Eier und eine Scheibe Vollkornbrot','Wo ist der günstigste Supermarkt in meiner Nähe?','Wie gesund ist Pizza?','Was kann ich heute Abend essen?','Was ersetzt Milch in meinem Frühstück?','Wie viel Protein fehlt mir noch?'];
 function aiInstr(){
   var c=calc(S.p,S.p.perMonth),st=dayStats(dayLog()),names=(SLOTS[S.p.meals]||SLOTS[3]),k7=histKeys(7).filter(function(k){return (S.log[k]||[]).length});
   var a7=avg(k7.map(function(k){return dayVal('k',k)})),s7=avg(k7.map(function(k){return dayVal('s',k)}));
@@ -2241,7 +2269,36 @@ async function aiSend(text){
   var r;try{r=botAnswer(text)}catch(e){r={antwort:'Das hat nicht geklappt. Schreib es bitte noch einmal anders.'}}
   ch.msgs.push({role:'a',text:String(r.antwort||'Okay.'),logged:r.logged||[]});
   ch.msgs=ch.msgs.slice(-40);save();if(S.view==='ai')renderAILog();
+  if(r.shop){var msg=ch.msgs[ch.msgs.length-1];ch.busy=true;if(S.view==='ai')renderAILog();
+    shopFind(r.shop.item).then(function(t){msg.text=t}).catch(function(e){msg.text=e&&e.text?e.text:'Das hat nicht geklappt. Versuche es später noch einmal.'}).then(function(){ch.busy=false;save();if(S.view==='ai')renderAILog()})}
 }
+
+/* ---------- Supermarkt in der Nähe: Standort nur auf Nachfrage, Läden über OpenStreetMap, Preisklasse als Einschätzung ---------- */
+var SHOPTIER=[[1,/aldi|lidl|penny|netto|norma|nahkauf? ?discount|diska|treff 3000/i,'Discounter'],[2,/kaufland|real\b|marktkauf|famila|combi|sky\b|hit\b/i,'Verbrauchermarkt'],[3,/rewe|edeka|globus|e center|e-center|tegut|famila|nah ?& ?gut|e neukauf|cap\b|spar\b|budni/i,'Supermarkt'],[4,/denn|alnatura|basic|bio|reformhaus|vollcorner|bio company/i,'Bio-Markt']];
+function shopTier(n){for(var i=0;i<SHOPTIER.length;i++)if(SHOPTIER[i][1].test(n))return SHOPTIER[i];return [3,null,'Supermarkt']}
+function geoOnce(){return new Promise(function(res,rej){if(!navigator.geolocation){rej({code:'nogeo'});return}navigator.geolocation.getCurrentPosition(function(p){res(p.coords)},function(e){rej({code:e&&e.code===1?'denied':'geofail'})},{enableHighAccuracy:false,timeout:15000,maximumAge:300000})})}
+function distM(a,b,c,d){var R=6371000,x=(c-a)*Math.PI/180,y=(d-b)*Math.PI/180,q=Math.sin(x/2)*Math.sin(x/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(y/2)*Math.sin(y/2);return 2*R*Math.asin(Math.sqrt(q))}
+async function shopFind(item){
+  var pos;
+  try{pos=await geoOnce()}catch(e){
+    if(e.code==='denied')throw {text:'Ich darf deinen Standort nicht benutzen. Erlaube ihn in den Einstellungen deines Handys für die App, dann frag mich noch einmal. Der Standort wird nur für diese Suche gebraucht und nicht gespeichert.'};
+    throw {text:'Ich konnte deinen Standort gerade nicht bestimmen. Schalte die Ortung ein und frag mich noch einmal.'}}
+  var lat=pos.latitude,lon=pos.longitude,q='[out:json][timeout:20];(node["shop"~"^(supermarket|convenience)$"](around:3500,'+lat+','+lon+');way["shop"~"^(supermarket|convenience)$"](around:3500,'+lat+','+lon+'););out center 60;',r,j;
+  var ctl=new AbortController(),tm=setTimeout(function(){ctl.abort()},20000);
+  try{r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'},signal:ctl.signal});j=await r.json()}
+  catch(e){clearTimeout(tm);throw {text:'Die Suche nach Läden hat nicht geklappt. Prüfe dein Internet und frag mich noch einmal.'}}
+  clearTimeout(tm);
+  var shops=((j&&j.elements)||[]).map(function(e){var t=e.tags||{},la=e.lat!=null?e.lat:(e.center&&e.center.lat),lo=e.lon!=null?e.lon:(e.center&&e.center.lon);if(la==null||lo==null)return null;var n=t.name||t.brand||'';if(!n&&t.shop==='convenience')return null;var tr=shopTier(n+' '+(t.brand||''));return {n:n||'Supermarkt',tier:tr[0],kind:tr[2],d:distM(lat,lon,la,lo),street:t['addr:street']?(t['addr:street']+(t['addr:housenumber']?' '+t['addr:housenumber']:'')):'',oh:t.opening_hours||''}}).filter(Boolean);
+  if(!shops.length)return 'Im Umkreis von 3,5 km habe ich keinen Supermarkt gefunden.';
+  shops.sort(function(a,b){return (a.tier*900+a.d)-(b.tier*900+b.d)});
+  var best=shops[0];
+  var near=shops.slice().sort(function(a,b){return a.d-b.d}).slice(0,3);
+  var fm=function(m){return m<1000?Math.round(m/10)*10+' m':(m/1000).toFixed(1).replace('.',',')+' km'};
+  var line=function(s){return s.n+', '+fm(s.d)+(s.street?' ('+s.street+')':'')+' · '+s.kind};
+  var out=(item?'Für „'+item+'“: ':'')+'Am günstigsten wird es voraussichtlich bei diesem Laden in deiner Nähe:\n• '+line(best)+(best.oh?'\n  Öffnungszeiten: '+best.oh:'')+'\n\nDie nächsten Läden:\n'+near.map(function(s){return '• '+line(s)}).join('\n')+'\n\nHinweis: Live-Preise kenne ich nicht. Ich ordne nach Preisklasse (Discounter vor Supermarkt) und Entfernung, das ist eine Einschätzung. Dein Standort wird nur für diese Suche benutzt und nicht gespeichert.';
+  return out;
+}
+
 
 /* ---------- Verlauf: Ansichten Essen / Training / Gewicht, Gewichtsverlauf ---------- */
 function histSeg(){
@@ -3433,16 +3490,26 @@ function summaryHtml(){
    '<div class="two" style="margin-top:14px"><button type="button" class="btn" data-act="goview" data-v="menu">Noch mehr eintragen</button><button type="button" class="btn pri" data-act="closesheet">Fertig</button></div></div>';
 }
 var RGD=[];
+var BC_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2M8 8v8M12 8v8M16 8v8"/></svg>';
+function localMode(sh){return !!(sh&&(sh.ing||sh.swapId))}
 function quickHtml(sh){
-  var rec=[],seen={},ks=Object.keys(S.log).sort().reverse();
-  for(var i=0;i<ks.length&&rec.length<6;i++){var a=S.log[ks[i]];for(var j=a.length-1;j>=0&&rec.length<6;j--){var it=a[j];if(isDrink(it)||seen[it.name])continue;seen[it.name]=1;if(FOODS.some(function(f){return f.name===it.name}))rec.push(it.name)}}
-  var h='';
-  if(!sh.photo)h+='<div class="qt3"><button type="button" data-act="goview" data-v="scan">'+I.cam+'<b>Foto / Barcode</b></button><button type="button" data-act="goview" data-v="recipes">'+I.book+'<b>Eigenes Rezept</b></button><button type="button" data-act="gotoai">'+I.chat+'<b>Assistent</b></button></div>';
-  if(rec.length)h+='<p class="hint" style="margin:14px 0 6px">Zuletzt gegessen</p><div class="chips">'+rec.map(function(n){return '<button type="button" class="chip" data-act="pickfood" data-n="'+esc(n)+'">'+esc(n)+'</button>'}).join('')+'</div>';
-  return h+'<p class="hint" style="margin:14px 0 6px">Beliebt</p>';
+  return '<div class="qt5"><button type="button" data-act="scanfood">'+I.cam+'<b>Foto</b><small>Teller fotografieren</small></button><button type="button" data-act="scanbc">'+BC_ICON+'<b>Barcode</b><small>Verpackung scannen</small></button><button type="button" data-act="goview" data-v="online">'+I.search+'<b>Online suchen</b><small>Produkte und Marken</small></button><button type="button" data-act="goview" data-v="recipes">'+I.book+'<b>Eigenes Rezept</b><small>selbst anlegen</small></button><button type="button" data-act="gotoai">'+I.chat+'<b>Assistent</b><small>sagen statt tippen</small></button></div>';
+}
+function onlineRows(q){
+  var sh=S.sheet,l=q.trim();
+  var own=l.length>=2?'<button type="button" class="btn full" style="margin-top:10px" data-act="cfnew">Nicht dabei? Eigenes Essen anlegen: '+esc(l)+'</button>':'';
+  if(l.length<3)return '<p class="hint" style="margin-top:12px">Tippe mindestens 3 Buchstaben, die Suche startet dann von selbst. Die Nährwerte kommen online aus Open Food Facts.</p>';
+  return offHtml(sh,q)+own;
+}
+function offRun(sh){
+  var oq=(sh.q||'').trim();if(oq.length<3)return;
+  sh.off={q:oq,st:'busy',list:[]};var re0=document.getElementById('results');if(re0)re0.innerHTML=foodRows(sh.q);
+  offSearch(oq).then(function(l){if(S.sheet!==sh||!sh.off||sh.off.q!==oq)return;sh.off.st='ok';sh.off.list=l;var r1=document.getElementById('results');if(r1)r1.innerHTML=foodRows(sh.q)}).catch(function(){if(S.sheet!==sh||!sh.off)return;sh.off.st='err';var r2=document.getElementById('results');if(r2)r2.innerHTML=foodRows(sh.q)});
 }
 function foodRows(q){
-  var qh=(q.trim()===''&&S.sheet&&!S.sheet.swapId)?quickHtml(S.sheet):'';
+  var sh=S.sheet;
+  if(sh&&!localMode(sh)&&(sh.view==='online'||sh.view==='search'))return onlineRows(q);
+  var qh=(q.trim()===''&&sh&&!sh.swapId&&sh.view!=='search')?quickHtml(sh):'';
   return qh+foodRows0(q);
 }
 function foodRows0(q){
@@ -3456,20 +3523,19 @@ function foodRows0(q){
 function renderSheet(){
   var sh=S.sheet;if(!sh)return;
   if(!(sh.view==='scan'&&sh.scan.status==='cam'))stopCam();
-  var v=sh.view,h='<div class="panel">',title={premium:'Premium',drink:'Getränk eintragen',settings:'Einstellungen und Info',menu:sh.meal||'Eintragen',search:'Essen eingeben',weight:'Menge bestimmen',recipes:'Eigenes Rezept',recipenew:'Neues Rezept',recweight:'Portionen',scan:'Essen scannen',chat:'Mit KI sprechen',summary:'Eingetragen',custom:'Eigenes Essen',itemedit:'Eintrag ändern',dishview:'Rezept'}[v];
+  var v=sh.view,h='<div class="panel">',title={online:'Online suchen',premium:'Premium',drink:'Getränk eintragen',settings:'Einstellungen und Info',menu:sh.meal||'Eintragen',search:(sh.photo?'Dein Foto':localMode(sh)?'Zutat wählen':'Online suchen'),weight:'Menge bestimmen',recipes:'Eigenes Rezept',recipenew:'Neues Rezept',recweight:'Portionen',scan:'Essen scannen',chat:'Mit KI sprechen',summary:'Eingetragen',custom:'Eigenes Essen',itemedit:'Eintrag ändern',dishview:'Rezept'}[v];
   var back=(v==='menu'||v==='summary'||v==='drink'||v==='settings'||v==='premium'||(v==='recipes'&&!sh.meal))?'':'<button type="button" class="bk" data-act="sheetback">‹ Zurück</button>';
   h+='<div class="ph"><div style="display:flex;align-items:center;gap:6px;min-width:0">'+back+'<h2>'+esc(title)+'</h2></div>'+(sh.res&&sh.photo&&v==='search'?'<button type="button" class="btn pri" style="min-height:40px;padding:0 18px;margin-left:auto;margin-right:8px" data-act="phdone">Fertig</button>':'')+'<button type="button" class="ib" data-act="closesheet" aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';
   if(!sh.meal&&sh.view!=='menu'&&!sh.mealSel)sh.mealSel=guessMeal();
-  if(['search','weight','menu','recipes','recweight','scan','summary','recipenew'].indexOf(v)>-1&&!(v==='recipenew'&&sh.ing===false&&false))h+=mealBar();
-  if(['search','weight','menu','recipes','recweight','scan'].indexOf(v)>-1)h+=basketBar();
+  if(['search','online','weight','menu','recipes','recweight','scan','summary','recipenew'].indexOf(v)>-1&&!(v==='recipenew'&&sh.ing===false&&false))h+=mealBar();
+  if(['search','online','weight','menu','recipes','recweight','scan'].indexOf(v)>-1)h+=basketBar();
   if(v==='summary')h+=summaryHtml();
-  if(v==='menu'){
-    h+='<input class="text" id="q" type="text" autocomplete="off" placeholder="Essen suchen, z. B. Haferflocken, Ei, Reis" value="'+esc(sh.q)+'"><div id="results">'+foodRows(sh.q)+'</div>';
-  }
+  if(v==='menu'){h+=quickHtml(sh)}
+  if(v==='online'){h+='<input class="text" id="q" type="text" autocomplete="off" placeholder="z. B. Nutella, Skyr, Hähnchenbrust" value="'+esc(sh.q)+'"><div id="results">'+foodRows(sh.q)+'</div>'}
   if(v==='search'){
     if(sh.photo)rgStart(sh);
     if(sh.photo)h+='<div class="phprev"><img src="'+safeImg(sh.photo)+'" alt="Dein Foto"><div><b>Dein Foto</b><small>Das Foto bleibt auf deinem Gerät und wird beim ersten Eintrag gespeichert.</small></div><button type="button" class="x" data-act="phclear" aria-label="Foto entfernen">×</button></div>'+rgVariantsHtml(sh)+(sh.ask?'<p class="hint" style="margin:10px 0 4px"><b>Welches Essen ist das?</b> Tippe den Namen ein. Wenn ich es nicht kenne, kannst du es selbst anlegen.</p>':'');
-    if(!(sh.photo&&sh.res))h+='<input class="text" id="q" type="text" autocomplete="off" placeholder="z. B. Haferflocken, Ei, Reis" value="'+esc(sh.q)+'"><div id="results">'+foodRows(sh.q)+'</div>';
+    if(!(sh.photo&&sh.res))h+='<input class="text" id="q" type="text" autocomplete="off" placeholder="'+(localMode(sh)?'z. B. Haferflocken, Ei, Reis':'Name des Essens, z. B. Lachs mit Reis')+'" value="'+esc(sh.q)+'"><div id="results">'+foodRows(sh.q)+'</div>';
   }
   if(v==='dishview'&&sh.dv){
     var dv=sh.dv,isT=S.day===keyOf(today(0));
@@ -4131,7 +4197,7 @@ function rgRank(ft,cats){
   function fits(txt){for(var i=0;i<rx.length;i++)if(!rx[i].test(txt))return false;return true}
   function score(h,t,n){return rgCos(ft.h,h)*.8+(1-Math.abs(ft.t-t)/2)*.12+(1-Math.min(3,Math.abs(Math.min(ft.nv,4)-Math.min(n,4)))/3)*.08}
   /* Eigene Fotos von früher zählen am meisten */
-  RG.learn.forEach(function(l){if(!fits(l.n))return;var s=rgCos(ft.h,l.h)*.9+(1-Math.abs(ft.t-l.t)/2)*.1;cands.push({s:s+.05,f:{name:l.n,k:l.k,p:l.p,c:l.c,f:l.f,u:l.u||0,un:l.un||'',s:l.sc},learned:true})});
+  var lc={};RG.learn.forEach(function(l){lc[l.n]=(lc[l.n]||0)+1});RG.learn.forEach(function(l){if(!fits(l.n))return;var s=rgCos(ft.h,l.h)*.9+(1-Math.abs(ft.t-l.t)/2)*.1;cands.push({cnt:lc[l.n],s:s+.05+Math.min(.04,.01*(lc[l.n]-1)),f:{name:l.n,k:l.k,p:l.p,c:l.c,f:l.f,u:l.u||0,un:l.un||'',s:l.sc},learned:true})});
   ddb().concat(rgRecs()).forEach(function(d){if(rx.length&&!fits(rgText(d)))return;var m=d._m||(d._m=rgMix(d.cm));cands.push({s:score(m.h,m.t,m.n)-(rx.length?0:.02),f:d})});
   FOODS.forEach(function(f){if(rx.length&&!fits(f.name))return;var m=f._m||(f._m=rgMix([[f.name,100]]));cands.push({s:score(m.h,m.t,1)-.03,f:f})});
   cands.sort(function(a,b){return b.s-a.s});
@@ -4145,15 +4211,11 @@ function rgRank(ft,cats){
 function rgVariantsHtml(sh){
   if(sh.res)return rgResHtml(sh);
   if(sh.pf===undefined)return '';
-  if(sh.pf==='busy')return '<div class="phsug"><small>Ich schaue mir die Farben und das Muster deines Fotos an …</small></div>';
-  var cats=sh.cats||[],top=sh.sug||[];
-    var h='<div class="phsug"><b>'+'Ich bin mir nicht sicher. Was ist auf dem Teller?'+'</b><small>Tippe an, was du siehst. Danach suche ich nach Farben und Muster das passende Gericht. Das ist keine KI und eine Schätzung, du entscheidest. Ich merke mir deine Antwort für das nächste Mal.'+'</small>'+
-   '<div class="chips" role="group" aria-label="Was ist auf dem Teller">'+RGCAT.map(function(c){var on=cats.indexOf(c[0])>-1;return '<button type="button" class="chip'+(on?' on':'')+'" data-act="sugcat" data-k="'+c[0]+'" aria-pressed="'+on+'">'+c[1]+'</button>'}).join('')+'</div>';
-  if(sh.pf==='err')h+='<small>Das Foto konnte ich nicht auswerten. Wähle trotzdem aus, was du siehst, oder such unten selbst.</small>';
-  else if(!top.length)h+='<p class="hint" style="margin:10px 0 0">Dazu kenne ich nichts Passendes. Such unten nach dem Namen oder leg es als eigenes Essen an.</p>';
-  else h+='<div class="list" style="margin-top:10px">'+top.map(function(c,i){var f=c.f;return '<button type="button" class="row" data-act="sugpick" data-i="'+i+'"><div><b>'+esc(f.name)+'</b><small>'+(c.learned?'Von dir gemerkt · ':f.rec?'Rezept · ':f.cm?'Gericht · ':'')+fmt(f.k)+' kcal pro 100 g'+'</small></div></button>'}).join('')+'</div>';
-  h+='<button type="button" class="btn full" style="margin-top:8px" data-act="sugnone">Nichts davon. Welches Essen ist das?</button><button type="button" class="btn pri full" style="margin-top:8px" data-act="cfnew">Neues Essen mit eigenen Angaben eintragen</button></div>';
-  return h;
+  if(sh.pf==='busy')return '<div class="phsug"><small>Ich vergleiche dein Foto mit deinen gemerkten Fotos …</small></div>';
+  var top=sh.sug||[];
+  var h='<div class="phsug"><b>Das kenne ich noch nicht.</b><small>Gib unten den Namen ein, ich suche online die Nährwerte. Dein Foto merke ich mir mit diesem Namen, je mehr Fotos du benennst, desto besser erkenne ich dein Essen.</small>';
+  if(top.length)h+='<p class="hint" style="margin:10px 0 4px">Meinst du eines davon?</p><div class="list">'+top.map(function(c,i){var f=c.f;return '<button type="button" class="row" data-act="sugpick" data-i="'+i+'"><div><b>'+esc(f.name)+'</b><small>Von dir gemerkt · '+fmt(f.k)+' kcal pro 100 g</small></div></button>'}).join('')+'</div>';
+  return h+'</div>';
 }
 function rgPills(){
   var sh=S.sheet,el=document.getElementById('rpre');if(!sh||!sh.res||!el)return;
@@ -4177,7 +4239,7 @@ function rgStart(sh){
   rgFeat(sh.photo).then(function(ft){
     if(S.sheet!==sh)return;
     sh.pft=ft;
-    sh.cats=[];var top=rgRank(ft,sh.cats);sh.sug=top;sh.pf='ok';if(top.length&&top[0].learned&&top[0].s>.93){var af=top[0].f;sh.res={food:af,g:af.u?af.u:100,src:'learned'}}
+    sh.cats=[];var top=rgRank(ft,sh.cats).filter(function(c){return c.learned&&c.s>.86});sh.sug=top.slice(0,3);sh.pf='ok';if(top.length&&top[0].learned&&(top[0].s>.93||(top[0].cnt>1&&top[0].s>.9))){var af=top[0].f;sh.res={food:af,g:af.u?af.u:100,src:'learned'}}
     if(sh.view==='search')renderSheet();
   }).catch(function(){if(S.sheet===sh){sh.pf='err';if(sh.view==='search')renderSheet()}});
 }
@@ -4186,7 +4248,7 @@ function rgLearn(sh,f){
   if(!sh||!sh.pft||!f)return;
   rgLoad();
   RG.learn.push({n:f.name,h:sh.pft.h.map(function(x){return Math.round(x*1000)/1000}),t:sh.pft.t,k:+f.k.toFixed(1),p:+f.p.toFixed(1),c:+f.c.toFixed(1),f:+f.f.toFixed(1),u:f.u||0,un:f.un||'',sc:foodScore(f)});
-  if(RG.learn.length>300)RG.learn.shift();rgSave();
+  if(RG.learn.length>1500)RG.learn.shift();rgSave();
 }
 /* Online-Suche in Open Food Facts (Millionen echte Produkte mit Marken, zum Beispiel Nutella). Nur auf Tipp, ohne KI, ohne Konto. */
 async function offSearch(q){
@@ -4599,11 +4661,11 @@ function camAct(a){
 var GUIDE=[
  {i:'dumbbell',t:'Willkommen bei Mahlzeit',tx:'Ernährung und Training in einer App. Diese Anleitung dauert eine Minute.',b:[]},
  {i:'home',t:'Heute',tx:'Dein Tag auf einen Blick.',b:['Tippe auf eine Mahlzeit, um Essen einzutragen','Im Tagesplan öffnet ein Tipp auf ein Gericht die Zutaten und die Zubereitung','Die Flamme wächst, wenn du jeden Tag etwas einträgst']},
- {i:'book',t:'Essen eintragen',tx:'Drei Wege, alle ohne KI.',b:['Suchen: Gerichte, Rezepte und Marken, online sogar Millionen Produkte','Foto: Ich schätze nach Farben und Muster, du bestätigst und die App lernt dazu','Barcode scannen für Packungen']},
+ {i:'book',t:'Essen eintragen',tx:'Fünf Wege, alle ohne KI.',b:['Foto vom Teller: Was ich nicht kenne, suchst du online und die App merkt es sich','Barcode scannen, Online-Suche und eigenes Rezept','Der Assistent trägt für dich ein, wenn du schreibst, was du gegessen hast']},
  {i:'chart',t:'Verlauf',tx:'Alles über die Zeit, an einem Ort.',b:['Essen, Training, Gewicht und Fotos','Hier trägst du auch dein Gewicht ein','Mit dem Stift bei Heute änderst du Einträge']},
  {i:'chat',t:'Assistent',tx:'Schreib, was du gegessen hast, oder frag nach Rezepten.',b:['Zum Beispiel: „Abendessen für 4 Personen ohne Fleisch“']},
  {i:'trophy',t:'Arena',tx:'Sammle EP und tritt gegen andere an.',b:['Jeden Tag 4 Quests','Minispiel Küstenkampf']},
- {i:'star',t:'Mango',tx:'Deine Mango ist dein Coach.',b:['Gib ihr einen Namen und einen Look','Tipp eine Weile nichts, dann tanzt sie']},
+ {i:'star',t:'Mango',tx:'Deine Mango ist dein Coach.',b:['Die App ist auf gesunden Muskelaufbau ausgelegt, hilft aber auch beim Abnehmen','Gib ihr einen Namen und einen Look']},
  {i:'dumbbell',t:'Training',tx:'Dein Trainingsplan ist kostenlos.',b:['Beantworte ein paar Fragen und erhalte deinen Plan','Mit „Plan ändern“ wählst du eigene Übungen']},
  {i:'gear',t:'Einstellungen',tx:'Das Zahnrad oben rechts öffnet die Einstellungen.',b:['Dort findest du auch diese Anleitung wieder']},
  {i:'check',t:'Los geht es',tx:'Trag dein erstes Essen oder dein Wasser ein.',b:[]}
@@ -5517,6 +5579,36 @@ R('Tofu-Erbsen-Happen','S','As',10,1,'Pflanzlich und proteinreich.',[['Tofu natu
 var LCAT={F:'F',M:'M',A:'A',S:'S'};
 function lcat(slot){return /Frühstück/.test(slot)?'F':/Mittag/.test(slot)?'M':/Abend/.test(slot)?'A':'S'}
 function lflags(r){var s='';r.ing.forEach(function(i){s+=LING[i[0]].fl});return s}
+/* Muskelaufbau-Rezepte (eiweiß- und kalorienreich) */
+R("Protein-Porridge mit Banane","F","De Am",8,1,"Warm, satt und mit viel Eiweiß in den Tag.",[["Haferflocken", 80], ["Milch 1,5 %", 250], ["Proteinpulver (Whey)", 30], ["Banane", 120], ["Erdnussbutter", 15]],["Haferflocken mit der Milch in einem Topf aufkochen und 3 Minuten quellen lassen.", "Vom Herd nehmen und das Proteinpulver unterrühren.", "Mit Banane in Scheiben und Erdnussbutter servieren."]);
+R("Skyr-Bowl mit Müsli und Mandeln","F","De Am",5,1,"Schnell gemacht und sehr eiweißreich.",[["Skyr", 250], ["Müsli (ohne Zucker)", 60], ["Beeren (gemischt)", 100], ["Mandeln", 20], ["Honig", 10]],["Skyr in eine Schüssel geben.", "Müsli, Beeren und gehackte Mandeln darauf verteilen.", "Mit Honig beträufeln."]);
+R("Rührei-Wrap mit Schinken","F","De Am",10,1,"Warmes Frühstück zum Mitnehmen.",[["Ei (Hühnerei)", 240], ["Wrap (Weizentortilla)", 70], ["Schinken (gekocht)", 40], ["Paprika", 60], ["Butter", 5]],["Eier verquirlen, salzen und pfeffern.", "Paprika würfeln und in Butter anbraten, Eier dazugeben und stocken lassen.", "Mit Schinken in den Wrap einrollen."]);
+R("Quark-Pfannkuchen mit Banane","F","De",15,2,"Weich, süß und mit Eiweiß aus dem Quark.",[["Ei (Hühnerei)", 120], ["Haferflocken", 70], ["Magerquark", 150], ["Banane", 100], ["Butter", 10]],["Eier, Haferflocken, Quark und halbe Banane zu einem Teig pürieren.", "In Butter von beiden Seiten goldbraun backen.", "Mit restlicher Banane servieren."]);
+R("Hüttenkäse-Brot mit Ei und Avocado","F","De Me",10,1,"Sättigend mit gesunden Fetten.",[["Vollkornbrot", 120], ["Hüttenkäse", 150], ["Ei (Hühnerei)", 120], ["Tomate", 100], ["Avocado", 60]],["Eier 8 Minuten kochen.", "Brot mit Hüttenkäse und Avocado belegen.", "Eier und Tomate in Scheiben darauflegen."]);
+R("Mass-Shake mit Haferflocken","F","Am",5,1,"Viele Kalorien zum Trinken, wenn du morgens wenig Hunger hast.",[["Milch 1,5 %", 400], ["Haferflocken", 60], ["Banane", 120], ["Proteinpulver (Whey)", 30], ["Erdnussbutter", 20]],["Alle Zutaten in den Mixer geben.", "1 Minute fein mixen und sofort trinken."]);
+R("Hähnchen-Reis-Bowl mit Brokkoli","X","As Am",25,2,"Der Klassiker für Muskelaufbau.",[["Hähnchenbrust (gegart)", 200], ["Reis (gekocht)", 250], ["Brokkoli", 150], ["Olivenöl", 10], ["Sojasauce", 10]],["Reis nach Packung kochen.", "Brokkoli 4 Minuten dämpfen, Hähnchen in Stücke schneiden.", "Alles in einer Schale anrichten, mit Öl und Sojasauce abschmecken."]);
+R("Hackfleisch-Nudeln mit Tomatensauce","X","It",25,2,"Kalorienreich und mit viel Eiweiß.",[["Nudeln (gekocht)", 300], ["Rindfleisch, Hack (gegart)", 150], ["Tomatensauce (Passata)", 200], ["Parmesan", 15], ["Zwiebel", 50]],["Zwiebel würfeln und mit dem Hack anbraten.", "Passata zugeben und 10 Minuten köcheln lassen.", "Mit den Nudeln mischen und Parmesan darüber reiben."]);
+R("Lachs mit Süßkartoffel und Spinat","X","Me",30,2,"Omega-3 und langsame Kohlenhydrate.",[["Lachs (gegart)", 180], ["Süßkartoffel (gekocht)", 300], ["Spinat", 150], ["Olivenöl", 10]],["Süßkartoffel in Stücke schneiden und im Ofen oder Topf garen.", "Lachs 4 Minuten pro Seite braten.", "Spinat kurz in Öl zusammenfallen lassen und alles anrichten."]);
+R("Thunfisch-Pasta mit Mais","X","It",20,1,"Günstig und schnell fertig.",[["Vollkornnudeln (gekocht)", 300], ["Thunfisch (Dose, im eigenen Saft)", 150], ["Tomatensauce (Passata)", 150], ["Mais (Dose)", 60], ["Olivenöl", 10]],["Nudeln kochen.", "Passata erhitzen, Thunfisch und Mais zugeben.", "Mit den Nudeln mischen."]);
+R("Puten-Wrap mit Hummus und Feta","X","Or Me",15,1,"Kalt oder warm, ideal für unterwegs.",[["Wrap (Weizentortilla)", 120], ["Putenbrust (gegart)", 150], ["Hummus", 50], ["Paprika", 80], ["Blattsalat", 40], ["Feta", 30]],["Wrap mit Hummus bestreichen.", "Pute, Paprikastreifen, Salat und Feta darauf verteilen.", "Fest einrollen und halbieren."]);
+R("Rinderhack-Reispfanne","X","As",25,2,"Eine Pfanne, viel Eiweiß.",[["Rindfleisch, Hack (gegart)", 180], ["Vollkornreis (gekocht)", 250], ["Paprika", 100], ["Zwiebel", 50], ["Sojasauce", 15], ["Olivenöl", 10]],["Zwiebel und Paprika in Öl anbraten.", "Hack zugeben und krümelig braten.", "Reis und Sojasauce unterrühren und kurz erhitzen."]);
+R("Schweinefilet mit Kartoffeln und Rotkohl","X","De",35,3,"Mager und kräftig, mit vielen Kohlenhydraten.",[["Schweinefilet (gegart)", 200], ["Kartoffeln (gekocht)", 350], ["Rotkohl", 150], ["Butter", 10]],["Kartoffeln kochen.", "Filet in Scheiben schneiden und in Butter braten.", "Mit warmem Rotkohl servieren."]);
+R("Linsen-Quinoa-Bowl mit Feta","X","Or Me",25,2,"Pflanzliches Eiweiß mit Käse.",[["Linsen (gekocht)", 200], ["Quinoa (gekocht)", 200], ["Feta", 50], ["Tomate", 100], ["Olivenöl", 10]],["Linsen und Quinoa vermischen.", "Tomate würfeln, Feta zerbröseln.", "Alles anrichten und mit Öl beträufeln."]);
+R("Tofu-Reispfanne mit Erdnuss","X","As",25,2,"Vegane Pfanne mit viel Eiweiß.",[["Tofu natur", 250], ["Reis (gekocht)", 250], ["Brokkoli", 150], ["Erdnussbutter", 20], ["Sojasauce", 15]],["Tofu würfeln und knusprig anbraten.", "Brokkoli zugeben und garen.", "Reis, Erdnussbutter und Sojasauce unterrühren."]);
+R("Garnelen mit Reisnudeln und Erdnüssen","X","As",25,2,"Leicht und eiweißreich.",[["Garnelen (gegart)", 180], ["Reisnudeln (gekocht)", 300], ["Paprika", 100], ["Erbsen", 80], ["Sojasauce", 15], ["Erdnüsse", 20]],["Paprika und Erbsen kurz anbraten.", "Garnelen und Nudeln zugeben, mit Sojasauce würzen.", "Mit gehackten Erdnüssen bestreuen."]);
+R("Kabeljau mit Kartoffeln und Erbsen","X","De",30,2,"Mageres Fischfilet, sättigende Beilage.",[["Kabeljau (gegart)", 200], ["Kartoffeln (gekocht)", 350], ["Erbsen", 100], ["Butter", 15]],["Kartoffeln kochen und stampfen.", "Kabeljau in Butter braten.", "Erbsen erwärmen und alles anrichten."]);
+R("Hähnchen-Süßkartoffel-Pfanne","X","Am",30,2,"Eine Pfanne für den Muskelaufbau.",[["Hähnchenbrust (gegart)", 200], ["Süßkartoffel (gekocht)", 300], ["Zucchini", 150], ["Olivenöl", 10]],["Süßkartoffel und Zucchini würfeln und in Öl anbraten.", "Hähnchen in Stücken dazugeben.", "Würzen und 3 Minuten durchziehen lassen."]);
+R("Kichererbsen-Curry mit Reis","X","In",30,2,"Vegan, sättigend, mit Eiweiß aus Kichererbsen.",[["Kichererbsen (gekocht)", 250], ["Reis (gekocht)", 250], ["Kokosmilch light", 100], ["Spinat", 100], ["Zwiebel", 50]],["Zwiebel anbraten, Kichererbsen und Kokosmilch zugeben.", "Mit Curry würzen und 10 Minuten köcheln lassen.", "Spinat unterheben und mit Reis servieren."]);
+R("Tempeh-Bulgur-Bowl mit Kürbis","X","Or",30,2,"Fermentiertes Eiweiß mit Ballaststoffen.",[["Tempeh", 150], ["Bulgur (gekocht)", 250], ["Kürbis", 150], ["Olivenöl", 10], ["Hummus", 40]],["Kürbis würfeln und im Ofen rösten.", "Tempeh in Scheiben braten.", "Mit Bulgur und Hummus anrichten."]);
+R("Magerquark mit Banane und Walnüssen","S","De",5,1,"Schneller Eiweiß-Snack.",[["Magerquark", 250], ["Banane", 120], ["Walnüsse", 20], ["Honig", 10]],["Quark in eine Schale geben.", "Banane in Scheiben und Walnüsse darauflegen, mit Honig beträufeln."]);
+R("Proteinriegel mit Banane","S","Am",1,1,"Zum Mitnehmen, ohne Aufwand.",[["Proteinriegel", 60], ["Banane", 120]],["Auspacken und essen."]);
+R("Reiswaffeln mit Erdnussbutter und Banane","S","Am",5,1,"Kohlenhydrate und Fett für das Training.",[["Reiswaffel", 40], ["Erdnussbutter", 30], ["Banane", 100]],["Reiswaffeln mit Erdnussbutter bestreichen.", "Banane in Scheiben darauflegen."]);
+R("Griechischer Joghurt mit Haferflocken und Mandeln","S","Me",5,1,"Cremig und sättigend.",[["Griechischer Joghurt", 250], ["Haferflocken", 40], ["Mandeln", 25], ["Honig", 10]],["Joghurt in eine Schale geben.", "Haferflocken und gehackte Mandeln darüber streuen, mit Honig beträufeln."]);
+R("Whey-Shake mit Milch und Banane","S","Am",3,1,"Nach dem Training, schnell getrunken.",[["Milch 1,5 %", 400], ["Proteinpulver (Whey)", 30], ["Banane", 100]],["Alles im Mixer fein pürieren und trinken."]);
+R("Thunfisch-Brot mit Gurke","S","De",5,1,"Herzhafter Snack mit viel Eiweiß.",[["Vollkornbrot", 120], ["Thunfisch (Dose, im eigenen Saft)", 120], ["Gurke", 80], ["Tomate", 80]],["Thunfisch abtropfen lassen.", "Brot belegen und mit Gurke und Tomate toppen."]);
+R("Hüttenkäse mit Trauben und Mandeln","S","De",3,1,"Frisch, süß und eiweißreich.",[["Hüttenkäse", 250], ["Weintrauben", 100], ["Mandeln", 25]],["Hüttenkäse in eine Schale geben.", "Trauben und Mandeln dazugeben."]);
+R("Avocado-Ei-Brot","S","Am",8,1,"Gesunde Fette und Eiweiß.",[["Vollkornbrot", 100], ["Ei (Hühnerei)", 120], ["Avocado", 80]],["Eier 8 Minuten kochen.", "Brot mit Avocado bestreichen, Ei in Scheiben darauflegen."]);
+LREC.forEach(function(r){if(r.n&&!r.gain&&/Muskel|Whey|Proteinpulver/.test(JSON.stringify(r.ing)))r.gain=1});
 LREC.forEach(function(r){r.fl=lflags(r);var t=0,ps=0,sc=0,w=0;r.ing.forEach(function(i){var x=LING[i[0]];t+=i[1]*x.k/100;ps+=i[1]*x.p/100;sc+=x.s*i[1];w+=i[1]});r.k0=t;r.p0=ps;r.sc=sc/w});
 var LSYN={pilz:'champignons',käse:'gouda mozzarella feta halloumi parmesan hüttenkäse',wurst:'schinken',nuss:'nüsse mandeln walnüsse haselnüsse erdnüsse',nüsse:'mandeln walnüsse haselnüsse erdnüsse',kartoffel:'kartoffeln',reis:'reis',nudel:'nudeln spaghetti',pasta:'nudeln spaghetti',huhn:'hähnchen',hühnchen:'hähnchen',geflügel:'hähnchen putenbrust',rind:'rindfleisch',schwein:'schweinefilet schinken',joghurt:'joghurt skyr',milch:'milch',ei:'ei (',eier:'ei (',kohl:'rotkohl blumenkohl brokkoli',bohne:'kidneybohnen',süßkartoffel:'süßkartoffel',obst:'apfel banane orange weintrauben beeren'};
 function ltok(txt){return String(txt||'').toLowerCase().split(/[,;\n]| und |\//).map(function(x){return x.trim()}).filter(function(x){return x.length>=2})}
@@ -5574,6 +5666,7 @@ function lbonus(r,p,used){
   if(eff==='quick')b+=r.ef>1?6:0;else if(eff==='long')b-=r.ef>1?3:0;else b+=r.ef>2?3:0;
   if(fo.indexOf('Ballaststoffe')>-1||fo.indexOf('Vitamine')>-1)b-=(r.sc||0)*0.08;
   if(used[r.n]!==undefined)b+=used[r.n]>0?14:0;
+  if(p.goal==='gain'){b-=(r.p0/Math.max(r.k0,1))*110;if(r.k0>=550)b-=3;if(r.k0<260&&r.sl!=='S')b+=10}
   return b;
 }
 function lgenDay(){
@@ -5606,7 +5699,7 @@ function lgenDay(){
     var tk=dishes.reduce(function(a,d){return a+d.kcal},0),f=c.target/tk;
     if(Math.abs(f-1)>.015){dishes=dishes.map(function(d){var r=LREC.filter(function(x){return x.n===d.name})[0];return ldish(r,d.slot,d.kcal*f)});tk=dishes.reduce(function(a,d){return a+d.kcal},0)}
     var tp=dishes.reduce(function(a,d){return a+d.protein},0),tc=dishes.reduce(function(a,d){return a+d.carbs},0),tf=dishes.reduce(function(a,d){return a+d.fett},0);
-    cost+=Math.abs(tp-c.P)*1.2+Math.abs(tc-c.C)*.15+Math.abs(tf-c.F)*.25+Math.abs(tk-c.target)*.1;
+    cost+=Math.abs(tp-c.P)*(p.goal==='gain'?2.4:1.2)+Math.abs(tc-c.C)*.15+Math.abs(tf-c.F)*.25+Math.abs(tk-c.target)*.1;
     if(cost<bc){bc=cost;best=dishes}
   }
   if(!best)return {err:'Ich konnte keinen passenden Tag zusammenstellen. Versuche es noch einmal.'};
@@ -5990,7 +6083,7 @@ function botMealIn(text){
   return guessMeal();
 }
 function botLogFood(text){
-  var l=botNorm(text),meal=botMealIn(text),segs=l.split(/,| und | sowie | plus | \+ | & | dazu | danach | mit /),logged=[],unknown=[],est=[];
+  var l=botNorm(text),meal=botMealIn(text),segs=l.split(/,| und | sowie | plus | \+ | & | dazu | danach | mit /),logged=[],unknown=[],est=[],replaced=[];
   segs.forEach(function(sg){
     var r=botParseSeg(sg);if(!r)return;
     if(r.unknown){unknown.push(r.unknown);return}
@@ -6004,7 +6097,7 @@ function botLogFood(text){
       else{ml=d.sz[1]||250;est.push(d.n)}
       addDrink(d,ml);logged.push(d.n+' ('+ml+' ml, '+fmt(d.k*ml/100)+' kcal)');return;
     }
-    var f=mt.food,g;
+    var f=mt.food,g,estN0=est.length;
     if(mt.drink&&f){var ml2=(u&&u[0]==='ml')?Math.round((q||1)*u[1]):Math.round((q||1)*330);addItem('Getränke',f.name,ml2,f.k*ml2/100,f.p*ml2/100,f.c*ml2/100,f.f*ml2/100,SCORE[f.name],{kind:'drink',ml:ml2,hy:.9});logged.push(f.name+' ('+ml2+' ml)');return}
     if(u&&u[0]==='g')g=Math.round((q||1)*u[1]);
     else if(u&&u[0]==='ml')g=Math.round((q||1)*u[1]);
@@ -6013,10 +6106,22 @@ function botLogFood(text){
     else if(q){g=Math.round(q*(/gekocht|gegart/.test(f.name)?150:100));est.push(f.name)}
     else{g=f.u?f.u:(/gekocht|gegart/.test(f.name)?150:100);est.push(f.name)}
     g=clamp(g,1,3000);
-    addItem(meal,f.name,g,f.k*g/100,f.p*g/100,f.c*g/100,f.f*g/100,foodScore(f));
+    var wasEst=est.length>estN0;
+    if(!wasEst&&botDropEst(f.name))replaced.push(f.name);
+    addItem(meal,f.name,g,f.k*g/100,f.p*g/100,f.c*g/100,f.f*g/100,foodScore(f),wasEst?{bot:'est'}:null);
     logged.push(f.name+' ('+g+' g, '+fmt(f.k*g/100)+' kcal)');
   });
-  return {logged:logged,unknown:unknown,est:est,meal:meal};
+  return {logged:logged,unknown:unknown,est:est,meal:meal,replaced:replaced};
+}
+function botDropEst(name){
+  var arr=S.log[keyOf(today(0))]||[],now=Date.now(),n0=arr.length;
+  S.log[keyOf(today(0))]=arr.filter(function(i){return !(i.bot==='est'&&i.name===name&&now-(i.ts||0)<45*60000)});
+  return S.log[keyOf(today(0))].length<n0;
+}
+function botFixLast(g){
+  var arr=S.log[keyOf(today(0))]||[],now=Date.now();
+  for(var i=arr.length-1;i>=0;i--){var it=arr[i];if(it.bot==='est'&&now-(it.ts||0)<45*60000&&it.g>0){var f=g/it.g;it.k*=f;it.p*=f;it.c*=f;it.f*=f;it.g=g;delete it.bot;save();return it}}
+  return null;
 }
 function botSayNum(x){return fmt(Math.round(x))}
 function botFindFoodIn(text){var w=botNorm(text).split(' ').filter(function(x){return !BOT_STOP[x]});var m=botMatchFood(w.filter(function(x){return x.length>1}));return m}
@@ -6125,7 +6230,7 @@ function botAnswer(text){
   st=dayStats(dayLog());
   if(/^(hallo|hi|hey|moin|servus|guten (morgen|tag|abend)|na)\b/.test(l)&&l.split(' ').length<4)return {antwort:'Hallo! Sag mir einfach, was du gegessen oder getrunken hast, zum Beispiel „2 Eier und eine Scheibe Vollkornbrot". Ich trage es für dich ein.'};
   if(/^(danke|dankeschön|super|top|ok|okay|cool|alles klar)\b/.test(l)&&l.split(' ').length<4)return {antwort:'Gern! Sag Bescheid, wenn du noch etwas gegessen hast.'};
-  if(/hilfe|was kannst du|was kann ich dich|wie funktioniert/.test(l))return {antwort:'Das kann ich:\n• Essen und Getränke eintragen: „Ich hatte 2 Eier und 200 g Skyr" oder „einen Kaffee"\n• Fragen beantworten: „Wie viel Protein fehlt mir noch?", „Wie viele Kalorien habe ich noch?", „Wie viel habe ich getrunken?"\n• Essen bewerten: „Wie gesund ist Pizza?", „Kalorien von Banane"\n• Gerichte vorschlagen mit Rezept und Tipps: „Ich brauche ein veganes Abendessen“, „glutenfreies Frühstück“, „schnelles Mittagessen mit Tofu“, „Abendessen für 5 Personen ohne Fleisch“ (mit Mengen für alle), „noch eins“ für ein anderes\n• Tipps: „Gib mir Tipps“, „Tipps für Veganer“\n• Überblick: „Was habe ich heute gegessen?"\n• Rückgängig: „letzten Eintrag löschen"\nIch bin kein KI-Chat, sondern ein fester Assistent mit vorgegebenen Antworten.'};
+  if(/hilfe|was kannst du|was kann ich dich|wie funktioniert/.test(l))return {antwort:'Das kann ich:\n• Essen und Getränke eintragen: „Ich hatte 2 Eier und 200 g Skyr" oder „einen Kaffee"\n• Fragen beantworten: „Wie viel Protein fehlt mir noch?", „Wie viele Kalorien habe ich noch?", „Wie viel habe ich getrunken?"\n• Essen bewerten: „Wie gesund ist Pizza?", „Kalorien von Banane"\n• Gerichte vorschlagen mit Rezept und Tipps: „Ich brauche ein veganes Abendessen“, „glutenfreies Frühstück“, „schnelles Mittagessen mit Tofu“, „Abendessen für 5 Personen ohne Fleisch“ (mit Mengen für alle), „noch eins“ für ein anderes\n• Tipps: „Gib mir Tipps“, „Tipps für Veganer“\n• Überblick: „Was habe ich heute gegessen?"\n• Rückgängig: „letzten Eintrag löschen"\n• Einkaufen: „Wo ist der günstigste Supermarkt in der Nähe?“ (nutzt kurz deinen Standort)\n• Menge verbessern: erst „Lachs“, dann „Lachs 150 g“, die Schätzung wird ersetzt\nIch bin kein KI-Chat, sondern ein fester Assistent mit vorgegebenen Antworten.'};
   if(/(rückgängig|letzten eintrag|letztes löschen|lösche.*(letzt|eintrag)|falsch eingetragen)/.test(l)){
     var key=keyOf(today(0)),arr=S.log[key]||[];if(!arr.length)return {antwort:'Heute ist noch nichts eingetragen, da gibt es nichts zu löschen.'};
     var last=arr.pop();save();return {antwort:'Okay, ich habe „'+last.name+'" wieder entfernt.'};
@@ -6157,10 +6262,14 @@ function botAnswer(text){
     }
     return {antwort:'Dieses Essen kenne ich noch nicht. Du kannst es über „Eintragen" suchen oder ein eigenes Rezept speichern.'};
   }
+  var gm=l.match(/^(?:nur |es waren |waren |das waren |war )?(\d+(?:\.\d+)?)\s*(g|gr|gramm|ml)$/);
+  if(gm){var fx=botFixLast(Math.round(parseFloat(gm[1])));if(fx)return {antwort:'Okay, „'+fx.name+'“ ist jetzt '+fx.g+' g, das sind '+botSayNum(fx.k)+' kcal. Die Schätzung ist ersetzt.'}}
+  if(/(supermarkt|discounter|einkaufen|einkauf|kaufen|besorgen|bekomme ich|bekommt man|gibt es .*(billig|günstig))/.test(l)&&/(wo|nähe|nächst|günstig|billig|laden|supermarkt|discounter)/.test(l)&&!/(gegessen|hatte|habe ich)/.test(l)){var itx=botFindFoodIn(text);return {antwort:'Ich suche einen günstigen Supermarkt in deiner Nähe …',shop:{item:itx&&itx.food?itx.food.name:(itx&&itx.drink?itx.drink.n:'')}}}
   res=botLogFood(text);
   if(res.logged.length){
     var a='Eingetragen als '+res.meal+': '+res.logged.join(', ')+'.';
-    if(res.est.length)a+=' Die Menge habe ich geschätzt. Schreib sie dazu (zum Beispiel „150 g"), wenn du es genau willst.';
+    if(res.replaced.length)a+=' Die frühere Schätzung für '+res.replaced.join(', ')+' habe ich ersetzt, es zählt nur die neue Menge.';
+    if(res.est.length)a+=' Die Menge habe ich geschätzt. Schreib sie noch einmal mit Gramm dazu (zum Beispiel „Lachs 150 g"), dann ersetze ich die Schätzung.';
     if(res.unknown.length)a+=' Nicht erkannt: '+res.unknown.join(', ')+'.';
     var st2=dayStats(dayLog());a+=' Heute zusammen: '+botSayNum(st2.k)+' von '+botSayNum(c.target)+' kcal.';
     return {antwort:a};
@@ -6185,7 +6294,7 @@ function goStep(n){S.step=n;save();render();window.scrollTo(0,0)}
 function onClick(e){
   var t=e.target.closest('[data-act]');if(!t)return;var a=t.dataset.act,sh=S.sheet;
   switch(a){
-  case 'pick':setVal(t.dataset.k,t.dataset.v);save();render();break;
+  case 'pick':setVal(t.dataset.k,t.dataset.v);if(t.dataset.k==='goal'&&t.dataset.v==='gain'&&+S.p.perMonth===2)S.p.perMonth=1;save();render();break;
   case 'toggle':var l=S.p[t.dataset.k],i=l.indexOf(t.dataset.v);i>-1?l.splice(i,1):l.push(t.dataset.v);save();render();break;
   case 'start':TRK.wiz=undefined;S.view='wizard';goStep(0);break;
   case 'tab':if(t.dataset.v==='eagle'){if(S.view!=='eagle')S.prev=S.view;S.view='eagle'}else S.view=S.done?'result':(S.prev==='wizard'?'wizard':'welcome');render();window.scrollTo(0,0);break;
@@ -6207,6 +6316,7 @@ function onClick(e){
   case 'egrand':egFxSet('all');randomEagle();save();render();break;
   case 'next':
     if(!STEPS[S.step].ok())return;
+    if(num(S.p.height)>0&&num(S.p.height)<3)S.p.height=String(hgtCm(S.p.height));
     if(S.p.goal==='keep'){S.p.tw=S.p.weight;S.p.perMonth=0}
     if(stepNext()<STEPS.length)hopGo(function(){goStep(stepNext())});
     else{S.view='loading';S.day=keyOf(today(0));var sig=JSON.stringify(S.p);try{if(localStorage.getItem(KEY+'.sig')!==sig)S.plans={};localStorage.setItem(KEY+'.sig',sig)}catch(e2){}save();render();window.scrollTo(0,0)}
@@ -6288,7 +6398,8 @@ function onClick(e){
   case 'sheetback':
     if(!sh)break;
     if(sh.view==='weight')sh.view=sh.from||'search';
-    else if(sh.view==='custom')sh.view='search';
+    else if(sh.view==='custom')sh.view=(sh.photo||localMode(sh))?'search':'online';
+    else if(sh.view==='online')sh.view='menu';
     else if(sh.view==='search'&&sh.swapId){sh.swapId=null;sh.view='itemedit'}
     else if(sh.view==='search')sh.view=sh.ing?'recipenew':'menu';
     else if(sh.view==='recipenew'){sh.ing=false;sh.view='recipes'}
@@ -6297,7 +6408,7 @@ function onClick(e){
     renderSheet();break;
   case 'goview':if(sh){sh.view=t.dataset.v;renderSheet()}break;
   case 'mealsel':if(sh){sh.mealSel=t.dataset.v;document.querySelectorAll('[data-act=mealsel]').forEach(function(b){b.classList.toggle('on',b.dataset.v===sh.mealSel)})}break;
-  case 'pickfood':if(sh){sh.from=sh.view==='menu'?'menu':'search';sh.food=FOODS.filter(function(f){return f.name===t.dataset.n})[0];sh.g=sh.food.u?sh.food.u:100;if(sh.photo&&!sh.ing){sh.res={food:sh.food,g:sh.g,src:'pick'};renderSheet();rgPills();break}sh.view='weight';renderSheet()}break;
+  case 'pickfood':if(sh){sh.from=sh.view;sh.food=FOODS.filter(function(f){return f.name===t.dataset.n})[0];sh.g=sh.food.u?sh.food.u:100;if(sh.photo&&!sh.ing){sh.res={food:sh.food,g:sh.g,src:'pick'};renderSheet();rgPills();break}sh.view='weight';renderSheet()}break;
   case 'aiest':aiEstimate();break;
   case 'setg':if(sh){sh.g=t.dataset.g;var gi=document.getElementById('g');if(gi)gi.value=sh.g;updateWprev()}break;
   case 'addfood':
@@ -6318,10 +6429,9 @@ function onClick(e){
     sh.basket.push({meal:sh.mealSel,name:rc.name+(po2!==1?' ('+po2.toLocaleString('de-DE')+' Portionen)':''),g:null,k:rc.per.k*po2,p:rc.per.p*po2,c:rc.per.c*po2,f:rc.per.f*po2,s:rc.score});toast('In der Auswahl: '+rc.name);sh.view='menu';renderSheet();break;
   case 'phclear':if(sh){sh.photo=null;sh.pf=undefined;sh.pfFor=null;sh.sug=null;sh.pft=null;sh.ask=false;sh.res=null;renderSheet()}break;
   case 'sugpick':if(sh&&sh.sug&&sh.sug[+t.dataset.i]){var sf=sh.sug[+t.dataset.i].f;sh.res={food:sf,g:sf.u?sf.u:100,src:'pick'};renderSheet();rgPills()}break;
-  case 'pickdish':if(sh&&RGD[+t.dataset.i]){sh.food=RGD[+t.dataset.i];sh.g=sh.food.u?sh.food.u:100;if(sh.photo&&!sh.ing){sh.res={food:sh.food,g:sh.g,src:'pick'};renderSheet();rgPills();break}sh.view='weight';renderSheet()}break;
-  case 'offsearch':if(sh){var oq=(sh.q||'').trim();if(oq.length<2)break;sh.off={q:oq,st:'busy',list:[]};var re0=document.getElementById('results');if(re0)re0.innerHTML=foodRows(sh.q);
-    offSearch(oq).then(function(l){if(S.sheet!==sh||!sh.off||sh.off.q!==oq)return;sh.off.st='ok';sh.off.list=l;var r1=document.getElementById('results');if(r1)r1.innerHTML=foodRows(sh.q)}).catch(function(){if(S.sheet!==sh||!sh.off)return;sh.off.st='err';var r2=document.getElementById('results');if(r2)r2.innerHTML=foodRows(sh.q)})}break;
-  case 'pickoff':if(sh&&sh.off&&sh.off.list[+t.dataset.i]){sh.food=sh.off.list[+t.dataset.i];sh.g=sh.food.u?sh.food.u:100;if(sh.photo&&!sh.ing){sh.res={food:sh.food,g:sh.g,src:'pick'};renderSheet();rgPills();break}sh.view='weight';renderSheet()}break;
+  case 'pickdish':if(sh&&RGD[+t.dataset.i]){sh.from=sh.view;sh.food=RGD[+t.dataset.i];sh.g=sh.food.u?sh.food.u:100;if(sh.photo&&!sh.ing){sh.res={food:sh.food,g:sh.g,src:'pick'};renderSheet();rgPills();break}sh.view='weight';renderSheet()}break;
+  case 'offsearch':if(sh)offRun(sh);break;
+  case 'pickoff':if(sh&&sh.off&&sh.off.list[+t.dataset.i]){sh.from=sh.view;sh.food=sh.off.list[+t.dataset.i];sh.g=sh.food.u?sh.food.u:100;if(sh.photo&&!sh.ing){sh.res={food:sh.food,g:sh.g,src:'pick'};renderSheet();rgPills();break}sh.view='weight';renderSheet()}break;
   case 'sugcat':if(sh&&sh.pft){sh.cats=sh.cats||[];var ci=sh.cats.indexOf(t.dataset.k);ci>-1?sh.cats.splice(ci,1):sh.cats.push(t.dataset.k);sh.sug=rgRank(sh.pft,sh.cats);renderSheet()}break;
   case 'sugnone':if(sh){sh.ask=true;renderSheet();var qi=document.getElementById('q');if(qi){qi.focus();try{qi.scrollIntoView({block:'center'})}catch(e5){}}}break;
   case 'cfnew':if(sh){sh.cf={n:(sh.q||'').trim(),k:'',p:'',c:'',f:'',u:''};sh.view='custom';renderSheet()}break;
@@ -6381,7 +6491,7 @@ function onInput(e){
   if(t.id==='egname'){S.eagle.name=t.value.slice(0,14);save();return}
   if(t.id==='pcode'&&S.sheet){S.sheet.pcode=t.value;if(S.sheet.pmsg){S.sheet.pmsg='';var nn=document.querySelector('#sheet .note');if(nn)nn.remove()}return}
   if(t.id==='ml'&&S.sheet){S.sheet.ml=t.value;updateWprev();return}
-  if(t.id==='q'&&S.sheet){S.sheet.q=t.value;var r=document.getElementById('results');if(r)r.innerHTML=foodRows(t.value);return}
+  if(t.id==='q'&&S.sheet){S.sheet.q=t.value;var r=document.getElementById('results');if(r)r.innerHTML=foodRows(t.value);if(!localMode(S.sheet)){var shq=S.sheet;clearTimeout(window._offT);window._offT=setTimeout(function(){if(S.sheet===shq&&!localMode(shq)&&shq.q.trim().length>=3&&!(shq.off&&shq.off.q===shq.q.trim()))offRun(shq)},800)}return}
   if(t.id==='g'&&S.sheet){S.sheet.g=t.value;updateWprev();return}
   if(t.id==='por'&&S.sheet){S.sheet.por=t.value;updateWprev();return}
   if(t.dataset&&t.dataset.ie&&S.sheet&&S.sheet.it){var ii=S.sheet.it,ig=ii.g>0?(num(t.value)||0)/ii.g:1,pe=document.getElementById('iepre');S.sheet.ieg=t.value;if(pe)pe.innerHTML='<span class="pill k">'+fmt(ii.k*ig)+' kcal</span><span class="pill p">'+fmt1(ii.p*ig)+' g Eiweiß</span><span class="pill c">'+fmt1(ii.c*ig)+' g Kohlenhydrate</span><span class="pill f">'+fmt1(ii.f*ig)+' g Fett</span>';return}
@@ -6392,6 +6502,7 @@ function onInput(e){
   var k=t.dataset&&t.dataset.key;if(!k||S.view!=='wizard')return;
   if(k==='perMonth'){S.p.perMonth=+t.value;updateAmount()}else S.p[k]=t.value;
   if(k==='tw'){var tn=document.getElementById('twNote');if(tn)tn.innerHTML=twNote()}
+  if(k==='weight'||k==='height'){var wn=document.getElementById('whNote');if(wn)wn.innerHTML=whNote()}
   if(k==='age'){var an=document.getElementById('ageNote');if(an)an.innerHTML=ageNote()}
   updateNav();save();
 }
@@ -6464,3 +6575,6 @@ rgLoad();load();applyTheme();render();
 })();
 
 </script>
+<script>if("serviceWorker"in navigator&&location.protocol.indexOf("http")===0){navigator.serviceWorker.register("sw.js").catch(function(){})}</script>
+</body>
+</html>
