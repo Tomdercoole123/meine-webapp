@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-iFShu2aw97PObTjp9VBXaz7Lf4alVRmfy2XX3FJO+9w=' 'sha256-5EDkrP4B+TQo0pkHY5cowZkeQfPLfyttLltlc2oGzXc='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob: data:; connect-src 'self' https:; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-2FzN1DAKlpr0Un6bJ+EnOzxY4cCvU037K67FBBH8uQw=' 'sha256-5EDkrP4B+TQo0pkHY5cowZkeQfPLfyttLltlc2oGzXc='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob: data:; connect-src 'self' https:; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#06100B">
@@ -1282,6 +1282,29 @@ html,body{overflow-x:clip}
 .qt5 button{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--surface2);border:1.5px solid transparent;border-radius:18px;padding:16px 8px;min-height:112px;font:inherit;color:inherit;cursor:pointer;text-align:center}
 .qt5 button:last-child{grid-column:1/-1;min-height:92px}
 .qt5 button:hover{border-color:var(--accent)}.qt5 svg{width:30px;height:30px;color:var(--accent)}.qt5 b{font-size:1rem}.qt5 small{font-size:.78rem;opacity:.75}
+
+.smode{display:flex;gap:8px;margin:2px 0 12px;flex-wrap:wrap}.offgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.offgrid .chip{justify-content:center;text-align:center;padding:12px 4px;min-height:48px}
+
+.acc{border:1px solid var(--line);border-radius:16px;margin:10px 0;background:var(--surface)}.acc-h{display:flex;justify-content:space-between;align-items:center;width:100%;padding:14px 16px;background:none;border:0;font:inherit;color:inherit;cursor:pointer;text-align:left}.acc-h span{font-size:1.4rem;line-height:1;color:var(--accent)}.acc-b{padding:0 14px 14px}
+.notifcard{margin:12px 0;border:1.5px solid var(--accent)}
+
+/* v61b: dezente Verfeinerung */
+.card{box-shadow:0 1px 2px rgba(0,0,0,.05),0 10px 26px -16px rgba(0,0,0,.28);border-radius:24px}
+.pg-h h1{font-size:1.9rem;letter-spacing:-.02em}
+.pg-h{margin:4px 0 16px}
+.seg{box-shadow:inset 0 1px 2px rgba(0,0,0,.04)}
+.seg button{border-radius:12px}
+.btn{box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.btn:active,.opt:active{transform:scale(.98)}
+.btn.pri{box-shadow:0 10px 26px -8px rgba(55,185,207,.45)}
+.opt{box-shadow:0 1px 2px rgba(0,0,0,.04);border-radius:18px}
+.opt.sel{box-shadow:0 8px 22px -12px rgba(55,185,207,.5)}
+.tabbar{box-shadow:0 14px 34px -10px rgba(0,0,0,.4);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.tabbar button{font-size:.74rem}
+.tabbar button.on{box-shadow:inset 0 0 0 1px rgba(79,209,165,.25)}
+.acc{box-shadow:0 1px 2px rgba(0,0,0,.04);border-radius:18px}
+.ib{box-shadow:0 1px 2px rgba(0,0,0,.05)}
+#app>section,#app>.card{margin-bottom:12px}
 </style>
 
 <div id="app"></div>
@@ -1409,7 +1432,12 @@ function calc(p,perMonth){
   var P=2*w;
   var F=0.27*t/9;F=Math.max(0,Math.min(F,(t-4*P)/9));
   var C=Math.max(0,(t-4*P-9*F)/4);
-  return {bf:bf,lbm:lbm,bmr:bmr,tdee:tdee,target:t,delta:t-tdee,P:P,F:F,C:C,minor:minor,limited:limited,actual:Math.abs(t-tdee)*30/7700,loss:loss,keep:keep};
+  var res={bf:bf,lbm:lbm,bmr:bmr,tdee:tdee,target:t,delta:t-tdee,P:P,F:F,C:C,minor:minor,limited:limited,actual:Math.abs(t-tdee)*30/7700,loss:loss,keep:keep};
+  if(p.ovK>0){res.target=p.ovK;res.delta=p.ovK-tdee;res.actual=Math.abs(p.ovK-tdee)*30/7700;res.custom=true}
+  if(p.ovP>0){res.P=p.ovP;res.custom=true}
+  if(p.ovC>0){res.C=p.ovC;res.custom=true}
+  if(p.ovF>0){res.F=p.ovF;res.custom=true}
+  return res;
 }
 function rating(loss,k){
   if(loss) return k<=1?'Sanft und gut durchzuhalten':k<=2.5?'Moderat':k<=4?'Ambitioniert':'Sehr aggressiv';
@@ -1896,7 +1924,11 @@ var STEPS=[
  {t:function(){return 'Wie möchtest du deinen Fortschritt verfolgen?'},s:'Such dir einfach aus, was zu dir passt, du kannst auch mehrere wählen.',
   b:function(){return multi('track',TRACK)},ok:function(){return true}},
  {t:function(){return 'Wie oft möchtest du ein Foto von deinem Körper machen?'},s:'Aus deinen Fotos entsteht später ein kurzes Video deiner Veränderung, sobald du dein Zielgewicht erreichst. Am besten immer am gleichen Ort, im gleichen Licht und in gleicher Haltung. Die Fotos bleiben nur auf deinem Gerät.',
-  b:function(){return pfOptions()},ok:function(){return !!S.p.pfreq}}
+  b:function(){return pfOptions()},ok:function(){return !!S.p.pfreq}} ,
+ {t:function(){return 'Möchtest du Erinnerungen, '+notifName()+'?'},s:'Ich erinnere dich freundlich ans Essen und ans Training, zum Beispiel morgens, mittags und abends. Nie aufdringlich und nie beleidigend. Du kannst das jederzeit in den Einstellungen ändern.',
+  b:function(){return '<div class="grid2">'+opt('notif','ja','Ja, gerne','Freundliche Erinnerungen')+opt('notif','nein','Nein danke','Keine Nachrichten')+'</div>'},ok:function(){return !!S.p.notif}} ,
+ {t:function(){return 'Darf die App deinen Standort nutzen?'},s:'Damit der Assistent dir den günstigsten Supermarkt in deiner Nähe zeigen kann. Der Standort wird nur für die Suche benutzt und nicht gespeichert. Du kannst das jederzeit in den Einstellungen ändern.',
+  b:function(){return '<div class="grid2">'+opt('geo','ja','Ja, erlauben','Supermarkt in der Nähe')+opt('geo','nein','Nein danke','Ohne Standort')+'</div>'},ok:function(){return !!S.p.geo}}
 ];
 
 /* ---------- Rendering ---------- */
@@ -1989,7 +2021,7 @@ function renderResult(){
   }).join('');
   var sb=st.score==null?null:band(st.score),wk=newWeek();
   app.innerHTML=topbar({gear:true})+
-  '<div class="pg-h"><div><h1>Heute</h1><small>'+new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'})+'</small></div></div>'+
+  '<div class="pg-h"><div><h1>Heute</h1><small>'+new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'})+'</small></div></div>'+notifCard()+geoCard()+
   '<div class="dayq"><span class="dql" aria-hidden="true">'+I.leaf+'</span><p>'+esc(dayQuote())+'</p></div>'+streakCard()+
   '<section class="card ringcard"><div class="ringbox" style="width:190px;height:190px">'+ring(190,15,sm.k/c.target,over?'var(--over)':'grad')+'<div class="rc'+(over?' over':'')+'"><small>'+(over?'über dem Ziel':'noch übrig')+'</small><b>'+fmt(Math.abs(left))+'</b><small>kcal</small><span>Gegessen '+fmt(sm.k)+' · Ziel '+fmt(c.target)+'</span></div></div>'+
   '<div class="minis">'+mini('Protein',sm.p,c.P,'var(--protein)')+mini('Fett',sm.f,c.F,'var(--fat)')+mini('Carbs',sm.c,c.C,'var(--carb)')+'</div>'+
@@ -2206,14 +2238,16 @@ function weekHtml(k,isNew){
 function renderHistory(){
   var hv=S.hview||'food';if(hv!=='food'){renderHistExtra(hv);return}
   var nw=newWeek(),ks=weekKeys().filter(function(k){return weekData(k).logged.length||k===keyOf(weekStart(today(0)))});
+  S.hist.weeksOpen=(S.hist.open==='weeks');S.hist.table=(S.hist.open==='table');
   if(nw&&S.hist.weeksOpen){S.hist.opened[nw]=S.hist.opened[nw]!==undefined?S.hist.opened[nw]:true}
+  var op=S.hist.open||null;
+  var acc=function(id,title,body){var on=op===id;return '<div class="acc'+(on?' on':'')+'"><button type="button" class="acc-h" data-act="hopen" data-v="'+id+'" aria-expanded="'+on+'"><b>'+title+'</b><span aria-hidden="true">'+(on?'−':'+')+'</span></button>'+(on?'<div class="acc-b">'+body+'</div>':'')+'</div>'};
   var seg=function(act,list,cur){return '<div class="seg pad" role="tablist">'+list.map(function(x){return '<button type="button" role="tab" class="'+(String(x[0])===String(cur)?'on':'')+'" data-act="'+act+'" data-v="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</div>'};
-  app.innerHTML=topbar({gear:true})+'<div class="pg-h"><div><h1>Verlauf</h1><small>Was du in den letzten 90 Tagen gegessen hast</small></div></div>'+histSeg()+
+  app.innerHTML=topbar({gear:true})+'<div class="pg-h"><div><h1>Verlauf</h1><small>Dein Essen auf einen Blick</small></div></div>'+histSeg()+
    seg('hmetric',[['k','Kalorien'],['p','Protein'],['s','Score'],['w','Trinken']],S.hist.metric)+
    seg('hrange',[[7,'7 Tage'],[30,'30 Tage'],[90,'90 Tage']],S.hist.range)+
-   histSummary()+'<h2 class="ch-t">'+HM[S.hist.metric].n+' pro Tag</h2><p class="hint ch-h">'+HEXPL[S.hist.metric]+' Tippe oder fahre über einen Balken für Details.</p>'+chartHtml()+'<h2 class="ch-t" style="margin-top:20px">Zusammenfassung</h2>'+histStats()+
-   '<button type="button" class="btn full" data-act="htable">'+(S.hist.table?'Tabelle ausblenden':'Als Tabelle anzeigen')+'</button>'+(S.hist.table?'<div style="margin-top:12px">'+tableHtml()+'</div>':'')+
-   '<section class="sec"><h2>Wochenrückblick</h2>'+(S.hist.weeksOpen?'<p class="sub">Jede Woche bekommt einen Rückblick mit allen Mahlzeiten.</p>'+(ks.length?ks.map(function(k){return weekHtml(k,k===nw)}).join(''):'<div class="empty"><h3>Noch nichts da</h3><p>Trag ein paar Mahlzeiten ein, dann erscheint hier dein erster Rückblick.</p></div>')+'<button type="button" class="btn full" style="margin-top:10px" data-act="weeksToggle">Wochenrückblick ausblenden</button>':'<button type="button" class="btn full" data-act="weeksToggle">Wochenrückblick anzeigen</button>')+'</section>'+
+   histSummary()+'<h2 class="ch-t">'+HM[S.hist.metric].n+' pro Tag</h2><p class="hint ch-h">'+HEXPL[S.hist.metric]+' Tippe oder fahre über einen Balken für Details.</p>'+chartHtml()+
+   acc('stats','Alle Zahlen',histStats())+acc('table','Als Tabelle',tableHtml())+acc('weeks','Wochenrückblick',(ks.length?ks.map(function(k){return weekHtml(k,k===nw)}).join(''):'<div class="empty"><h3>Noch nichts da</h3><p>Trag ein paar Mahlzeiten ein, dann erscheint hier dein erster Rückblick.</p></div>'))+
    '<p class="foot">Der Score ist eine Schätzung von 1 bis 100 (100 ist am besten). Ziele zählen so, wie sie am jeweiligen Tag galten.</p>';
   if(nw&&S.hist.weeksOpen){S.seenWeek=nw;save()}
   hideTip();
@@ -2232,7 +2266,7 @@ async function weekAI(k){
 }
 
 /* ---------- Essens-KI: nur Essen, Trinken, Ernährung ---------- */
-var AI_SUGG=['Ich hatte 2 Eier und eine Scheibe Vollkornbrot','Wo ist der günstigste Supermarkt in meiner Nähe?','Wie gesund ist Pizza?','Was kann ich heute Abend essen?','Was ersetzt Milch in meinem Frühstück?','Wie viel Protein fehlt mir noch?'];
+var AI_SUGG=['Ich hatte 2 Eier und eine Scheibe Vollkornbrot','Wo ist der günstigste Supermarkt in meiner Nähe?','Meine Schultern hängen nach vorne, was hilft?','Wie baue ich gesund Muskeln auf?','Wie gesund ist Pizza?','Was kann ich heute Abend essen?','Was ersetzt Milch in meinem Frühstück?','Wie viel Protein fehlt mir noch?'];
 function aiInstr(){
   var c=calc(S.p,S.p.perMonth),st=dayStats(dayLog()),names=(SLOTS[S.p.meals]||SLOTS[3]),k7=histKeys(7).filter(function(k){return (S.log[k]||[]).length});
   var a7=avg(k7.map(function(k){return dayVal('k',k)})),s7=avg(k7.map(function(k){return dayVal('s',k)}));
@@ -2247,25 +2281,30 @@ function lockedAI(){
    '<div class="card lockcard"><span class="lockbadge">'+I.lock+'Premium</span><h3>Der Essens-Assistent gehört zu Premium</h3><p class="sub" style="margin:8px 0 14px">Erzähl ihr, was du gegessen oder getrunken hast, und sie trägt es für dich ein. Du kannst sie auch nach Rezepten, Nährwerten und dem Score eines Essens fragen.</p><button type="button" class="btn pri full" style="flex:none" data-act="openpremium">Premium ansehen ('+PREMIUM_PRICE+')</button></div>';
 }
 function renderAI(){
+  AIST=true;
   if(!S.premium){lockedAI();return}
   app.innerHTML=topbar({gear:true})+
-   '<div class="aihead"><div class="av">'+I.spark+'</div><div><h1>Essens-Assistent</h1><small>Nur für Essen, Trinken und Ernährung. Sie trägt für dich ein, was du gegessen hast.</small></div></div>'+
+   '<div class="aihead"><div class="av">'+I.spark+'</div><div><h1>Essens-Assistent</h1><small>Für Essen, Ernährung und Training. Sie trägt für dich ein, was du gegessen hast.</small></div></div>'+
    '<div class="log page" id="ailog"></div><div class="prev" id="aichips"></div>'+
    '<div class="chat-in dock"><input class="text" id="cin" type="text" autocomplete="off" maxlength="400" placeholder="Was hast du gegessen? Oder frag etwas zu Essen."><button type="button" class="btn pri" style="flex:none;padding:0 18px" data-act="chatsend" aria-label="Senden">'+I.send+'</button></div>'+
    (S.aichat.msgs.length?'<p class="hint" style="text-align:center"><button type="button" class="btn sm" data-act="aiclear">Chat leeren</button></p>':'');
   renderAILog();
 }
+
+var AIST=true;
+window.addEventListener('scroll',function(){if(S.view==='ai'){var d=document.documentElement.scrollHeight-(window.innerHeight+(window.scrollY||0));AIST=d<140}},{passive:true});
+function aiToBottom(){var f=function(){window.scrollTo(0,document.documentElement.scrollHeight)};f();requestAnimationFrame(f);setTimeout(f,120)}
 function renderAILog(){
   var ch=S.aichat,log=document.getElementById('ailog');if(!log)return;
   var msgs=ch.msgs.length?ch.msgs:[{role:'a',text:'Hallo! Ich bin der Essens-Assistent. Erzähl mir, was du gegessen oder getrunken hast, dann trage ich es ein. Frag mich zum Beispiel nach dem Score eines Essens oder was dir heute noch fehlt. Schreib „Hilfe“ für alle Beispiele.'}];
   log.innerHTML=msgs.map(function(m){return '<div class="msg '+(m.role==='u'?'u':'a')+'">'+esc(m.text)+(m.logged&&m.logged.length?'<small>Eingetragen: '+m.logged.map(esc).join(', ')+'</small>':'')+'</div>'}).join('')+(ch.busy?'<div class="msg a">Ich überlege …</div>':'');
   var cc=document.getElementById('aichips');if(cc)cc.innerHTML=ch.msgs.length?'':AI_SUGG.map(function(t){return '<button type="button" class="chip" data-act="chatchip" data-t="'+esc(t)+'">'+esc(t)+'</button>'}).join('');
-  if(ch.msgs.length&&S.aiScroll!==false)window.scrollTo(0,document.body.scrollHeight);
+  if(AIST)aiToBottom();
 }
 async function aiSend(text){
   if(!S.premium){openSheet(null,'premium');return}
   var ch=S.aichat;text=String(text||'').trim();if(!text||ch.busy)return;
-  ch.msgs.push({role:'u',text:text});
+  ch.msgs.push({role:'u',text:text});AIST=true;
   var r;try{r=botAnswer(text)}catch(e){r={antwort:'Das hat nicht geklappt. Schreib es bitte noch einmal anders.'}}
   ch.msgs.push({role:'a',text:String(r.antwort||'Okay.'),logged:r.logged||[]});
   ch.msgs=ch.msgs.slice(-40);save();if(S.view==='ai')renderAILog();
@@ -2280,6 +2319,8 @@ function geoOnce(){return new Promise(function(res,rej){if(!navigator.geolocatio
 function distM(a,b,c,d){var R=6371000,x=(c-a)*Math.PI/180,y=(d-b)*Math.PI/180,q=Math.sin(x/2)*Math.sin(x/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(y/2)*Math.sin(y/2);return 2*R*Math.asin(Math.sqrt(q))}
 async function shopFind(item){
   var pos;
+  if(S.p.geo==='nein')throw {text:'Der Standort ist ausgeschaltet. Du kannst ihn in den Einstellungen unter „Standort“ erlauben, dann frag mich noch einmal.'};
+  if(S.p.geo!=='ja'){var okc=window.confirm('Darf die App deinen Standort einmalig für die Supermarkt-Suche nutzen? Er wird nicht gespeichert.');S.p.geo=okc?'ja':'nein';save();if(!okc)throw {text:'Okay, ich nutze deinen Standort nicht. Du kannst ihn in den Einstellungen unter „Standort“ erlauben.'}}
   try{pos=await geoOnce()}catch(e){
     if(e.code==='denied')throw {text:'Ich darf deinen Standort nicht benutzen. Erlaube ihn in den Einstellungen deines Handys für die App, dann frag mich noch einmal. Der Standort wird nur für diese Suche gebraucht und nicht gespeichert.'};
     throw {text:'Ich konnte deinen Standort gerade nicht bestimmen. Schalte die Ortung ein und frag mich noch einmal.'}}
@@ -2387,6 +2428,29 @@ function autoSplit(){
   DAYS.forEach(function(d){var i=pat.indexOf(d[0]);sp[d[0]]=i<0?['rest']:(i%2?B:A).slice()});
   return sp;
 }
+
+/* Wochenplan automatisch: nur sagen, an welchen Tagen man nicht kann (ohne KI, feste Regeln) */
+function autoSplit2(){
+  var T=S.train,off=T.off||[],avail=DAYS.filter(function(d){return off.indexOf(d[0])<0}).map(function(d){return d[0]}),
+      n=Math.max(1,Math.min(avail.length,+T.days||3)),pick=[],i,sp={};
+  if(!avail.length){DAYS.forEach(function(d){sp[d[0]]=['rest']});return sp}
+  for(i=0;i<n;i++)pick.push(avail[Math.min(avail.length-1,Math.round((i+.5)*avail.length/n-.5))]);
+  var ausd=T.goal==='ausdauer',kraft=T.goal==='kraft',tpl;
+  var FB1=ausd?['oberschenkel','brust','ruecken','cardio']:['brust','ruecken','oberschenkel','bauch'],FB2=ausd?['po','schulter','bauch','cardio']:['schulter','po','bizeps','trizeps'];
+  if(n<=3)tpl=[FB1,FB2,FB1.slice()];
+  else if(n===4)tpl=[['brust','schulter','trizeps','bizeps'],['oberschenkel','po','wade','bauch'],['ruecken','bizeps','schulter','bauch'],['oberschenkel','po','brust','trizeps']];
+  else tpl=[['brust','schulter','trizeps'],['ruecken','bizeps','bauch'],['oberschenkel','po','wade'],['brust','schulter','trizeps'],['ruecken','bizeps','bauch'],['oberschenkel','po','wade']];
+  DAYS.forEach(function(d){var k=pick.indexOf(d[0]);sp[d[0]]=k<0?['rest']:tpl[k%tpl.length].slice()});
+  return sp;
+}
+function splitModeHtml(){
+  var a=!!S.train.auto;
+  return '<div class="smode"><button type="button" class="chip'+(a?'':' sel')+'" data-act="tauto" data-v="0" aria-pressed="'+!a+'">Selbst festlegen</button><button type="button" class="chip'+(a?' sel':'')+'" data-act="tauto" data-v="1" aria-pressed="'+a+'">App entscheidet</button></div>';
+}
+function autoOffHtml(){
+  var off=S.train.off||[],free=DAYS.length-off.length,n=+S.train.days||3;
+  return '<p class="hint" style="margin:6px 0 10px">Tippe die Tage an, an denen du <b>nicht</b> trainieren kannst. Die Muskelgruppen verteile ich selbst nach festen Regeln, ohne KI und ohne Internet.</p><div class="offgrid">'+DAYS.map(function(d){var on=off.indexOf(d[0])>-1;return '<button type="button" class="chip'+(on?' sel':'')+'" data-act="toff" data-d="'+d[0]+'" aria-pressed="'+on+'">'+d[1].slice(0,2)+(on?' ✕':'')+'</button>'}).join('')+'</div>'+(free<n?'<p class="note" style="margin-top:10px">Du hast nur '+free+' freie Tage, ich plane deshalb '+Math.max(free,0)+' Trainingstage.</p>':'<p class="hint" style="margin-top:10px">'+n+' Trainingstage auf '+free+' freie Tage verteilt.</p>');
+}
 function splitOf(){return S.train.split||(S.train.split={})}
 function splitHtml(){
   var sp=splitOf();
@@ -2403,9 +2467,10 @@ function updateSplit(){
   var nx=document.getElementById('tnext');if(nx)nx.disabled=!tAnswered(tqList()[S.train.step]);
 }
 function tqList(){return TQ.filter(function(q){return !q.cond||q.cond()})}
-function tAnswered(q){if(q.split){var sp=S.train.split||{};return DAYS.every(function(d){return sp[d[0]]&&sp[d[0]].length>0})}var v=S.train[q.k];return q.optional?true:q.multi?(v&&v.length>0):!!v}
+function tAnswered(q){if(q.split){if(S.train.auto)return (S.train.off||[]).length<DAYS.length;var sp=S.train.split||{};return DAYS.every(function(d){return sp[d[0]]&&sp[d[0]].length>0})}var v=S.train[q.k];return q.optional?true:q.multi?(v&&v.length>0):!!v}
 function tLabel(q){
   var v=S.train[q.k];
+  if(q.split&&S.train.auto){var of=(S.train.off||[]).map(function(x){return x.charAt(0).toUpperCase()+x.slice(1)});return 'Automatisch'+(of.length?', kein Training: '+of.join(', '):'')}
   if(q.split){var sp=S.train.split||{};return DAYS.map(function(d){return d[1].slice(0,2)+': '+(sp[d[0]]||[]).map(function(m){return musName(m).replace(/ \(.*\)/,'')}).join(', ')}).join(' · ')}
   if(q.search)return v&&v.length?v.join(', '):'Keine';
   if(q.multi)return (v||[]).map(function(x){var o=q.o.filter(function(y){return y[0]===x})[0];return o?o[1]:x}).join(', ')||'–';
@@ -2449,10 +2514,10 @@ function renderTrain(){
   if(T.done){renderTrainHome();return}
   var q=L[T.step],last=T.step===L.length-1;
   if(q.split&&SPD===null&&!tAnswered(q))SPD=null;
-  var body=q.split?splitHtml():q.search?avoidHtml():'<div class="'+(q.grid?'grid2':'stack')+'">'+q.o.map(function(o){return topt(q,o)}).join('')+'</div>';
+  var body=q.split?splitModeHtml()+(T.auto?autoOffHtml():splitHtml()):q.search?avoidHtml():'<div class="'+(q.grid?'grid2':'stack')+'">'+q.o.map(function(o){return topt(q,o)}).join('')+'</div>';
   app.innerHTML=topbar({count:'Frage '+(T.step+1)+' von '+L.length})+eagleTrack('train',T.step,L.length)+
    '<div class="coach"><div class="eg">'+eagle()+'</div><div class="bubble"><h1>'+esc(withName(q.t))+'</h1></div></div>'+
-   '<section class="card"><p class="sub">'+esc(q.s)+'</p>'+body+'</section>'+
+   '<section class="card"><p class="sub">'+esc(q.split&&T.auto?'Lass die App den Plan machen.':q.s)+'</p>'+body+'</section>'+
    '<nav class="nav"><button type="button" class="btn" data-act="tback">Zurück</button><button type="button" class="btn pri" id="tnext" data-act="tnext"'+(tAnswered(q)?'':' disabled')+'>'+(last?'Fertig':'Weiter')+'</button></nav>';
   animTrack();hopEnter();
 }
@@ -3463,6 +3528,52 @@ function renderShop(){
 }
 
 /* ---------- Sheet ---------- */
+
+/* ---------- Erinnerungen: lokale Benachrichtigungen auf dem Handy (Capacitor LocalNotifications), keine Server, nur freundliche Texte ---------- */
+var NT=[
+ [8,0,['Guten Morgen, {n}! Ein Frühstück mit Eiweiß gibt deinen Muskeln einen guten Start.','Steh auf und starte in den Tag, {n}. Dein Frühstück wartet.','Neuer Tag, neue Chance, {n}. Trag dein Frühstück ein, wenn du gegessen hast.','Guten Morgen, {n}! Ein Glas Wasser und ein gutes Frühstück, dann läuft es.','Heute ist ein guter Tag für kleine Schritte, {n}. Fang mit dem Frühstück an.']],
+ [13,0,['Zeit für dein Mittagessen, {n}. Ausreichend essen ist wichtig für den Muskelaufbau.','Mittagspause, {n}! Iss etwas Gutes und trag es danach kurz ein.','Hast du schon gegessen, {n}? Dein Körper braucht jetzt Energie.','Kurze Erinnerung, {n}: Eiweiß, Gemüse und etwas Sättigendes zum Mittag.','Gönn dir eine richtige Pause, {n}. Dein Mittagessen ist wichtig.']],
+ [18,0,['Zeit fürs Abendessen, {n}. Gut gegessen ist halb trainiert.','Feierabend, {n}! Wie lief dein Tag? Trag dein Abendessen kurz ein.','Fehlt dir heute noch Eiweiß, {n}? Schau kurz in die App.','Du hast heute schon viel geschafft, {n}. Ein gutes Abendessen rundet den Tag ab.','Denk an dein Training und dein Essen, {n}. Kleine Schritte zählen.']]
+];
+function notifName(){return (S.p.uname||'').trim()||'du'}
+async function notifPlug(){var C=window.Capacitor;return (C&&C.Plugins&&C.Plugins.LocalNotifications)||null}
+async function notifSync(ask){
+  try{
+    var LN=await notifPlug();
+    if(S.p.notif!=='ja'){if(LN){var pe=await LN.getPending();if(pe&&pe.notifications&&pe.notifications.length)await LN.cancel({notifications:pe.notifications})}return 'off'}
+    if(!LN){if(ask)toast('Erinnerungen funktionieren in der installierten App.');return 'noplugin'}
+    var pm=await LN.checkPermissions();
+    if(pm.display!=='granted'){if(!ask)return 'noperm';pm=await LN.requestPermissions();if(pm.display!=='granted'){S.p.notif='nein';save();toast('Benachrichtigungen sind auf deinem Handy nicht erlaubt.');return 'denied'}}
+    var pe2=await LN.getPending();if(pe2&&pe2.notifications&&pe2.notifications.length)await LN.cancel({notifications:pe2.notifications});
+    var now=Date.now(),list=[],id=1,day,sl;
+    for(day=0;day<14;day++)for(sl=0;sl<NT.length;sl++){
+      var d=new Date();d.setDate(d.getDate()+day);d.setHours(NT[sl][0],NT[sl][1],0,0);
+      if(d.getTime()<=now+60000)continue;
+      var txt=NT[sl][2][(day+sl)%NT[sl][2].length].replace('{n}',notifName());
+      list.push({id:id++,title:'Mahlzeit',body:txt,schedule:{at:d,allowWhileIdle:true}});
+    }
+    if(list.length)await LN.schedule({notifications:list});
+    return 'ok';
+  }catch(e){return 'err'}
+}
+
+/* ---------- Standort: nur nach Zustimmung ---------- */
+async function geoAsk(){
+  try{
+    var G=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.Geolocation;
+    if(G&&G.requestPermissions){var r=await G.requestPermissions();var ok=r&&(r.location==='granted'||r.coarseLocation==='granted');if(!ok){S.p.geo='nein';save();toast('Standort ist auf deinem Handy nicht erlaubt.');render();return false}return true}
+    if(!navigator.geolocation)return false;
+    return await new Promise(function(res){navigator.geolocation.getCurrentPosition(function(){res(true)},function(e){if(e&&e.code===1){S.p.geo='nein';save();toast('Standort ist auf deinem Handy nicht erlaubt.');render()}res(false)},{timeout:12000,maximumAge:600000})});
+  }catch(e){return false}
+}
+function geoCard(){
+  if(!S.done||S.p.geo!=null||S.geoAsked||S.p.notif==null)return '';
+  return '<section class="card notifcard"><b>Standort erlauben?</b><p class="sub" style="margin:6px 0 12px">Damit der Assistent dir den günstigsten Supermarkt in deiner Nähe zeigen kann. Der Standort wird nur für die Suche benutzt und nicht gespeichert.</p><div class="grid2"><button type="button" class="btn pri" data-act="geoyes">Erlauben</button><button type="button" class="btn" data-act="geono">Nein danke</button></div></section>';
+}
+function notifCard(){
+  if(!S.done||S.p.notif!=null||S.notifAsked)return '';
+  return '<section class="card notifcard"><b>Erinnerungen?</b><p class="sub" style="margin:6px 0 12px">Soll ich dich freundlich ans Essen und Training erinnern? Du kannst das jederzeit in den Einstellungen ändern.</p><div class="grid2"><button type="button" class="btn pri" data-act="notifyes">Ja, gerne</button><button type="button" class="btn" data-act="notifno">Nein danke</button></div></section>';
+}
 function toast(t){var el=document.createElement('div');el.className='toast';el.textContent=t;document.body.appendChild(el);setTimeout(function(){el.remove()},2200)}
 function openSheet(meal,view){
   S.sheet={dk:'wasser',ml:'250',confirm:false,meal:meal,view:view||'menu',q:'',food:null,g:100,recipe:{name:'',portions:'2',ings:[]},ing:false,scan:{status:'idle',items:[],err:'',preview:'',hint:''},chat:{msgs:[],turns:[],busy:false},rec:null,por:'1',estimating:false,mealSel:meal||guessMeal(),basket:[],sum:null};
@@ -3555,6 +3666,16 @@ function renderSheet(){
      '<button type="button" class="btn full" style="margin-top:8px" data-act="iechange">Anderes Essen wählen</button>'+
      '<button type="button" class="btn full" style="margin-top:8px;color:var(--bad,#E5484D)" data-act="iedel">Eintrag löschen</button>';
   }
+  if(v==='customgoals'){
+    var cN=calc(S.p,S.p.perMonth),cg=sh.cg||(sh.cg={k:S.p.ovK>0?String(S.p.ovK):'',p:S.p.ovP>0?String(S.p.ovP):'',c:S.p.ovC>0?String(S.p.ovC):'',f:S.p.ovF>0?String(S.p.ovF):''});
+    h+='<p class="hint" style="margin:0 0 10px">Normalerweise berechnet die App deine Tagesziele selbst. Hier kannst du sie direkt festlegen. Lass ein Feld leer, dann rechnet die App es wieder selbst.</p>'+
+     '<div class="field" style="margin-top:0"><label for="cgk">Kalorien pro Tag</label><div class="num"><input id="cgk" data-cg="k" type="text" inputmode="numeric" autocomplete="off" placeholder="'+fmt(cN.target)+'" value="'+esc(cg.k)+'"><span class="unit">kcal</span></div></div>'+
+     '<div class="field"><label for="cgp">Eiweiß pro Tag</label><div class="num"><input id="cgp" data-cg="p" type="text" inputmode="numeric" autocomplete="off" placeholder="'+fmt(Math.round(cN.P))+'" value="'+esc(cg.p)+'"><span class="unit">g</span></div></div>'+
+     '<div class="field"><label for="cgc">Kohlenhydrate pro Tag</label><div class="num"><input id="cgc" data-cg="c" type="text" inputmode="numeric" autocomplete="off" placeholder="'+fmt(Math.round(cN.C))+'" value="'+esc(cg.c)+'"><span class="unit">g</span></div></div>'+
+     '<div class="field"><label for="cgf">Fett pro Tag</label><div class="num"><input id="cgf" data-cg="f" type="text" inputmode="numeric" autocomplete="off" placeholder="'+fmt(Math.round(cN.F))+'" value="'+esc(cg.f)+'"><span class="unit">g</span></div></div>'+
+     '<button type="button" class="btn pri full" style="margin-top:14px" data-act="cgsave">Speichern</button>'+
+     ((S.p.ovK>0||S.p.ovP>0||S.p.ovC>0||S.p.ovF>0)?'<button type="button" class="btn full" style="margin-top:8px" data-act="cgreset">Wieder automatisch berechnen</button>':'');
+  }
   if(v==='custom'){
     var cf=sh.cf||(sh.cf={n:'',k:'',p:'',c:'',f:'',u:''});
     h+='<p class="hint" style="margin:0 0 10px">Dieses Essen kenne ich noch nicht. Trag es einmal ein, dann findest du es ab jetzt in der Suche'+(sh.photo?' und ich erkenne es beim nächsten Foto wieder':'')+'. Die Werte stehen meist auf der Packung, sonst schätze sie ungefähr.</p>'+
@@ -3614,7 +3735,7 @@ function renderSheet(){
     var fsOk=!!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen),fsOn=!!(document.fullscreenElement||document.webkitFullscreenElement),inst=window.matchMedia&&(matchMedia('(display-mode:fullscreen)').matches||matchMedia('(display-mode:standalone)').matches||window.navigator.standalone);
     h+='<div class="setsec">Bildschirm</div><div class="menu">'+(inst?'<p class="hint" style="margin:0">Die App läuft schon als installierte App im Vollbild.</p>':fsOk?opt('fstoggle',I.gear,fsOn?'Vollbild beenden':'Vollbild einschalten','Blendet Adressleiste und Menüs aus. Tippe zum Beenden hier oder wische vom Rand'):'<p class="hint" style="margin:0">Dein Browser kann kein Vollbild von der Seite aus. Für den ganzen Bildschirm: Im Browser-Menü „Zum Startbildschirm hinzufügen“ oder „App installieren“ wählen und die App von dort öffnen.</p>')+'</div>';
     h+='<div class="setsec">Hilfe</div><div class="menu">'+opt('guide',I.book,'Anleitung','So funktioniert die App und wo alles zu finden ist')+'</div>';
-    h+='<div class="setsec">Mein Konto</div><div class="menu">'+opt('edit',I.gear,'Angaben ändern','Ziel, Gewicht, Aktivität und mehr neu beantworten')+'</div>';
+    h+='<div class="setsec">Mein Konto</div><div class="menu">'+opt('edit',I.gear,'Angaben ändern','Ziel, Gewicht, Aktivität und mehr neu beantworten')+opt('customgoals',I.gear,'Eigene Ziele',(S.p.ovK>0||S.p.ovP>0||S.p.ovC>0||S.p.ovF>0)?'Angepasst. Tippe zum Ändern':'Automatisch berechnet')+opt('geoset',I.gear,'Standort',S.p.geo==='ja'?'Erlaubt. Tippe zum Ausschalten':'Aus. Tippe zum Erlauben')+opt('notifset',I.gear,'Erinnerungen',S.p.notif==='ja'?'An. Tippe zum Ausschalten':'Aus. Tippe zum Einschalten')+'</div>';
     h+='<div class="setsec">Pläne</div><div class="menu">'+opt('regenfood',I.dice,'Essensplan neu erstellen','6 neue Gerichte für heute')+opt('regentrain',I.dumbbell,sh.cT?'Wirklich neu erstellen? Nochmal tippen':'Trainingsplan neu erstellen','Baut den Plan aus deinen Antworten neu (zählt als Änderung)')+opt('edittrain',I.gear,'Trainingsfragen ändern','Ziel, Ort, Geräte, Wochenplan und mehr neu beantworten')+'</div>';
     h+='<div class="setsec">Technik und Daten</div><div class="menu">'+opt('aitest',I.spark,'KI testen',sh.diag?esc(sh.diag):'Prüft, ob die KI antwortet, und zeigt den Grund, falls nicht')+opt('wipe',I.book,sh.confirm?'Wirklich alles löschen? Nochmal tippen':'Alle Daten löschen','Entfernt Profil, Tagebuch, Rezepte und Mango von diesem Gerät')+'</div>'+
      '<div class="legal" style="margin-top:16px"><p><b>Datenschutz.</b> Deine Angaben, dein Tagebuch und deine Mango werden nur auf diesem Gerät gespeichert. Deine Fortschrittsfotos bleiben nur auf diesem Gerät und werden nie gesendet. Tagesgerichte, Essens-Assistent, Rekord-Rang und Barcode-Scan laufen ohne KI direkt in der App. Nur die optionalen KI-Funktionen (zum Beispiel das Wochenfazit) senden deine Eingaben zur Verarbeitung.</p><p><b>Hinweis.</b> Alle Werte sind Richtwerte und kein medizinischer Rat. Der Gesundheits-Score von 1 bis 100 ist eine Schätzung. Bei Erkrankungen, Allergien oder in der Schwangerschaft sprich mit deiner Ärztin oder deinem Arzt.</p></div>';
@@ -6224,13 +6345,95 @@ function botRecipe(text,again){
   if(others.length)t+='\n\nWeitere Ideen: '+others.join(', ')+'. Schreib „noch eins", dann zeige ich dir ein anderes Gericht.';
   return t;
 }
+
+/* ---------- Fachwissen: Haltung, Körper, Diät, Training. Feste, zurückhaltend formulierte Antworten nach Studienlage ---------- */
+var KB_END='\n\nDas ist allgemeine Information und ersetzt keine ärztliche oder physiotherapeutische Beratung.';
+var KB_PAIN=/(schmerz|taub|kribbel|stechen|stechend|ausstrahl|schwindel|brustenge|lähmung|verletz|bandscheibe|entzünd)/;
+var KB=[
+{k:'haltung',re:/(schulter|schultern).*(vorne|rund|hängen|hängt|nach innen|krumm|eingefallen)|(vorne|rund|hängen|krumm).*(schulter|schultern)|rundrücken|runder rücken|schlechte haltung|haltung verbessern|haltungsschwäche/,
+ a:'Schultern, die nach vorne hängen, hängen oft mit einer verkürzten Brustmuskulatur und einem schwachen oberen Rücken zusammen. Die Studienlage ist moderat: Kräftigung des oberen Rückens plus Dehnung der Brust verbessert die Haltung oft messbar, wenn man mehrere Wochen dranbleibt. Eine perfekte Haltung gibt es nicht, leichte Abweichungen sind normal.\n\nÜbungen (2 bis 3 mal pro Woche, 2 bis 3 Sätze mit 10 bis 15 Wiederholungen):\n• Face Pulls am Kabel oder mit Band\n• Rudern (Kabel, Kurzhantel oder Band)\n• Reverse Flys (Seitheben vorgebeugt)\n• Außenrotation mit Band\n• Dehnung: Brust in der Türzarge, 2 mal 30 Sekunden\n\nBenötigte Muskeln: mittlerer und unterer Trapezmuskel, Rautenmuskeln (Rhomboiden), hinterer Schultermuskel, Außenrotatoren der Schulter. Gedehnt wird der Brustmuskel.\nDazu hilft: Bildschirm auf Augenhöhe und regelmäßig aufstehen.'},
+{k:'hals',re:/(fett|speck|dick|doppelkinn|kinn|moppel).*(hals|nacken|kinn)|(hals|doppelkinn)/,
+ a:'Gezielt am Hals Fett abzubauen geht nicht. Studien zur „Spot Reduction“ zeigen, dass Übungen für eine Körperstelle dort kein Fett gezielt verbrennen. Wo dein Körper zuerst abbaut, ist großteils veranlagt.\n\nWas nachweislich wirkt:\n• Ein moderates Kaloriendefizit, etwa 300 bis 500 kcal unter deinem Bedarf\n• Genug Eiweiß (1,6 bis 2,2 g pro kg Körpergewicht)\n• Krafttraining 2 bis 3 mal pro Woche, damit du Muskeln behältst\n• 7 bis 9 Stunden Schlaf\n\nEin Doppelkinn wirkt auch durch die Haltung. Chin Tucks (Kinn gerade nach hinten ziehen, 5 Sekunden halten, 10 mal) trainieren die tiefen Halsbeuger und verbessern die Haltung, entfernen aber kein Fett.\nBenötigte Muskeln: tiefe Halsbeuger (Musculus longus colli).\nWichtig: Ein sehr großer Halsumfang (als grobe Orientierung über 43 cm bei Männern, über 41 cm bei Frauen) zusammen mit Schnarchen oder Tagesmüdigkeit sollte ärztlich abgeklärt werden, wegen möglicher Schlafapnoe.'},
+{k:'kopf',re:/kopf.*(vorne|vorgeschoben)|nacken.*(verspann|steif|schmerz)|verspannt.*nacken|handynacken|nackenprobleme|tech neck/,
+ a:'Ein nach vorne geschobener Kopf (Handynacken) kommt oft von langem Sitzen und Blick nach unten. Hilfreich laut Studien sind Kräftigung der tiefen Halsbeuger und des oberen Rückens, dazu Bewegungspausen.\n\nÜbungen:\n• Chin Tucks: Kinn gerade zurückziehen, 5 Sekunden halten, 10 mal, täglich\n• Rudern oder Face Pulls, 2 bis 3 mal pro Woche\n• Brust dehnen, 2 mal 30 Sekunden\n\nBenötigte Muskeln: tiefe Halsbeuger, Rautenmuskeln, mittlerer und unterer Trapezmuskel. Gedehnt werden Brust und oberer Nackenbereich.\nDazu: Bildschirm auf Augenhöhe, alle 30 bis 45 Minuten kurz aufstehen.'},
+{k:'bauch',re:/(bauchfett|speck am bauch|dicker bauch|bauch.*(weg|abnehmen|loswerden|verlieren)|wampe|rettungsring|bierbauch)/,
+ a:'Bauchfett lässt sich nicht gezielt wegtrainieren. Bauchübungen stärken die Bauchmuskeln, verbrennen aber nicht lokal das Fett darüber. Fett geht im ganzen Körper zurück, wenn du über mehrere Wochen weniger Energie aufnimmst, als du verbrauchst.\n\nWas nachweislich hilft:\n• Moderates Kaloriendefizit (300 bis 500 kcal pro Tag)\n• Eiweiß 1,6 bis 2,2 g pro kg Körpergewicht, das sättigt und schützt Muskeln\n• Krafttraining 2 bis 3 mal pro Woche und viel Alltagsbewegung (Schritte)\n• Weniger Alkohol und genug Schlaf\n\nBenötigte Muskeln für einen starken Bauch: gerader Bauchmuskel, schräge Bauchmuskeln und tiefe Rumpfmuskeln, zum Beispiel mit Planks und Beinheben.'},
+{k:'zunehmen',re:/(nicht|kaum|schwer|schlecht).*(zunehmen|zunehm|aufbauen|muskeln aufbauen)|hardgainer|zu dünn|zu schlank|muskeln aufbauen|muskelaufbau|baue.*muskel|muskeln?.*(aufbau|bauen)|masse aufbauen|wie nehme ich zu|wie kann ich zunehmen|mehr muskeln|zunehmen/,
+ a:'Muskelaufbau braucht drei Dinge: Training, Energie und Erholung. Nach heutiger Studienlage:\n• Kalorienüberschuss von etwa 250 bis 500 kcal pro Tag. Das ist genug, um ohne viel Fett zuzunehmen.\n• Eiweiß: 1,6 bis 2,2 g pro kg Körpergewicht (eine Auswertung vieler Studien von 2018 sieht dort die Obergrenze des Nutzens).\n• Krafttraining 2 bis 4 mal pro Woche mit steigender Last, jede Muskelgruppe etwa 2 mal pro Woche.\n• 7 bis 9 Stunden Schlaf.\n• Wenig Appetit? Flüssige Kalorien helfen: Milch, Shakes, Haferflocken, Nüsse.\n\nGrundübungen und Muskeln:\n• Kniebeugen: Oberschenkel, Po\n• Bankdrücken: Brust, Schulter, Trizeps\n• Rudern: Rücken, Bizeps\n• Schulterdrücken: Schultern, Trizeps\n• Rumänisches Kreuzheben: hintere Oberschenkel, Po, unterer Rücken\n\nDer Tagesplan in der App ist auf Muskelaufbau abgestimmt. Beim Gewicht reicht es meist, 0,25 bis 0,5 kg pro Woche zuzunehmen.'},
+{k:'protein',re:/(wie viel|wieviel|wie viele).*(eiweiß|protein)|eiweißbedarf|proteinbedarf/,
+ a:'Für Muskelaufbau gelten 1,6 bis 2,2 g Eiweiß pro kg Körpergewicht pro Tag als gut belegt. Mehr bringt in Studien keinen zusätzlichen Vorteil. Beim Abnehmen sind 1,6 bis 2,4 g sinnvoll, damit du Muskeln behältst.'},
+{k:'plateau',re:/(gewicht|waage).*(stagniert|steht|bewegt sich nicht|plateau|stillstand)|plateau|stagniert/,
+ a:'Wenn sich dein Gewicht 2 bis 3 Wochen nicht bewegt, hilft nach Studienlage Folgendes:\n• Genau tracken (alles wiegen und eintragen), kleine Abweichungen summieren sich\n• Gewicht nur im Wochenschnitt vergleichen, Wasser schwankt täglich um 1 bis 2 kg\n• Dann die Kalorien um etwa 100 bis 200 kcal anpassen (beim Zunehmen hoch, beim Abnehmen runter)\n• Schlaf, Schritte und Training prüfen'},
+{k:'beine',re:/(dünne|schmale|dürre|hühner).*(beine|waden|oberschenkel)|beine.*(aufbauen|dicker|stärker|muskeln)|beintraining/,
+ a:'Beine wachsen mit schweren Grundübungen und genug Essen.\n• Kniebeugen oder Beinpresse: 3 Sätze à 6 bis 12 Wiederholungen\n• Rumänisches Kreuzheben: hintere Oberschenkel und Po\n• Ausfallschritte oder bulgarische Kniebeugen\n• Wadenheben im Stehen\nBenötigte Muskeln: Oberschenkelstrecker (Quadrizeps), Oberschenkelbeuger, Gesäßmuskel, Waden. 2 mal pro Woche reicht für Fortschritte.'},
+{k:'arme',re:/(dünne|schmale|dürre).*(arme|oberarme)|arme.*(aufbauen|dicker|stärker|muskeln)|armtraining|bizeps aufbauen|trizeps aufbauen/,
+ a:'Oberarme wachsen gut mit direkten Übungen plus Grundübungen.\n• Bizepscurls (Kurzhantel oder SZ-Stange): 3 Sätze à 8 bis 12\n• Trizepsdrücken am Kabel oder Dips: 3 Sätze à 8 bis 12\n• Klimmzüge oder Rudern trainieren den Bizeps mit\nBenötigte Muskeln: Bizeps, Trizeps, Unterarm. 2 mal pro Woche pro Muskel reicht.'},
+{k:'schultern_breit',re:/(breite|breitere|größere).*(schulter|schultern)|schultern.*(aufbauen|breiter|größer)|schultertraining/,
+ a:'Breite Schultern kommen vor allem vom seitlichen Schultermuskel.\n• Seitheben mit Kurzhanteln: 3 Sätze à 10 bis 15\n• Schulterdrücken: 3 Sätze à 6 bis 12\n• Face Pulls für den hinteren Teil und die Haltung\nBenötigte Muskeln: seitlicher, vorderer und hinterer Schultermuskel, Trapez, Trizeps. 2 mal pro Woche.'},
+{k:'brust',re:/(flache|schmale).*brust|brust.*(aufbauen|größer|breiter|muskeln)|brusttraining/,
+ a:'Für die Brust sind Drückübungen mit steigender Last am besten belegt.\n• Bankdrücken oder Kurzhantel-Drücken: 3 Sätze à 6 bis 12\n• Schrägbankdrücken für den oberen Teil\n• Fliegende oder Kabelzug zur Isolation\n• Liegestütze, wenn du ohne Geräte trainierst\nBenötigte Muskeln: großer Brustmuskel, vordere Schulter, Trizeps. 2 mal pro Woche.'},
+{k:'rueck',re:/rückenschmerz|schmerzen im rücken|kreuzschmerz|lendenwirbel|ischias/,
+ a:'Bei Rückenschmerzen ist der erste Schritt eine ärztliche Abklärung, vor allem bei Taubheit, Kribbeln, Ausstrahlung ins Bein oder Schmerzen nach einem Sturz. Bei unspezifischen Rückenschmerzen zeigt die Studienlage, dass aktiv bleiben und angepasstes Krafttraining oft besser hilft als Schonung. Welche Übungen für dich passen, klärst du am besten mit Arzt oder Physiotherapie.'},
+{k:'kater',re:/muskelkater/,
+ a:'Muskelkater ist kein Maß für guten Muskelaufbau. Er entsteht vor allem bei ungewohnten Bewegungen und vergeht meist nach 2 bis 4 Tagen. Leichte Bewegung, genug Eiweiß und Schlaf helfen. Ist ein Muskel noch sehr schmerzhaft, trainiere eine andere Muskelgruppe.'},
+{k:'schlaf',re:/schlaf|erholung|regeneration/,
+ a:'Schlaf ist beim Muskelaufbau und Abnehmen gut belegt wichtig. Wer zu wenig schläft (unter 6 Stunden), hat in Studien mehr Hunger, verliert mehr Muskeln und weniger Fett. Ziel: 7 bis 9 Stunden. Dazu: feste Zeiten, abends wenig Bildschirm, Koffein nur bis zum frühen Nachmittag.'},
+{k:'kreatin',re:/kreatin|creatin/,
+ a:'Kreatin-Monohydrat gehört zu den am besten untersuchten Nahrungsergänzungen für Kraft und Muskelaufbau. Übliche Menge: 3 bis 5 g pro Tag, jeden Tag, ohne Ladephase. Bei gesunden Erwachsenen gilt es als sicher. Bei Nierenerkrankungen oder Medikamenten bitte vorher mit dem Arzt sprechen.'},
+{k:'diaet',re:/(beste|welche).*(diät|ernährungsform)|diät.*(beste|empfehl)|abnehmen.*(wie|tipps)|wie nehme ich ab|am schnellsten abnehmen/,
+ a:'Für das Abnehmen zählt nach Studienlage vor allem ein Kaloriendefizit, das du durchhalten kannst. Große Vergleichsstudien (zum Beispiel DIETFITS 2018) fanden bei Low-Carb und Low-Fat ähnliche Ergebnisse. Gut belegt:\n• Defizit von etwa 300 bis 500 kcal, so verlierst du rund 0,25 bis 0,5 kg pro Woche\n• Eiweiß 1,6 bis 2,4 g pro kg, dazu Krafttraining, damit die Muskeln bleiben\n• Viel Gemüse, Ballaststoffe und wenig stark verarbeitete Produkte, das sättigt\n• Schritte und Schlaf nicht vergessen\nSehr schnelle Crash-Diäten verlieren meist Muskeln und werden oft wieder zugenommen.'},
+{k:'mythen',re:/detox|entgiften|fatburner|fettverbrenner|wundermittel|schlankheitstee|abnehmpille|kohlenhydrate.*abends|abends.*kohlenhydrate|nach 18 uhr|intervallfasten/,
+ a:'Dazu gibt es folgende Studienlage:\n• Detox-Kuren und Entschlackung: kein Nachweis, Leber und Nieren entgiften selbst.\n• Fatburner-Pillen und Schlankheitstees: kaum bis kein Effekt, teils Risiken.\n• Kohlenhydrate abends oder nach 18 Uhr: kein Nachweis, entscheidend sind die Gesamtkalorien am Tag.\n• Intervallfasten: wirkt, wenn dadurch weniger Kalorien gegessen werden, ist aber nicht besser als andere Diäten mit gleichem Defizit.\nWas wirkt: passende Kalorien, genug Eiweiß, Training, Schlaf.'}
+];
+var EXM=[
+ [/kniebeug|squat/,'Kniebeugen','Oberschenkelstrecker (Quadrizeps), Gesäßmuskel','Oberschenkelbeuger, unterer Rücken, Rumpf'],
+ [/bankdr|bankpress|bench/,'Bankdrücken','großer Brustmuskel','vordere Schulter, Trizeps'],
+ [/kreuzheb|deadlift/,'Kreuzheben','Gesäßmuskel, hintere Oberschenkel, unterer Rücken','Trapez, Unterarme, Rumpf'],
+ [/ruder/,'Rudern','Latissimus, Rautenmuskeln, mittlerer Trapez','Bizeps, hinterer Schultermuskel'],
+ [/klimmzug|latzug|pull.?up/,'Klimmzüge und Latzug','Latissimus (breiter Rückenmuskel)','Bizeps, Rautenmuskeln, Unterarme'],
+ [/liegest|push.?up/,'Liegestütze','großer Brustmuskel','vordere Schulter, Trizeps, Rumpf'],
+ [/schulterdr|military|overhead/,'Schulterdrücken','Schultermuskel (Deltamuskel)','Trizeps, oberer Trapez, Rumpf'],
+ [/bizeps|curl/,'Bizepscurls','Bizeps','Oberarmmuskel, Unterarm'],
+ [/trizeps|dips/,'Trizepsdrücken und Dips','Trizeps','Brust und vordere Schulter (bei Dips)'],
+ [/plank|unterarmstütz/,'Plank','gerader und querer Bauchmuskel','Gesäß, Schultern, Rumpfmuskeln'],
+ [/ausfallschr|lunge/,'Ausfallschritte','Quadrizeps, Gesäßmuskel','Oberschenkelbeuger, Waden, Rumpf'],
+ [/hip.?thrust|beckenheb|glute bridge/,'Hip Thrusts','Gesäßmuskel','hintere Oberschenkel, Rumpf'],
+ [/seitheb/,'Seitheben','seitlicher Schultermuskel','oberer Trapez'],
+ [/beinpress/,'Beinpresse','Quadrizeps, Gesäßmuskel','Oberschenkelbeuger, Waden'],
+ [/wadenheb/,'Wadenheben','Wadenmuskeln','-'],
+ [/face.?pull/,'Face Pulls','hinterer Schultermuskel, mittlerer Trapez, Rautenmuskeln','Außenrotatoren der Schulter']
+];
+function kbAnswer(l){
+  if(/(welche|was|wo|wie).*(muskel|muskeln)|muskeln.*(trainier|beansprucht|benötigt)|trainiert.*(muskel|das)/.test(l)){
+    for(var i=0;i<EXM.length;i++)if(EXM[i][0].test(l))return {antwort:EXM[i][1]+':\nHauptmuskeln: '+EXM[i][2]+'\nHilft mit: '+EXM[i][3]+KB_END};
+  }
+  var pain=KB_PAIN.test(l);
+  for(var j=0;j<KB.length;j++){var e=KB[j];if(e.re.test(l)){
+    if(e.k==='hals'&&!/(fett|speck|dick|kinn|abnehm|weg)/.test(l))continue;
+    if(e.k==='schlaf'&&!/(schlaf|erholung|regeneration)/.test(l))continue;
+    if(e.k==='zunehmen'&&/(abnehmen|diät)/.test(l)&&!/zunehm/.test(l.replace(/abnehm/g,'')))continue;
+    return {antwort:(pain&&e.k!=='rueck'?'Wichtig: Bei Schmerzen, Taubheit oder Kribbeln lass das bitte zuerst ärztlich abklären.\n\n':'')+e.a+(e.k==='rueck'?'':KB_END)}}}
+  if(/schulter/.test(l)&&!pain)return {antwort:'Damit ich dir die passende Antwort gebe: Meinst du, dass deine Schultern nach vorne hängen (Haltung), oder möchtest du breitere Schultern aufbauen? Schreib es mir kurz.'};
+  if(/(rücken|nacken|knie|hüfte|ellbogen|handgelenk)/.test(l)&&pain)return {antwort:'Bei Schmerzen in diesem Bereich sollte zuerst ein Arzt oder Physiotherapeut draufschauen. Ich kann dir danach gern Übungen zur Kräftigung nennen, wenn du mir sagst, was erlaubt ist.'};
+  return null;
+}
+
+function shopAsk(l){
+  if(/(gegessen|gegessen|hatte ich|habe ich (gegessen|getrunken)|ich hatte|trage|eintragen)/.test(l))return false;
+  var orte=/(supermarkt|super markt|discounter|diskonter|aldi|lidl|rewe|edeka|penny|netto|kaufland|norma|markt|laden|geschäft|geschaeft|einkaufen|einkauf|einkaufsladen|laden in der nähe|standort)/.test(l);
+  var kauf=/(kaufen|kauf|besorgen|bekomme|bekommt|bekommen|finde|finden|gibt es|gibts|günstig|guenstig|billig|preiswert|nähe|naehe|nächste|naechste|wo )/.test(l);
+  return (orte&&kauf)||/(wo kann ich .*(kaufen|bekommen|besorgen)|wo (gibt|bekomm|find|kauf)\w* (es|ich|man))/.test(l);
+}
 function botAnswer(text){
   var l=botNorm(text),c,st,res;
   try{c=calc(S.p,S.p.perMonth)}catch(e){c={target:2000,P:100}}
   st=dayStats(dayLog());
+
+  var kb=kbAnswer(l);if(kb)return kb;
+  if(shopAsk(l)){var itx0=botFindFoodIn(text);return {antwort:'Ich suche einen günstigen Supermarkt in deiner Nähe …',shop:{item:itx0&&itx0.food?itx0.food.name:''}}}
   if(/^(hallo|hi|hey|moin|servus|guten (morgen|tag|abend)|na)\b/.test(l)&&l.split(' ').length<4)return {antwort:'Hallo! Sag mir einfach, was du gegessen oder getrunken hast, zum Beispiel „2 Eier und eine Scheibe Vollkornbrot". Ich trage es für dich ein.'};
   if(/^(danke|dankeschön|super|top|ok|okay|cool|alles klar)\b/.test(l)&&l.split(' ').length<4)return {antwort:'Gern! Sag Bescheid, wenn du noch etwas gegessen hast.'};
-  if(/hilfe|was kannst du|was kann ich dich|wie funktioniert/.test(l))return {antwort:'Das kann ich:\n• Essen und Getränke eintragen: „Ich hatte 2 Eier und 200 g Skyr" oder „einen Kaffee"\n• Fragen beantworten: „Wie viel Protein fehlt mir noch?", „Wie viele Kalorien habe ich noch?", „Wie viel habe ich getrunken?"\n• Essen bewerten: „Wie gesund ist Pizza?", „Kalorien von Banane"\n• Gerichte vorschlagen mit Rezept und Tipps: „Ich brauche ein veganes Abendessen“, „glutenfreies Frühstück“, „schnelles Mittagessen mit Tofu“, „Abendessen für 5 Personen ohne Fleisch“ (mit Mengen für alle), „noch eins“ für ein anderes\n• Tipps: „Gib mir Tipps“, „Tipps für Veganer“\n• Überblick: „Was habe ich heute gegessen?"\n• Rückgängig: „letzten Eintrag löschen"\n• Einkaufen: „Wo ist der günstigste Supermarkt in der Nähe?“ (nutzt kurz deinen Standort)\n• Menge verbessern: erst „Lachs“, dann „Lachs 150 g“, die Schätzung wird ersetzt\nIch bin kein KI-Chat, sondern ein fester Assistent mit vorgegebenen Antworten.'};
+  if(/hilfe|was kannst du|was kann ich dich|wie funktioniert/.test(l))return {antwort:'Das kann ich:\n• Essen und Getränke eintragen: „Ich hatte 2 Eier und 200 g Skyr" oder „einen Kaffee"\n• Fragen beantworten: „Wie viel Protein fehlt mir noch?", „Wie viele Kalorien habe ich noch?", „Wie viel habe ich getrunken?"\n• Essen bewerten: „Wie gesund ist Pizza?", „Kalorien von Banane"\n• Gerichte vorschlagen mit Rezept und Tipps: „Ich brauche ein veganes Abendessen“, „glutenfreies Frühstück“, „schnelles Mittagessen mit Tofu“, „Abendessen für 5 Personen ohne Fleisch“ (mit Mengen für alle), „noch eins“ für ein anderes\n• Tipps: „Gib mir Tipps“, „Tipps für Veganer“\n• Überblick: „Was habe ich heute gegessen?"\n• Rückgängig: „letzten Eintrag löschen"\n• Einkaufen: „Wo ist der günstigste Supermarkt in der Nähe?“ (nutzt kurz deinen Standort)\n• Fragen zu Haltung, Muskeln und Diät: „Meine Schultern hängen nach vorne“, „Wie baue ich Muskeln auf?“ (nach Studienlage, mit Übungen und benötigten Muskeln)\n• Menge verbessern: erst „Lachs“, dann „Lachs 150 g“, die Schätzung wird ersetzt\nIch bin kein KI-Chat, sondern ein fester Assistent mit vorgegebenen Antworten.'};
   if(/(rückgängig|letzten eintrag|letztes löschen|lösche.*(letzt|eintrag)|falsch eingetragen)/.test(l)){
     var key=keyOf(today(0)),arr=S.log[key]||[];if(!arr.length)return {antwort:'Heute ist noch nichts eingetragen, da gibt es nichts zu löschen.'};
     var last=arr.pop();save();return {antwort:'Okay, ich habe „'+last.name+'" wieder entfernt.'};
@@ -6276,12 +6479,13 @@ function botAnswer(text){
   }
   if(/\?|^(wie|was|wer|wo|warum|wann|wieso|welche|welcher|kannst|kann|gibt)\b/.test(l)&&!res.logged.length)return {antwort:'Dazu kann ich leider nichts sagen. Ich bin nur für Essen, Trinken und deine Ziele da. Schreib „Hilfe“, dann zeige ich dir Beispiele.'};
   if(res.unknown.length)return {antwort:'Das kenne ich noch nicht: '+res.unknown.join(', ')+'. Probier ein anderes Wort oder trag es über „Eintragen" ein. Schreib „Hilfe", dann zeige ich dir, was ich kann.'};
-  return {antwort:'Das habe ich nicht verstanden. Ich kann Essen eintragen („2 Eier und ein Brötchen"), Fragen zu deinen Zielen beantworten und Essen bewerten. Schreib „Hilfe" für alle Beispiele.'};
+  return {antwort:'Das habe ich nicht ganz verstanden. Was meinst du?\n• Essen eintragen, zum Beispiel „2 Eier und ein Brötchen“\n• Eine Frage zu Ernährung oder Training, zum Beispiel „Meine Schultern hängen nach vorne“\n• Einen günstigen Supermarkt in der Nähe\nSchreib es mir bitte noch einmal etwas genauer. Mit „Hilfe“ siehst du alle Beispiele.'};
 }
 
 /* ---------- Ereignisse ---------- */
 function setVal(k,v){
-  var p=S.p;
+  var p=S.p;if(k==='geo'){p.geo=v;if(v==='ja')geoAsk()}
+  if(k==='notif'){p.notif=v;if(v==='ja')notifSync(true);else notifSync(false)}
   if(k==='bfIdx'||k==='meals')v=+v;
   if(k==='goal'&&p.goal!==v)p.perMonth=v==='lose'?2:1;
   if(k==='meals'&&p.meals!==v&&p.biggest&&p.biggest!=='even'&&SLOTS[v].indexOf(p.biggest)<0)p.biggest=null;
@@ -6359,13 +6563,15 @@ function onClick(e){
   case 'genmissing':genPlan(true);break;
   case 'tcal':S.tsel=t.dataset.k;render();break;
   case 'tdonetoggle':var dk0=t.dataset.k;if(dk0>keyOf(today(0)))break;if(S.tdone[dk0])delete S.tdone[dk0];else S.tdone[dk0]=1;save();render();break;
+  case 'tauto':S.train.auto=t.dataset.v==='1';save();renderTrain();break;
+  case 'toff':var of0=S.train.off||(S.train.off=[]),oi=of0.indexOf(t.dataset.d);if(oi>-1)of0.splice(oi,1);else of0.push(t.dataset.d);save();renderTrain();break;
   case 'tday':SPD=SPD===t.dataset.d?null:t.dataset.d;updateSplit();break;
   case 'tmus':var sp2=splitOf(),dv=sp2[t.dataset.d]||[],mv=t.dataset.v,mi=dv.indexOf(mv);
     if(mi>-1)dv.splice(mi,1);else if(mv==='rest')dv=['rest'];else{dv=dv.filter(function(x){return x!=='rest'});if(dv.length<4)dv.push(mv)}
     sp2[t.dataset.d]=dv;save();updateSplit();break;
   case 'tavoid':var av=S.train.avoid||(S.train.avoid=[]),ai=av.indexOf(t.dataset.v);if(ai>-1)av.splice(ai,1);else av.push(t.dataset.v);save();updateAvoid();break;
   case 'tcustom':var cu=String(S.train.q||'').trim();if(cu){var av2=S.train.avoid||(S.train.avoid=[]);if(av2.indexOf(cu)<0)av2.push(cu);S.train.q='';save();updateAvoid();var ts=document.getElementById('tsearch');if(ts){ts.value='';ts.focus()}}break;
-  case 'tnext':var tl=tqList(),tq2=tl[S.train.step];if(!tAnswered(tq2))break;if(S.train.exp==='anfaenger'&&S.train.days)S.train.split=autoSplit();if(S.train.step<tl.length-1){hopGo(function(){S.train.step++;save();render();window.scrollTo(0,0)});break}S.train.done=true;save();render();window.scrollTo(0,0);break;
+  case 'tnext':var tl=tqList(),tq2=tl[S.train.step];if(!tAnswered(tq2))break;if(S.train.exp==='anfaenger'&&S.train.days&&!S.train.auto)S.train.split=autoSplit();if(S.train.auto&&S.train.days)S.train.split=autoSplit2();if(S.train.step<tl.length-1){hopGo(function(){S.train.step++;save();render();window.scrollTo(0,0)});break}S.train.done=true;save();render();window.scrollTo(0,0);break;
   case 'tback':if(S.train.step>0){hopGo(function(){S.train.step--;save();render();window.scrollTo(0,0)},true);break}S.view='result';save();render();window.scrollTo(0,0);break;
   case 'tedit':SPD=null;TRK.train=undefined;S.train.done=false;S.train.step=0;S.train.q='';save();render();window.scrollTo(0,0);break;
   case 'subscribe':toast('Bezahlen ist in dieser Version noch nicht möglich. Nutze den Code.');break;
@@ -6387,11 +6593,12 @@ function onClick(e){
   case 'gotoai':closeSheet();go('ai');break;
   case 'hmetric':S.hist.metric=t.dataset.v;render();break;
   case 'hrange':S.hist.range=+t.dataset.v;render();break;
-  case 'htable':S.hist.table=!S.hist.table;render();break;
+  case 'hopen':S.hist.open=S.hist.open===t.dataset.v?null:t.dataset.v;render();break;
+  case 'htable':S.hist.open=S.hist.open==='table'?null:'table';render();break;
   case 'toggleweek':S.hist.opened[t.dataset.k]=!S.hist.opened[t.dataset.k];render();break;
   case 'weekai':weekAI(t.dataset.k);break;
-  case 'weeksToggle':S.hist.weeksOpen=!S.hist.weeksOpen;render();break;
-  case 'openweek':S.hist.weeksOpen=true;S.hist.opened[t.dataset.k]=true;S.hview='food';go('history');break;
+  case 'weeksToggle':S.hist.open=S.hist.open==='weeks'?null:'weeks';render();break;
+  case 'openweek':S.hist.open='weeks';S.hist.weeksOpen=true;S.hist.opened[t.dataset.k]=true;S.hview='food';go('history');break;
   case 'aiclear':S.aichat.msgs=[];save();render();break;
   case 'delitem':e.stopPropagation();var key=keyOf(today(0));S.log[key]=(S.log[key]||[]).filter(function(x){return x.id!==t.dataset.id});save();render();break;
   case 'closesheet':closeSheet();break;
@@ -6469,6 +6676,20 @@ function onClick(e){
   case 'theme':S.theme=(S.theme==='light')?'dark':'light';applyTheme();save();render();break;
   case 'settheme':S.theme=t.dataset.v;applyTheme();save();renderSheet();render();break;
   case 'guide':closeSheet();guideOpen();break;
+  case 'customgoals':openSheet(null,'customgoals');break;
+  case 'cgsave':{var cgv=S.sheet&&S.sheet.cg;if(!cgv)break;var nk=num(cgv.k),np=num(cgv.p),nc=num(cgv.c),nf=num(cgv.f);
+   if(cgv.k.trim()&&(!(nk>0)||nk<800||nk>6000)){toast('Bitte gib Kalorien zwischen 800 und 6000 ein.');break}
+   if(cgv.p.trim()&&!(np>=0)){toast('Bitte gib einen gültigen Eiweißwert ein.');break}
+   if(cgv.c.trim()&&!(nc>=0)){toast('Bitte gib einen gültigen Kohlenhydratwert ein.');break}
+   if(cgv.f.trim()&&!(nf>=0)){toast('Bitte gib einen gültigen Fettwert ein.');break}
+   S.p.ovK=cgv.k.trim()?nk:null;S.p.ovP=cgv.p.trim()?np:null;S.p.ovC=cgv.c.trim()?nc:null;S.p.ovF=cgv.f.trim()?nf:null;save();closeSheet();toast('Eigene Ziele gespeichert.');render();break}
+  case 'cgreset':S.p.ovK=null;S.p.ovP=null;S.p.ovC=null;S.p.ovF=null;save();closeSheet();toast('Die App berechnet deine Ziele wieder selbst.');render();break;
+  case 'notifset':S.p.notif=S.p.notif==='ja'?'nein':'ja';save();notifSync(true).then(function(r){if(S.p.notif==='ja'&&r==='ok')toast('Erinnerungen sind an.');else if(S.p.notif!=='ja')toast('Erinnerungen sind aus.')});if(S.sheet)renderSheet();break;
+  case 'geoset':S.p.geo=S.p.geo==='ja'?'nein':'ja';save();if(S.p.geo==='ja')geoAsk().then(function(ok){if(ok)toast('Standort ist erlaubt.')});else toast('Standort ist aus.');if(S.sheet)renderSheet();break;
+  case 'geoyes':S.p.geo='ja';S.geoAsked=true;save();geoAsk();render();break;
+  case 'geono':S.p.geo='nein';S.geoAsked=true;save();render();break;
+  case 'notifyes':S.p.notif='ja';S.notifAsked=true;save();notifSync(true);render();break;
+  case 'notifno':S.p.notif='nein';S.notifAsked=true;save();render();break;
   case 'arclose':if(S.arena){S.arena.last=null;save();render()}break;
   case 'pfchange':S.phChange=true;render();break;
   case 'pfdone':if(S.p.pfreq){S.phChange=false;save();render()}break;
@@ -6497,6 +6718,7 @@ function onInput(e){
   if(t.dataset&&t.dataset.ie&&S.sheet&&S.sheet.it){var ii=S.sheet.it,ig=ii.g>0?(num(t.value)||0)/ii.g:1,pe=document.getElementById('iepre');S.sheet.ieg=t.value;if(pe)pe.innerHTML='<span class="pill k">'+fmt(ii.k*ig)+' kcal</span><span class="pill p">'+fmt1(ii.p*ig)+' g Eiweiß</span><span class="pill c">'+fmt1(ii.c*ig)+' g Kohlenhydrate</span><span class="pill f">'+fmt1(ii.f*ig)+' g Fett</span>';return}
   if(t.dataset&&t.dataset.rg&&S.sheet&&S.sheet.res){S.sheet.res.g=t.value;rgPills();return}
   if(t.dataset&&t.dataset.cf&&S.sheet&&S.sheet.cf){S.sheet.cf[t.dataset.cf]=t.value;return}
+  if(t.dataset&&t.dataset.cg&&S.sheet&&S.sheet.cg){S.sheet.cg[t.dataset.cg]=t.value;return}
   if(t.dataset&&t.dataset.rk&&S.sheet){S.sheet.recipe[t.dataset.rk]=t.value;var b=document.querySelector('[data-act=recsave]');if(b)b.disabled=!(S.sheet.recipe.ings.length&&S.sheet.recipe.name.trim());return}
   if(t.dataset&&t.dataset.sg!==undefined&&S.sheet){var it=S.sheet.scan.items[+t.dataset.sg];it.g=t.value;var sk=document.getElementById('sk'+t.dataset.sg);if(sk)sk.textContent=fmt(it.pk*(num(t.value)||0))+' kcal';var st=document.getElementById('stot');if(st)st.innerHTML=pillsHtml(scanSum(S.sheet.scan));return}
   var k=t.dataset&&t.dataset.key;if(!k||S.view!=='wizard')return;
@@ -6571,7 +6793,7 @@ function egTick(){
 }
 window.__egTick=egTick;
 setInterval(egTick,250);
-rgLoad();load();applyTheme();render();
+rgLoad();load();applyTheme();render();setTimeout(function(){if(S.done)notifSync(false)},1500);
 })();
 
 </script>
